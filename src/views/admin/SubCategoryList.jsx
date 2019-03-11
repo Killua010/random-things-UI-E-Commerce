@@ -18,48 +18,47 @@ import {
   Table,
 } from "reactstrap";
 
-export default class CategoryList extends Component {
+export default class SubCategoryList extends Component {
 
   constructor(props) {
     super(props);
-    this.service = new GeneralService("categories");
+    this.service = new GeneralService("subcategories");
 
     this.state = {
       statusModal: false,
-      categories: [],
-      category: {},
-      update: false,
+      subCategories: [],
+      subCategory: {},
       loaderType: 'ball-pulse-sync',
       blocking: true
     };
 
-    this.getAllCategory = this.getAllCategory.bind(this);
-    this.deleteCategory = this.deleteCategory.bind(this)
+    this.getAllSubCategory = this.getAllSubCategory.bind(this);
+    this.deleteSubCategory = this.deleteSubCategory.bind(this)
     this.alterBlockUI = this.alterBlockUI.bind(this)
     
-    this.getAllCategory();
+    this.getAllSubCategory();
   }
 
-  editCategory(category){
-    this.props.history.push({pathname: "nova-categoria", state: { category: category }});
+  editSubCategory(subCategory){
+    this.props.history.push({pathname: "nova-subcategoria", state: { subCategory: subCategory }});
   }
 
-  newCategory() {
-    this.props.history.push("nova-categoria");
+  newSubCategory() {
+    this.props.history.push("nova-subcategoria");
   }
 
-  getAllCategory(){
+  getAllSubCategory(){
     this.service.getAll().then(val => this.setState({
-      categories: val
+      subCategories: val
     })).then(() => this.setState({
               blocking: false
             }))
   }
 
-  async deleteCategory(category){
+  async deleteSubCategory(subCategory){
     this.alterBlockUI()
-    await this.service.delete(category)
-    await this.getAllCategory()
+    await this.service.delete(subCategory)
+    await this.getAllSubCategory()
     this.alterBlockUI()
   }
 
@@ -69,9 +68,9 @@ export default class CategoryList extends Component {
     })
   }
 
-  removeCategory(category){
+  removeSubCategory(subCategory){
     swal({
-      title: 'Tem certeza que deseja excluir essa categoria?',
+      title: 'Tem certeza que deseja excluir essa subcategoria?',
       icon: 'warning',
       buttons: {
         cancel: 'Não, cancelar',
@@ -82,7 +81,7 @@ export default class CategoryList extends Component {
       }
     }).then((result) => {
       if(result){
-        this.deleteCategory(category)
+        this.deleteSubCategory(subCategory)
       }
     })
   }
@@ -96,15 +95,15 @@ export default class CategoryList extends Component {
                 <CardHeader>
                 <Row>
                   <Col sm="6">
-                    <h4 className="title">Categorias Atuais</h4>
+                    <h4 className="title">SubCategorias Atuais</h4>
                   </Col>
                   <Col sm="6">
                     <Button tag="label"
                             className="btn-simple float-right"
                             color="warning"
                             size="md"
-                            onClick={() => { this.newCategory() } }>
-                            Nova Categoria
+                            onClick={() => { this.newSubCategory() } }>
+                            Nova SubCategoria
                       </Button>
                     </Col>
                   </Row>
@@ -114,17 +113,19 @@ export default class CategoryList extends Component {
                     <thead>
                       <tr>
                         <th className="text-center">Nome</th>
+                        <th className="text-center">Categoria</th>
                         <th className="text-center">Remover</th>
                       </tr>
                     </thead>
                     <tbody>
                     { 
                       
-                        this.state.categories.map((category, index) => {
+                        this.state.subCategories.map((subCategory, index) => {
                             return (
                               <tr key={index}>
-                                <td className="text-center hover-point" onClick={() => this.editCategory(category) }>{category.name}</td>
-                                <td className="text-center"><a href="#" className="text-danger" onClick={() => this.removeCategory(category)}><i className="tim-icons icon-trash-simple"></i></a></td>
+                                <td className="text-center hover-point" onClick={() => this.editSubCategory(subCategory) }>{subCategory.name}</td>
+                                <td className="text-center hover-point" onClick={() => this.editSubCategory(subCategory) }>{subCategory.category.name}</td>
+                                <td className="text-center"><a href="#" className="text-danger" onClick={() => this.removeSubCategory(subCategory)}><i className="tim-icons icon-trash-simple"></i></a></td>
                               </tr>
                             )
                         })
