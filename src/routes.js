@@ -4,6 +4,9 @@ import CategoryNew from "views/admin/CategoryNew.jsx";
 import SubCategoryList from "views/admin/SubCategoryList.jsx";
 import SubCategoryNew from "views/admin/SubCategoryNew.jsx";
 
+import TableFieldList from "views/admin/TableFieldList.jsx";
+import TableFieldNew from "views/admin/TableFieldNew.jsx";
+
 import Profile from "./views/client/Profile";
 import MyCarts from "./views/client/MyCarts";
 import MyAddress from "./views/client/MyAddress";
@@ -21,6 +24,19 @@ export const adminRoutes = [
                 "fas fa-bars", "fas fa-guitar"],
     component: [CategoryList, CategoryNew,
                 SubCategoryList, SubCategoryNew],
+    layout: "/admin"
+  },
+  {
+    path: ["/produtos/listar-produtos", "/produtos/novo-produto",
+          "/produtos/listar-campo-tecnico", "/produtos/novo-campo-tecnico"],
+    name: "Produtos",
+    nameChild: ["Todos Produtos", "Dados Produto",
+                "campos tecnicos", "Dados Tecnico"],
+    icon: "fas fa-book",
+    iconChild: ["fas fa-bars", "fas fa-headphones",
+                "fas fa-bars", "fas fa-guitar"],
+    component: [TableFieldList, TableFieldNew,
+                TableFieldList, TableFieldNew],
     layout: "/admin"
   }
 ];

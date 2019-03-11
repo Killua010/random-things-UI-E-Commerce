@@ -20,7 +20,7 @@ class AdminLayout extends React.Component {
       backgroundColor: "orange",
       sidebarOpened:
         document.documentElement.className.indexOf("nav-open") !== -1,
-      dashboardName: "Administração Random Things"
+      dashboardName: "Adm Random Things"
     };
     document.body.classList.add("white-content");
   }

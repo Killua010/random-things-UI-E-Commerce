@@ -18,10 +18,22 @@ class Sidebar extends React.Component {
     this.activeRoute.bind(this);
     this.renderCollapseLink = this.renderCollapseLink.bind(this)
     this.abrir = this.abrir.bind(this);
-    this.state = { collapse: false };
+    let keys = [];
+    props.routes.map((prop, key) => {
+      if (prop.redirect) return null;
+      if(Array.isArray(prop.path)){
+        keys.push(false)
+      }
+    })
+
+    this.state = { collapse: keys };
+
   }
-  abrir() {
-    this.setState({ collapse: !this.state.collapse });
+  abrir(key) {
+    let keys = [];
+    keys = this.state.collapse;
+    keys[key] = !keys[key];
+    this.setState({ collapse: keys });
   }
   // verifies if routeName is the one active (in browser input)
   activeRoute(routeName) {
@@ -142,7 +154,7 @@ class Sidebar extends React.Component {
                       (prop.pro ? " active-pro" : "")
                     }
                    key={key}>
-                    <NavLink onClick={this.abrir}
+                    <NavLink onClick={() => this.abrir(key)}
                       to="#"
                       className="nav-link"
                       activeClassName="active"
@@ -150,7 +162,7 @@ class Sidebar extends React.Component {
                       <i className={prop.icon} />
                       <p>{prop.name}</p>
                     </NavLink>                  
-                    <Collapse isOpen={this.state.collapse}>
+                    <Collapse isOpen={this.state.collapse[key]}>
                       <ul style={{"listStyleType": "none"}}>
                         {
                           this.renderCollapseLink(prop)
