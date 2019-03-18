@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import {withRouter} from "react-router-dom";
 import GeneralService from '../../services/GeneralService';
+import SimpleService from '../../services/SimpleService';
 import swal from 'sweetalert';
 
 import BlockUi from 'react-block-ui';
 import { Loader } from 'react-loaders';
 import 'react-block-ui/style.css';
 import 'loaders.css/loaders.min.css';
-
+import ModalInactiveProduct from '../../components/Modal/ModalInactiveProduct';
 import {
   Card, 
   Row,
@@ -23,9 +24,14 @@ export default class ProductList extends Component {
   constructor(props) {
     super(props);
     this.service = new GeneralService("products");
+    this.inactiveStatusService = new GeneralService("statusInactivation");
+    this.inativationService = new SimpleService("inactivations");
 
     this.state = {
+      statusInactive: [],
       statusModal: false,
+      description: '',
+      inactiveStatu: {},
       products: [],
       product: {},
       loaderType: 'ball-pulse-sync',
@@ -35,8 +41,32 @@ export default class ProductList extends Component {
     this.getAllProduct = this.getAllProduct.bind(this);
     this.deleteProduct = this.deleteProduct.bind(this)
     this.alterBlockUI = this.alterBlockUI.bind(this)
+    this.getAllStatusType = this.getAllStatusType.bind(this)
+    this.updateDataInactive = this.updateDataInactive.bind(this)
+    this.getFields = this.getFields.bind(this)
+
+    this.getFields().then(() => this.setState({
+      blocking: false
+    }))
     
-    this.getAllProduct();
+    
+  }
+
+  async getFields(){
+    await this.getAllProduct();
+    await this.getAllStatusType();
+  }
+
+  updateDataInactive(description, statu){
+    if(statu === undefined){
+      statu = this.state.statusInactive[0].name
+    }
+    let inactive = {
+      description: description,
+      statusInactivation: statu,
+      productId: this.state.product.id
+    }
+    this.deleteProduct(inactive)
   }
 
   editProduct(product){
@@ -47,17 +77,22 @@ export default class ProductList extends Component {
     this.props.history.push("novo-produto");
   }
 
-  getAllProduct(){
-    this.service.getAll().then(val => this.setState({
-      products: val
-    })).then(() => this.setState({
-              blocking: false
-            }))
+  async getAllStatusType(){
+    await this.inactiveStatusService.getAll().then(val => this.setState({
+      statusInactive: val
+    }))
+    console.log(this.state.statusInactive)
   }
 
-  async deleteProduct(product){
+  async getAllProduct(){
+    await this.service.getAll().then(val => this.setState({
+      products: val
+    }))
+  }
+
+  async deleteProduct(inactivation){
     this.alterBlockUI()
-    await this.service.delete(product)
+    await this.inativationService.post(inactivation)
     await this.getAllProduct()
     this.alterBlockUI()
   }
@@ -83,6 +118,13 @@ export default class ProductList extends Component {
       if(result){
         this.deleteProduct(product)
       }
+    })
+  }
+
+  statusModal = (product) => {
+    this.setState({
+      statusModal: !this.state.statusModal,
+      product: product
     })
   }
 
@@ -126,7 +168,7 @@ export default class ProductList extends Component {
                               <tr key={index}>
                                 <td className="text-center hover-point" onClick={() => this.editProduct(product) }>{product.name}</td>
                                 <td className="text-center hover-point" onClick={() => this.editProduct(product) }>{product.pricingGroup.name}</td>
-                                <td className="text-center"><a href="#" className="text-danger" onClick={() => this.removeProduct(product)}><i className="tim-icons icon-trash-simple"></i></a></td>
+                                <td className="text-center"><a href="#" className="text-danger" onClick={() => this.statusModal(product)}><i className="tim-icons icon-trash-simple"></i></a></td>
                               </tr>
                             )
                         })
@@ -137,6 +179,12 @@ export default class ProductList extends Component {
             </Card>
           </Col>
         </BlockUi>
+        <ModalInactiveProduct statusModal={this.state.statusModal}
+         statusInactive={this.state.statusInactive}
+         modal={this.statusModal} 
+         description={this.state.description}
+         technicalField={this.state.technicalField}
+         updateDataInactive={this.updateDataInactive}></ModalInactiveProduct>
       </div>
     )
   }

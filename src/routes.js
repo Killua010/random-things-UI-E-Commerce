@@ -81,19 +81,24 @@ export const adminRoutes = [
   },
   {
     path: ["/produtos/listar-produtos", "/produtos/novo-produto",
-          "/produtos/listar-campo-tecnico", "/produtos/novo-campo-tecnico",
-          "/produtos/listar-grupo-precificacao", "/produtos/novo-grupo-precificacao"],
+          "/produtos/listar-campo-tecnico", "/produtos/novo-campo-tecnico"],
     name: "Produtos",
     nameChild: ["Todos Produtos", "Dados Produto",
-                "Campos Tecnicos", "Dados Tecnico",
-                "Precificaçoes", "Dados Precificação"],
+                "Campos Tecnicos", "Dados Tecnico"],
     icon: "fas fa-tshirt",
     iconChild: ["fas fa-bars", "fas fa-dice-d20",
-                "fas fa-bars", "fas fa-scroll",
-                "fas fa-bars", "fas fa-dollar-sign"],
+                "fas fa-bars", "fas fa-scroll"],
     component: [ProductList, ProductNew,
-                TableFieldList, TableFieldNew,
-                PricingGroupList, PricingGroupNew],
+                TableFieldList, TableFieldNew],
+    layout: "/admin"
+  },
+  {
+    path: ["/produtos/listar-grupo-precificacao", "/produtos/novo-grupo-precificacao"],
+    name: "Precificação",
+    nameChild: ["Precificaçoes", "Dados Precificação"],
+    icon: "fas fa-money-bill-wave",
+    iconChild: ["fas fa-bars", "fas fa-dollar-sign"],
+    component: [PricingGroupList, PricingGroupNew],
     layout: "/admin"
   }
 ];
