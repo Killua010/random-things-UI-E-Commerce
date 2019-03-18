@@ -1,0 +1,74 @@
+@media only screen and (max-width: 991px) {
+    .follow-us-content {
+        margin-left: 25% !important;
+    }
+
+    .social-left{
+        margin-left: 0% !important;
+    }
+
+    .follow-us-padding{
+        padding-top: 3rem !important;
+    }
+
+    .btn.btn-icon.btn-neutral, .navbar .navbar-nav > a.btn.btn-icon.btn-neutral {
+        font-size: 18px !important;
+        margin: 0px !important;
+        margin-left: 12px !important;
+    }
+
+    .btn-round {
+        border-width: 1px;
+        border-radius: 30px;
+        padding-top: 20px;
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+}
+
+.follow-us-parallax{
+    background-image: url("https://images.pexels.com/photos/267403/pexels-photo-267403.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+
+     /* Set a specific height */
+    min-height: 300px; 
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+}
+
+.follow-us-content {
+    color: #fff;
+    margin-left: 55%;
+}
+
+.social-left{
+    margin-left: 50%;
+}
+
+.social-line {
+    margin:0 5px;
+    margin-top:20px;
+    text-align:center;
+}
+
+.btn-round {
+    border-width: 1px;
+    border-radius: 30px !important;
+    padding-top: 23px !important;
+    padding-right: 23px !important;
+    padding-left: 23px !important;
+}
+
+.btn.btn-icon.btn-neutral, .navbar .navbar-nav > a.btn.btn-icon.btn-neutral {
+    font-size: 20px;
+    margin: 25px;
+}
+
+.follow-us-padding{
+    color: #fff !important;
+    padding-top: 8rem;
+}

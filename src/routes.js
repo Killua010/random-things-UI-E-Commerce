@@ -6,11 +6,64 @@ import SubCategoryNew from "views/admin/SubCategoryNew.jsx";
 
 import TableFieldList from "views/admin/TableFieldList.jsx";
 import TableFieldNew from "views/admin/TableFieldNew.jsx";
+import ProductList from "views/admin/ProductList.jsx";
+import ProductNew from "views/admin/ProductNew.jsx";
+import PricingGroupList from "views/admin/PricingGroupList.jsx";
+import PricingGroupNew from "views/admin/PricingGroupNew.jsx";
 
 import Profile from "./views/client/Profile";
 import MyCarts from "./views/client/MyCarts";
 import MyAddress from "./views/client/MyAddress";
 import PurchaseOrders from "./views/client/PurchaseOrders";
+
+import Index from "./views/main/Index";
+import Catalog from "./views/main/Catalog";
+import ProductDescription from "./views/main/ProductDescription";
+import Login from "./views/main/Login";
+import ShoppingCart from "./views/main/ShoppingCart";
+import ClientRegister from "./views/main/ClientRegister";
+import Payment from "./views/main/Payment";
+import FinishOrder from "./views/main/FinishOrder";
+import Favorite from "./views/main/Favorite";
+
+export var mainRoutes = [
+  {
+    path: "/",
+    component: Index
+  },
+  {
+    path: "/catalogo",
+    component: Catalog
+  },
+  {
+    path: "/produto",
+    component: ProductDescription
+  },
+  {
+    path: "/pagamento",
+    component: Payment
+  },
+  {
+    path: "/login",
+    component: Login
+  },
+  {
+    path: "/carrinho",
+    component: ShoppingCart
+  },
+  {
+    path: "/cadastro",
+    component: ClientRegister
+  },
+  {
+    path: "/pedidoFinalizado",
+    component: FinishOrder
+  },
+  {
+    path: "/favorito",
+    component: Favorite
+  }
+];
 
 export const adminRoutes = [
   {
@@ -28,15 +81,19 @@ export const adminRoutes = [
   },
   {
     path: ["/produtos/listar-produtos", "/produtos/novo-produto",
-          "/produtos/listar-campo-tecnico", "/produtos/novo-campo-tecnico"],
+          "/produtos/listar-campo-tecnico", "/produtos/novo-campo-tecnico",
+          "/produtos/listar-grupo-precificacao", "/produtos/novo-grupo-precificacao"],
     name: "Produtos",
     nameChild: ["Todos Produtos", "Dados Produto",
-                "campos tecnicos", "Dados Tecnico"],
-    icon: "fas fa-book",
-    iconChild: ["fas fa-bars", "fas fa-headphones",
-                "fas fa-bars", "fas fa-guitar"],
-    component: [TableFieldList, TableFieldNew,
-                TableFieldList, TableFieldNew],
+                "Campos Tecnicos", "Dados Tecnico",
+                "Precificaçoes", "Dados Precificação"],
+    icon: "fas fa-tshirt",
+    iconChild: ["fas fa-bars", "fas fa-dice-d20",
+                "fas fa-bars", "fas fa-scroll",
+                "fas fa-bars", "fas fa-dollar-sign"],
+    component: [ProductList, ProductNew,
+                TableFieldList, TableFieldNew,
+                PricingGroupList, PricingGroupNew],
     layout: "/admin"
   }
 ];

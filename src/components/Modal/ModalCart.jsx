@@ -4,6 +4,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
+import Typography from "@material-ui/core/Typography";
 
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
@@ -69,7 +70,7 @@ class ModalCart extends Component {
             >
               <Close className={classes.modalClose} />
             </IconButton>
-            <h4 className={classes.modalTitle}>Meus cartões</h4>
+            <Typography component="h4" variant="h5" className={classes.modalTitle}>Meus cartões</Typography>
           </DialogTitle>
           <DialogContent
             id="modal-slide-description"
@@ -77,38 +78,38 @@ class ModalCart extends Component {
           >
             <Card className="pointer" onClick={this.props.closeCartaoModal}>
               <CardBody>
-                <p>
+                <Typography>
                   Edson Benjamin da Paz <br />
                   1234.1234.1234.1234 <br />
                   Visa
-                </p>
+                </Typography>
               </CardBody>
             </Card>
             <Card className="pointer" onClick={this.props.closeCartaoModal}>
               <CardBody>
-                <p>
+                <Typography>
                   Edson Benjamin da Paz <br />
                   1234.1234.1234.1234 <br />
                   Visa
-                </p>
+                </Typography>
               </CardBody>
             </Card>
             <Card className="pointer" onClick={this.props.closeCartaoModal}>
               <CardBody>
-                <p>
+                <Typography>
                   Edson Benjamin da Paz <br />
                   1234.1234.1234.1234 <br />
                   Visa
-                </p>
+                </Typography>
               </CardBody>
             </Card>
             <Card className="pointer" onClick={this.props.closeCartaoModal}>
               <CardBody>
-                <p>
+                <Typography>
                   Edson Benjamin da Paz <br />
                   1234.1234.1234.1234 <br />
                   Visa
-                </p>
+                </Typography>
               </CardBody>
             </Card>
           </DialogContent>

@@ -1,0 +1,12 @@
+.slick-thumb {
+    bottom: -85px !important;
+}
+
+.slick-dots {
+    margin-left: 0 !important;
+}
+
+.slick-dots li, .slick-dots li button{
+    height: auto !important;
+    width: auto !important;
+}

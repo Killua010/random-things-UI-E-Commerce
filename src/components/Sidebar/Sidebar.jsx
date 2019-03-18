@@ -75,7 +75,7 @@ class Sidebar extends React.Component {
             activeClassName="active"
           >
             <i className={prop.iconChild[i]} />
-            <p>{prop.nameChild[i]}</p>
+            <p className="navbar-link">{prop.nameChild[i]}</p>
           </NavLink>                 
         </li>
       )
@@ -160,7 +160,7 @@ class Sidebar extends React.Component {
                       activeClassName="active"
                     >
                       <i className={prop.icon} />
-                      <p>{prop.name}</p>
+                      <p class="navbar-link">{prop.name}</p>
                     </NavLink>                  
                     <Collapse isOpen={this.state.collapse[key]}>
                       <ul style={{"listStyleType": "none"}}>

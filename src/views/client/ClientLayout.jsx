@@ -9,7 +9,7 @@ import Sidebar from "components/Sidebar/Sidebar.jsx";
 
 import { clientRoutes } from "routes.js";
 
-import logo from "assets/img/logo8.png";
+import logo from "assets/img/apple-icon.png";
 
 var ps;
 

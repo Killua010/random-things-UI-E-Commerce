@@ -18,47 +18,48 @@ import {
   Table,
 } from "reactstrap";
 
-export default class TableFieldList extends Component {
+export default class PricingGroupList extends Component {
 
   constructor(props) {
     super(props);
-    this.service = new GeneralService("technicalfields");
+    this.service = new GeneralService("pricinggroup");
 
     this.state = {
       statusModal: false,
-      fields: [],
-      field: {},
+      groups: [],
+      group: {},
+      update: false,
       loaderType: 'ball-pulse-sync',
       blocking: true
     };
 
-    this.getAllField = this.getAllField.bind(this);
-    this.deleteField = this.deleteField.bind(this)
+    this.getAllGroup = this.getAllGroup.bind(this);
+    this.deleteGroup = this.deleteGroup.bind(this)
     this.alterBlockUI = this.alterBlockUI.bind(this)
     
-    this.getAllField();
+    this.getAllGroup();
+  }
+  
+  editGroup(group){
+    this.props.history.push({pathname: "novo-grupo-precificacao", state: { group: group }});
   }
 
-  editField(field){
-    this.props.history.push({pathname: "novo-campo-tecnico", state: { field: field }});
+  newGroup() {
+    this.props.history.push("novo-grupo-precificacao");
   }
 
-  newField() {
-    this.props.history.push("novo-campo-tecnico");
-  }
-
-  getAllField(){
+  getAllGroup(){
     this.service.getAll().then(val => this.setState({
-      fields: val
+      groups: val
     })).then(() => this.setState({
-              blocking: false
-            }))
+      blocking: false
+    }))
   }
 
-  async deleteField(field){
+  async deleteGroup(group){
     this.alterBlockUI()
-    await this.service.delete(field)
-    await this.getAllField()
+    await this.service.delete(group)
+    await this.getAllGroup()
     this.alterBlockUI()
   }
 
@@ -68,9 +69,9 @@ export default class TableFieldList extends Component {
     })
   }
 
-  removeField(field){
+  removeGroup(group){
     swal({
-      title: 'Tem certeza que deseja excluir esse campo tecnico?',
+      title: 'Tem certeza que deseja excluir esse grupo?',
       icon: 'warning',
       buttons: {
         cancel: 'Não, cancelar',
@@ -81,7 +82,7 @@ export default class TableFieldList extends Component {
       }
     }).then((result) => {
       if(result){
-        this.deleteField(field)
+        this.deleteGroup(group)
       }
     })
   }
@@ -95,15 +96,15 @@ export default class TableFieldList extends Component {
                 <CardHeader>
                 <Row>
                   <Col sm="6">
-                    <h4 className="title">Dados Tecnicos Atuais</h4>
+                    <h4 className="title">Grupos de precificações Atuais</h4>
                   </Col>
                   <Col sm="6">
                     <Button tag="label"
                             className="btn-simple float-right"
                             color="warning"
                             size="md"
-                            onClick={() => { this.newField() } }>
-                            Novo Campo Tecnico
+                            onClick={() => { this.newGroup() } }>
+                            Novo Grupo
                       </Button>
                     </Col>
                   </Row>
@@ -113,17 +114,19 @@ export default class TableFieldList extends Component {
                     <thead>
                       <tr>
                         <th className="text-center">Nome</th>
+                        <th className="text-center">Percentual</th>
                         <th className="text-center">Remover</th>
                       </tr>
                     </thead>
                     <tbody>
                     { 
                       
-                        this.state.fields.map((field, index) => {
+                        this.state.groups.map((group, index) => {
                             return (
                               <tr key={index}>
-                                <td className="text-center hover-point" onClick={() => this.editField(field) }>{field.name}</td>
-                                <td className="text-center"><a href="#" className="text-danger" onClick={() => this.removeField(field)}><i className="tim-icons icon-trash-simple"></i></a></td>
+                                <td className="text-center hover-point" onClick={() => this.editGroup(group) }>{group.name}</td>
+                                <td className="text-center hover-point" onClick={() => this.editGroup(group) }>{group.profitPercentage} %</td>
+                                <td className="text-center"><a href="#" className="text-danger" onClick={() => this.removeGroup(group)}><i className="tim-icons icon-trash-simple"></i></a></td>
                               </tr>
                             )
                         })

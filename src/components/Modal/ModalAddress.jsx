@@ -4,6 +4,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
+import Typography from "@material-ui/core/Typography";
 
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
@@ -69,7 +70,7 @@ class ModalAddress extends Component {
             >
               <Close className={classes.modalClose} />
             </IconButton>
-            <h4 className={classes.modalTitle}>Meus Endereços</h4>
+            <Typography component="h4" variant="h5" className={classes.modalTitle}>Meus Endereços</Typography>
           </DialogTitle>
           <DialogContent
             id="modal-slide-description"
@@ -77,46 +78,46 @@ class ModalAddress extends Component {
           >
             <Card className="pointer" onClick={this.props.closeAddressModal}>
               <CardBody>
-                <p>
+                <Typography>
                   Rua Doutor Raul Abbott Escobar 549
                   <br />
                   Parque Califórnia Campos dos Goytacazes RJ
                   <br />
                   28015-312
-                </p>
+                </Typography>
               </CardBody>
             </Card>
             <Card className="pointer" onClick={this.props.closeAddressModal}>
               <CardBody>
-                <p>
+                <Typography>
                   Rua Doutor Raul Abbott Escobar 549
                   <br />
                   Parque Califórnia Campos dos Goytacazes RJ
                   <br />
                   28015-312
-                </p>
+                </Typography>
               </CardBody>
             </Card>
             <Card className="pointer" onClick={this.props.closeAddressModal}>
               <CardBody>
-                <p>
+                <Typography>
                   Rua Doutor Raul Abbott Escobar 549
                   <br />
                   Parque Califórnia Campos dos Goytacazes RJ
                   <br />
                   28015-312
-                </p>
+                </Typography>
               </CardBody>
             </Card>
             <Card className="pointer" onClick={this.props.closeAddressModal}>
               <CardBody>
-                <p>
+                <Typography>
                   Rua Doutor Raul Abbott Escobar 549
                   <br />
                   Parque Califórnia Campos dos Goytacazes RJ
                   <br />
                   28015-312
-                </p>
+                </Typography>
               </CardBody>
             </Card>
           </DialogContent>

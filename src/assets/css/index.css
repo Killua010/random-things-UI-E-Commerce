@@ -25,6 +25,10 @@
     padding-top: 2em;
 }
 
+.ml-2{
+    margin-left: 2em !important;
+}
+
 .mt-5{
     margin-top: 5em !important;
 }
@@ -79,4 +83,8 @@
 
 .pointer {
     cursor: pointer;
+}
+
+.navbar-link{
+    font-size: 0.62475rem;
 }

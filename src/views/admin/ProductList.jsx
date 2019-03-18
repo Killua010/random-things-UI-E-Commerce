@@ -18,47 +18,47 @@ import {
   Table,
 } from "reactstrap";
 
-export default class TableFieldList extends Component {
+export default class ProductList extends Component {
 
   constructor(props) {
     super(props);
-    this.service = new GeneralService("technicalfields");
+    this.service = new GeneralService("products");
 
     this.state = {
       statusModal: false,
-      fields: [],
-      field: {},
+      products: [],
+      product: {},
       loaderType: 'ball-pulse-sync',
       blocking: true
     };
 
-    this.getAllField = this.getAllField.bind(this);
-    this.deleteField = this.deleteField.bind(this)
+    this.getAllProduct = this.getAllProduct.bind(this);
+    this.deleteProduct = this.deleteProduct.bind(this)
     this.alterBlockUI = this.alterBlockUI.bind(this)
     
-    this.getAllField();
+    this.getAllProduct();
   }
 
-  editField(field){
-    this.props.history.push({pathname: "novo-campo-tecnico", state: { field: field }});
+  editProduct(product){
+    this.props.history.push({pathname: "novo-produto", state: { product: product }});
   }
 
-  newField() {
-    this.props.history.push("novo-campo-tecnico");
+  newProduct() {
+    this.props.history.push("novo-produto");
   }
 
-  getAllField(){
+  getAllProduct(){
     this.service.getAll().then(val => this.setState({
-      fields: val
+      products: val
     })).then(() => this.setState({
               blocking: false
             }))
   }
 
-  async deleteField(field){
+  async deleteProduct(product){
     this.alterBlockUI()
-    await this.service.delete(field)
-    await this.getAllField()
+    await this.service.delete(product)
+    await this.getAllProduct()
     this.alterBlockUI()
   }
 
@@ -68,9 +68,9 @@ export default class TableFieldList extends Component {
     })
   }
 
-  removeField(field){
+  removeProduct(product){
     swal({
-      title: 'Tem certeza que deseja excluir esse campo tecnico?',
+      title: 'Tem certeza que deseja excluir esse produto?',
       icon: 'warning',
       buttons: {
         cancel: 'Não, cancelar',
@@ -81,7 +81,7 @@ export default class TableFieldList extends Component {
       }
     }).then((result) => {
       if(result){
-        this.deleteField(field)
+        this.deleteProduct(product)
       }
     })
   }
@@ -95,15 +95,16 @@ export default class TableFieldList extends Component {
                 <CardHeader>
                 <Row>
                   <Col sm="6">
-                    <h4 className="title">Dados Tecnicos Atuais</h4>
+                    <h4 className="title">Produtos Atuais</h4>
                   </Col>
                   <Col sm="6">
                     <Button tag="label"
                             className="btn-simple float-right"
                             color="warning"
                             size="md"
-                            onClick={() => { this.newField() } }>
-                            Novo Campo Tecnico
+                            id="btnNewProduct"
+                            onClick={() => { this.newProduct() } }>
+                            Novo Produto
                       </Button>
                     </Col>
                   </Row>
@@ -113,17 +114,19 @@ export default class TableFieldList extends Component {
                     <thead>
                       <tr>
                         <th className="text-center">Nome</th>
+                        <th className="text-center">Grupo precificação</th>
                         <th className="text-center">Remover</th>
                       </tr>
                     </thead>
                     <tbody>
                     { 
                       
-                        this.state.fields.map((field, index) => {
+                        this.state.products.map((product, index) => {
                             return (
                               <tr key={index}>
-                                <td className="text-center hover-point" onClick={() => this.editField(field) }>{field.name}</td>
-                                <td className="text-center"><a href="#" className="text-danger" onClick={() => this.removeField(field)}><i className="tim-icons icon-trash-simple"></i></a></td>
+                                <td className="text-center hover-point" onClick={() => this.editProduct(product) }>{product.name}</td>
+                                <td className="text-center hover-point" onClick={() => this.editProduct(product) }>{product.pricingGroup.name}</td>
+                                <td className="text-center"><a href="#" className="text-danger" onClick={() => this.removeProduct(product)}><i className="tim-icons icon-trash-simple"></i></a></td>
                               </tr>
                             )
                         })
