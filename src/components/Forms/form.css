@@ -6,5 +6,12 @@
 }
 
 .size-input{
-    margin: 2% auto !important;
+    margin: 1% auto !important;
+}
+
+.orange:focus{
+    border-color: #f88e2c !important;
+}
+.text-color-select {
+    color: #696161 !important;
 }

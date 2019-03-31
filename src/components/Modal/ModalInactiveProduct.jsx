@@ -57,7 +57,7 @@ export default class ModalInactiveProduct extends Component {
             </ModalBody>
             <ModalFooter>
                 <Button color="second" onClick={() => {this.props.modal()}}>Cancelar</Button>
-                <Button color="warning" type="button" onClick={() => {this.props.updateDataInactive(this.state.description, this.state.statu); this.props.modal()}}>Adicionar</Button>
+                <Button color="warning" type="button" id="btnInactiveProduct" onClick={() => {this.props.updateDataInactive(this.state.description, this.state.statu); this.props.modal()}}>Adicionar</Button>
             </ModalFooter>
         </Modal>
     )

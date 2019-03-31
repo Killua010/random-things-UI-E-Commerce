@@ -49,17 +49,20 @@ class ModalNewClient extends Component {
           </IconButton>
           <h4 className={classes.modalTitle}>Editar dados</h4>
         </DialogTitle>
-        <DialogContent
-          id="modal-slide-description"
-          className={classes.modalBody}
-        >
-          <FormClient />
-        </DialogContent>
-        <DialogActions
-          className={classes.modalFooter + " " + classes.modalFooterCenter}
-        >
-          <Button color="warning" onClick={this.props.closeNewClientModal}>Salvar</Button>
-        </DialogActions>
+        <form onSubmit={this.props.handleSubmit}>
+          <DialogContent
+            id="modal-slide-description"
+            className={classes.modalBody}
+          >
+            <FormClient client ={this.props.client}
+              handleFieldChange={this.props.handleFieldChange}/>
+          </DialogContent>
+          <DialogActions
+            className={classes.modalFooter + " " + classes.modalFooterCenter}
+          >
+            <Button color="warning" type="submit">Salvar</Button>
+          </DialogActions>
+        </form>
       </Dialog>
     );
   }

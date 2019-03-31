@@ -35,6 +35,10 @@ class MyAddress extends Component {
     openNewAddress: false
   };
 
+  componentDidMount() {
+    console.log("endereço " + this.props.location.state)
+  }
+
   openNewAddressModal = () => {
     this.setState({ openNewAddress: true });
   };

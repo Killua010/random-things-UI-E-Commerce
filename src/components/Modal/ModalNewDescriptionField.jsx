@@ -57,7 +57,7 @@ export default class ModalNewDescriptionField extends Component {
             </ModalBody>
             <ModalFooter>
                 <Button color="second" onClick={() => {this.props.modal()}}>Cancelar</Button>
-                <Button color="warning" type="button" onClick={() => {this.props.updateDataFields(this.state.description, this.state.idField); this.props.modal()}}>Adicionar</Button>
+                <Button color="warning" id="btnSaveField" type="button" onClick={() => {this.props.updateDataFields(this.state.description, this.state.idField); this.props.modal()}}>Adicionar</Button>
             </ModalFooter>
         </Modal>
     )

@@ -5,16 +5,85 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Button from "components/CustomButtons/Button.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
-
+import GeneralService from '../../services/GeneralService';
 
 import ModalNewClient from "../../components/Modal/ModalNewClient";
+
+import { bindActionCreators } from "redux";
+
+import * as clientActions from "../../actions/client";
+
+import { connect } from "react-redux";
 
 import "../../assets/css/index.css";
 
 class Profile extends React.Component {
-  state = {
-    openNewClient: false
-  };
+
+  constructor(props){
+    super(props);
+
+    this.service = new GeneralService("clients");
+    this.state = {
+      openNewClient: false,
+      client: {},
+      blocking: false
+    }
+
+    this.handleFieldChange = this.handleFieldChange.bind(this);
+    this.alterBlockUI = this.alterBlockUI.bind(this)
+
+  }
+
+  alterBlockUI(){
+    this.setState({
+      blocking: !this.state.blocking
+    })
+  }
+
+  componentDidMount(){
+    if(this.props.client === null){
+      this.props.history.push("/login");
+    } else {
+      this.setState({
+        client: {
+          ...this.props.client,
+        confirmPassword: this.props.client.password
+        }
+      })
+    }
+  }
+
+  handleFieldChange(event) {
+    this.setState({
+      client: {
+        ...this.state.client,
+        [event.target.name]: event.target.value
+      }
+    })
+  }
+
+  handleSubmit = async (e) => {
+    e.preventDefault();
+    this.alterBlockUI()
+    await this.service.put(this.state.client).then(
+      (resp) => {
+        if(resp === false){
+          this.setState({
+            client: {
+              ...this.props.client,
+            confirmPassword: this.props.client.password
+            }
+          })
+        } else {
+          this.props.setClient(resp);
+        }
+        this.setState({
+          openNewClient: false
+        })
+      }
+    )
+    this.alterBlockUI()
+  }
 
   openNewClientModal = () => {
     this.setState({ openNewClient: true });
@@ -48,28 +117,31 @@ class Profile extends React.Component {
                   </CardHeader>
                   <CardBody>
                     <List component="nav">
-                      <ListItemText secondary="Dados da conta" />
-                      <ListItemText primary="Email: abc@efg.com" />
-                      <ListItemText primary="Senha: abcefg" />
+                      <ListItemText secondary={"Dados da conta"} />
+                      <ListItemText primary={`Email: ${this.state.client.email}`} />
+                      <ListItemText primary={`Senha: ${this.state.client.password}`} />
                     </List>
                     <List component="nav">
                       <ListItemText secondary="Dados Pessoais" />
-                      <ListItemText primary="Nome: abc da silva efg" />
-                      <ListItemText primary="Genero: MASCULINO" />
-                      <ListItemText primary="CPF: 01234567890" />
-                      <ListItemText primary="Data de nascimento" />
+                      <ListItemText primary={`Nome: ${this.state.client.firstName} ${this.state.client.lastName}`} />
+                      <ListItemText primary={`Genero: ${this.state.client.gender}`} />
+                      <ListItemText primary={`CPF: ${this.state.client.cpf}`} />
+                      <ListItemText primary={`Data de nascimento: ${this.state.client.birthDate}`} />
                     </List>
                     <List component="nav">
                       <ListItemText secondary="Contato" />
-                      <ListItemText primary="Telefone: (12) 91234-5678" />
-                      <ListItemText primary="Tipo: MOVEL" />
-                      <ListItemText primary="Email: abc@efg.com" />
+                      <ListItemText primary={`Telefone: ${this.state.client.phone}`} />
+                      <ListItemText primary={`Tipo: ${this.state.client.telephoneType}`} />
+                      <ListItemText primary={`Email: ${this.state.client.email}`} />
                     </List>
                   </CardBody>
                 </Card>
               </Col>
             </Row>
             <ModalNewClient
+              client ={this.state.client}
+              handleSubmit={this.handleSubmit}
+              handleFieldChange={this.handleFieldChange}
               openNewClient={this.state.openNewClient}
               openNewClientModal={this.openNewClientModal}
               closeNewClientModal={this.closeNewClientModal}
@@ -82,4 +154,12 @@ class Profile extends React.Component {
   }
 }
 
-export default Profile;
+const mapStateToProps = state => ({
+  client: state.client
+})
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(clientActions, dispatch);
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

@@ -160,7 +160,7 @@ export default class ProductList extends Component {
                         <th className="text-center">Remover</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tableList">
                     { 
                       
                         this.state.products.map((product, index) => {

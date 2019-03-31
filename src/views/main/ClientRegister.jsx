@@ -17,10 +17,54 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 
 import image from "../../assets/img/bg8.jpeg";
-
+import GeneralService from '../../services/GeneralService';
 import "../../assets/css/index.css";
 
 class ClientRegister extends Component {
+
+  constructor(props){
+    super(props);
+
+    this.service = new GeneralService("clients");
+
+    this.state = {
+      client: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        gender: "",
+        cpf: "",
+        phone: "",
+        telephoneType: "",
+        birthDate: "",
+        password: "",
+        confirmPassword: ""
+      }
+    }
+
+    this.handleFieldChange = this.handleFieldChange.bind(this);
+
+  }
+
+  handleFieldChange(event) {
+    this.setState({
+      client: {
+        ...this.state.client,
+        [event.target.name]: event.target.value
+      }
+    })
+  }
+
+  
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.service.post(this.state.client).then(resp => {
+      if(resp === true){
+        this.props.history.push("login");
+      }
+    })
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -42,14 +86,17 @@ class ClientRegister extends Component {
                       <h5>Novo Usuário</h5>
                     </CardHeader>
                     <CardBody>
-                      <FormClient />
-                      <Button
-                        color="warning"
-                        className="float-right"
-                        href="/perfil"
-                      >
-                        Salvar
-                      </Button>
+                      <form onSubmit={this.handleSubmit}>
+                        <FormClient client ={this.state.client}
+                        handleFieldChange={this.handleFieldChange} />
+                        <Button
+                          type="submit"
+                          color="warning"
+                          className="float-right"
+                        >
+                          Salvar
+                        </Button>
+                      </form>
                     </CardBody>
                   </Card>
                 </GridItem>

@@ -11,6 +11,8 @@ import { clientRoutes } from "routes.js";
 
 import logo from "assets/img/apple-icon.png";
 
+import { connect } from "react-redux";
+
 var ps;
 
 class ClientLayout extends React.Component {
@@ -25,6 +27,11 @@ class ClientLayout extends React.Component {
     document.body.classList.add("white-content");
   }
   componentDidMount() {
+
+    if(this.props.client === null){
+      this.props.history.push("/login");
+    } 
+
     if (navigator.platform.indexOf("Win") > -1) {
       document.documentElement.className += " perfect-scrollbar-on";
       document.documentElement.classList.remove("perfect-scrollbar-off");
@@ -132,4 +139,9 @@ class ClientLayout extends React.Component {
   }
 }
 
-export default ClientLayout;
+const mapStateToProps = state => ({
+  client: state.client
+})
+
+
+export default connect(mapStateToProps)(ClientLayout);

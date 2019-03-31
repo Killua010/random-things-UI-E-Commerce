@@ -25,17 +25,20 @@ export default class GeneralService {
     }
 
     async put(entity) {
+        let resp;
         await axios.put(`${path}/${this.entityPath}/${entity.id}`, entity, {
             headers: {
                 'Content-Type': 'application/json'
             }
         })
         .then(() => {
+            resp = true;
             swal({
                 title: "Atualizado com Sucesso",
                 icon: "success",
               });
         }).catch(function (error, e) {
+            resp = false;
             if(undefined === error.response.data.errors){
                 swal({
                     title: error.response.data,
@@ -53,9 +56,11 @@ export default class GeneralService {
                 });
             }
         })
+        return resp;
     }
 
     async post(entity) {
+        let response;
         await axios.post(`${path}/${this.entityPath}`, entity, {
             headers: {
                 'Content-Type': 'application/json'
@@ -66,12 +71,18 @@ export default class GeneralService {
                 title: "Cadastrado com Sucesso",
                 icon: "success",
             });
+            response = true;
         }).catch(function (error, e) {
+            if(undefined === error.response){
+                console.log(error)
+                response = false
+            }
             if(undefined === error.response.data.errors){
                 swal({
                     title: error.response.data,
                     icon: "error",
                 });
+                response = false;
             } else {
                 let errors = "";
                 error.response.data.errors.map((err) => {
@@ -82,8 +93,10 @@ export default class GeneralService {
                     text: errors,
                     icon: "error",
                 });
+                response = false;
             }
         })
+        return response;
     }
 
     async delete(entity) {

@@ -74,6 +74,7 @@ class CustomTabs extends React.Component {
                     wrapper: classes.tabWrapper
                   }}
                   key={key}
+                  id={prop.tabId}
                   label={prop.tabName}
                   {...icon}
                 />
@@ -109,6 +110,7 @@ CustomTabs.propTypes = {
     PropTypes.shape({
       tabName: PropTypes.string.isRequired,
       tabIcon: PropTypes.func,
+      tabId: PropTypes.string,
       tabContent: PropTypes.node.isRequired
     })
   ),

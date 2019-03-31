@@ -19,18 +19,46 @@ import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 
 import loginPageStyle from "../../assets/jss/material-kit-react/views/loginPage.jsx";
 
+import { bindActionCreators } from "redux";
+
+import * as clientActions from "../../actions/client";
+
+import { connect } from "react-redux";
+
 import "../../assets/css/index.css";
 
 import image from "../../assets/img/bg8.jpeg";
+import ClientService from "../../services/ClientService.js";
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
+    console.log(this.props)
+    this.service = new ClientService("clients");
     // we use this to make the card to appear after the page has been rendered
     this.state = {
-      cardAnimaton: "cardHidden"
+      cardAnimaton: "cardHidden",
+      email: "",
+      password: ""
     };
+
+    this.handleFieldChange = this.handleFieldChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.login = this.login.bind(this);
+
   }
+
+  login(){
+    let email = this.state.email;
+    let password = this.state.password;
+    this.service.login({"email": email, "password": password}).then(resp => {
+      if(resp !== null){
+        this.props.setClient(resp);
+        this.props.history.push("/perfil");
+      }
+    })
+  }
+
   componentDidMount() {
     // we add a hidden class to the card and after 700 ms we delete it and the transition appears
     setTimeout(
@@ -40,6 +68,23 @@ class Login extends React.Component {
       700
     );
   }
+
+  handleFieldChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    })
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.login()
+    // this.service.post(this.state.client).then(resp => {
+    //   if(resp === true){
+    //     this.props.history.push("login");
+    //   }
+    // })
+  }
+
   render() {
     const { classes, ...rest } = this.props;
     return (
@@ -56,20 +101,22 @@ class Login extends React.Component {
             <GridContainer justify="center">
               <GridItem xs={12} sm={12} md={4}>
                 <Card className={classes[this.state.cardAnimaton]}>
-                  <form className={classes.form}>
+                  <form className={classes.form} onSubmit={this.handleSubmit}>
                     <CardHeader color="warning" className={classes.cardHeader}>
                       <h4 className="no-margin">Login</h4>
                     </CardHeader>
                     <CardBody>
                       <GridItem xs="12" className="login-input">
                         <CustomInput
-                          id="email"
                           formControlProps={{
                             fullWidth: true
                           }}
                           inputProps={{
-                            placeholder: "Email...",
+                            name: "email",
+                            onChange: this.handleFieldChange,
+                            value: this.state.email,
                             type: "email",
+                            placeholder: "Email...",
                             endAdornment: (
                               <InputAdornment position="end">
                                 <Email className={classes.inputIconsColor} />
@@ -85,6 +132,9 @@ class Login extends React.Component {
                             fullWidth: true
                           }}
                           inputProps={{
+                            name: "password",
+                            onChange: this.handleFieldChange,
+                            value: this.state.password,
                             placeholder: "Senha...",
                             type: "password",
                             endAdornment: (
@@ -102,7 +152,7 @@ class Login extends React.Component {
                       </GridItem>
                     </CardBody>
                     <CardFooter className={classes.cardFooter}>
-                      <Button color="warning" size="lg" href="/perfil">
+                      <Button color="warning" size="lg" type="submit">
                         Entrar
                       </Button>
                     </CardFooter>
@@ -127,4 +177,11 @@ class Login extends React.Component {
   }
 }
 
-export default withStyles(loginPageStyle)(Login);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(clientActions, dispatch);
+
+  const mapStateToProps = state => ({
+    client: state.client
+  })
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(loginPageStyle)(Login));

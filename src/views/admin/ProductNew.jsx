@@ -140,7 +140,6 @@ export default class ProductNew extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.location.state)
     if(this.props.location.state !== undefined){
       let idsSubCategories = [];
       let descriptions = []
@@ -342,12 +341,14 @@ export default class ProductNew extends Component {
                     },
                     {
                       tabName: "Descrição tecnica",
+                      tabId: "tabDescricao",
                       tabContent: (
                         <div>
                           <Button tag="label"
                                 className="btn-simple float-right"
                                 color="warning"
                                 size="md"
+                                id="btnNewDescription"
                                 onClick={() => { this.modal() } }>
                                 Nova Descrição tecnica
                           </Button>
