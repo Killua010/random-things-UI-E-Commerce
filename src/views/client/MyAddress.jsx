@@ -129,7 +129,6 @@ class MyAddress extends Component {
   }
   
   componentDidMount() {
-    console.log(this.props.client)
     if(this.props.client === null){
       this.props.history.push("/login");
     } else {

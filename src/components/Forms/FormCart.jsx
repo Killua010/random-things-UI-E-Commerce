@@ -11,8 +11,11 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Check from "@material-ui/icons/Check";
+import {Input,
+} from "reactstrap";
 
 import "./form.css";
+import GeneralService from "../../services/GeneralService.js";
 
 const styles = theme => ({
   root: {
@@ -29,6 +32,27 @@ const styles = theme => ({
 });
 
 class FormCart extends Component {
+
+  constructor(props){
+    super(props);
+
+    this.flagService = new GeneralService("flags");
+
+    this.state = {
+      flags: []
+    }
+
+    this.getFlags = this.getFlags.bind(this);
+
+    this.getFlags();
+  }
+
+  async getFlags(){
+    this.flagService.getAll().then(resp => this.setState({
+      flags: resp
+    }))
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -36,8 +60,11 @@ class FormCart extends Component {
         <GridContainer>
           <GridItem md="6">
             <CustomInput
-              id="regular"
               inputProps={{
+                type: "text",
+                name: "number",
+                onChange: this.props.handleFieldChange,
+                value: this.props.card.number,
                 placeholder: "Número do cartão..."
               }}
               formControlProps={{
@@ -47,8 +74,11 @@ class FormCart extends Component {
           </GridItem>
           <GridItem md="6">
             <CustomInput
-              id="regular"
               inputProps={{
+                type: "text",
+                name: "securityCode",
+                onChange: this.props.handleFieldChange,
+                value: this.props.card.securityCode,
                 placeholder: "Código de segurança..."
               }}
               formControlProps={{
@@ -58,8 +88,11 @@ class FormCart extends Component {
           </GridItem>
           <GridItem md="6">
             <CustomInput
-              id="regular"
               inputProps={{
+                type: "text",
+                name: "printedName",
+                onChange: this.props.handleFieldChange,
+                value: this.props.card.printedName,
                 placeholder: "Nome Impresso..."
               }}
               formControlProps={{
@@ -68,36 +101,23 @@ class FormCart extends Component {
             />
           </GridItem>
           <GridItem md="6">
-            <FormControl className={classes.formControl + " width-100"}>
-              <InputLabel htmlFor="age-simple">Bandeira</InputLabel>
-              <Select
-                inputProps={{
-                  name: "age",
-                  id: "age-simple"
-                }}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-            </FormControl>
+            <Input type="select" name="creditCardFlagId" className="text-color-select orange" value={this.props.card.creditCardFlagId} onChange={this.props.handleFieldChange} required>
+              <option disabled selected value="">Bandeira</option>
+              {
+                this.state.flags.map((flag, index) => {
+                  return(
+                    <option value={flag.id} key={index}>{flag.name}</option>
+                  )
+                })
+              }
+            </Input>
           </GridItem>
           <GridItem md="6">
-            <FormControlLabel
-              control={
-                <Checkbox
-                  tabIndex={-1}
-                  checkedIcon={<Check className={classes.checkedIcon} />}
-                  icon={<Check className={classes.uncheckedIcon} />}
-                  classes={{ checked: classes.checked }}
-                />
-              }
-              classes={{ label: classes.label }}
-              label="Favorido"
-            />
+            <Input type="checkbox" name="favorite"
+                onChange={this.props.handleFieldChange}
+                value={this.props.card.favorite}
+                onClick={(e) => e.target.value = e.target.checked
+                }/>Favorito
           </GridItem>
         </GridContainer>
       </form>

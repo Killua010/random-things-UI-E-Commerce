@@ -36,7 +36,7 @@ class FormAddress extends Component {
 
   constructor(props){
     super(props);
-    console.log(props)
+    
     this.stateService = new GeneralService("states");
     this.residenceTypeService = new GeneralService("residenceTypes");
 
@@ -73,21 +73,6 @@ class FormAddress extends Component {
       states: resp
     }))
   }
-
-  // componentWillUpdate(){
-  //   if(this.props.address.cityId !== undefined && 
-  //     this.state.update === false && this.props.update === true){
-  //     let obj = {
-  //       target: {
-  //         value: this.props.address.stateId
-  //       }
-  //     }
-  //     this.setCities(obj);
-  //     this.setState({
-  //       update: true
-  //     })
-  //   }
-  // }
 
   renderCities(){
     let cities = []

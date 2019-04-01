@@ -49,17 +49,21 @@ class ModalNewCart extends Component {
           </IconButton>
           <h4 className={classes.modalTitle}>Novo Cartão</h4>
         </DialogTitle>
-        <DialogContent
-          id="modal-slide-description"
-          className={classes.modalBody}
-        >
-          <FormCart />
-        </DialogContent>
-        <DialogActions
-          className={classes.modalFooter + " " + classes.modalFooterCenter}
-        >
-          <Button color="warning" onClick={this.props.closeNewCartModal}>Salvar</Button>
-        </DialogActions>
+        <form onSubmit={this.props.handleSubmit}>
+          <DialogContent
+            id="modal-slide-description"
+            className={classes.modalBody}
+          >
+            <FormCart card ={this.props.card}
+                handleFieldChange={this.props.handleFieldChange} 
+                update={this.props.update}/>
+          </DialogContent>
+          <DialogActions
+            className={classes.modalFooter + " " + classes.modalFooterCenter}
+          >
+            <Button color="warning" type="submit">Salvar</Button>
+          </DialogActions>
+        </form>
       </Dialog>
     );
   }
