@@ -42,4 +42,19 @@ export default class ClientService extends GeneralService {
         return resp;
 
     }
+
+    async getById(id) {
+        let data = null;
+        await axios.get(`${path}/${this.entityPath}/${id}`)
+        .then(res => {
+            data = res.data;
+        }).catch(function (error, e) {
+            swal({
+                title: error,
+                icon: "error",
+            });
+        })
+        
+        return await data;
+    }
 }

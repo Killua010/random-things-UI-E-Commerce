@@ -47,19 +47,23 @@ class ModalNewAddress extends Component {
           >
             <Close className={classes.modalClose} />
           </IconButton>
-          <h4 className={classes.modalTitle}>Novo Endereço</h4>
+          <h4 className={classes.modalTitle}>Endereço</h4>
         </DialogTitle>
-        <DialogContent
-          id="modal-slide-description"
-          className={classes.modalBody}
-        >
-          <FormAddress />
-        </DialogContent>
-        <DialogActions
-          className={classes.modalFooter + " " + classes.modalFooterCenter}
-        >
-          <Button color="warning" onClick={this.props.closeNewAddressModal}>Salvar</Button>
-        </DialogActions>
+        <form onSubmit={this.props.handleSubmit}>
+          <DialogContent
+            id="modal-slide-description"
+            className={classes.modalBody}
+          >
+            <FormAddress address ={this.props.address}
+                handleFieldChange={this.props.handleFieldChange} 
+                update={this.props.update}/>
+          </DialogContent>
+          <DialogActions
+            className={classes.modalFooter + " " + classes.modalFooterCenter}
+          >
+            <Button color="warning" type="submit">Salvar</Button>
+          </DialogActions>
+        </form>
       </Dialog>
     );
   }

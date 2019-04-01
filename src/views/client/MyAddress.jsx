@@ -12,7 +12,15 @@ import classNames from "classnames";
 import withStyles from "@material-ui/core/styles/withStyles";
 import ModalNewAddress from "components/Modal/ModalNewAddress";
 
+import { bindActionCreators } from "redux";
+
+import * as clientActions from "../../actions/client";
+
+import { connect } from "react-redux";
+
 import "../../assets/css/index.css";
+import DeliveryAddressService from "../../services/DeliveryAddressService";
+import ClientService from "../../services/ClientService";
 
 const style = {
   textCenter: {
@@ -31,97 +39,208 @@ const style = {
 };
 
 class MyAddress extends Component {
-  state = {
-    openNewAddress: false
-  };
+  constructor(props){
+    super(props);
+    this.clientService = new ClientService("clients");
+    this.service = new DeliveryAddressService("deliveryAddress");
 
-  componentDidMount() {
-    console.log("endereço " + this.props.location.state)
+    this.state = {
+      addresses: [],
+      address: {
+        city: {}
+      },
+      openNewAddress: false,
+      update: false,
+      blocking: false
+    }
+
+    this.postAddress = this.postAddress.bind(this);
+    this.putAddress = this.putAddress.bind(this);
+    this.deleteAddress = this.deleteAddress.bind(this);
+    this.handleFieldChange = this.handleFieldChange.bind(this);
+    this.alterBlockUI = this.alterBlockUI.bind(this);
   }
 
-  openNewAddressModal = () => {
-    this.setState({ openNewAddress: true });
+  async deleteAddress(address){
+    this.service.delete(address).then(() => {
+      this.clientService.getById(this.props.client.id).then((resp) => {
+        this.props.setClient(resp);
+        this.setState({
+          addresses: [
+            ...this.props.client.deliveryAddress
+          ]
+        })
+      })
+    })
+  }
+
+  async putAddress(){
+    this.alterBlockUI()
+    
+    await this.service.put(this.props.client.id, this.state.address).then(
+      (resp) => {
+        if(resp === true){
+          this.clientService.getById(this.props.client.id).then((resp) => {
+            this.props.setClient(resp);
+            this.setState({
+              addresses: [
+                ...this.props.client.deliveryAddress
+              ]
+            })
+          })
+          
+        }
+      })
+
+      this.setState({
+        openNewAddress: false,
+        addresses: [
+          ...this.props.client.deliveryAddress
+        ]
+      })
+      
+    this.alterBlockUI()
+  }
+
+  async postAddress(){
+    this.alterBlockUI()
+    await this.service.post(this.props.client.id, this.state.address).then(
+      (resp) => {
+        if(resp === true){
+          this.clientService.getById(this.props.client.id).then((resp) => {
+            this.props.setClient(resp);
+            this.setState({
+              addresses: [
+                ...this.props.client.deliveryAddress
+              ]
+            })
+          })
+          
+        }
+      })
+
+      this.setState({
+        openNewAddress: false,
+        addresses: [
+          ...this.props.client.deliveryAddress
+        ]
+      })
+    this.alterBlockUI()
+  }
+  
+  componentDidMount() {
+    console.log(this.props.client)
+    if(this.props.client === null){
+      this.props.history.push("/login");
+    } else {
+      this.setState({
+        addresses: [
+          ...this.props.client.deliveryAddress
+        ]
+      })
+    }
+  }
+
+  alterBlockUI(){
+    this.setState({
+      blocking: !this.state.blocking
+    })
+  }
+
+  openNewAddressModal = (address) => {
+    if(address.city.cityId === undefined){
+      this.setState({
+        update: false,
+        openNewAddress: true,
+        address: {
+          fullName: "",
+          street: "",
+          number: "",
+          neighborhood: "",
+          zipCode: "",
+          observation: "",
+          favorite: "",
+          cityId: "",
+          stateId: ""
+        }
+       })  
+    } else {
+      this.setState({
+        update: true,
+        openNewAddress: true,
+        address: address
+       })  
+    }
   };
 
   closeNewAddressModal = () => {
     this.setState({ openNewAddress: false });
   };
 
+  handleFieldChange(event) {
+    this.setState({
+      address: {
+        ...this.state.address,
+        [event.target.name]: event.target.value
+      }
+    })
+  }
+
+  handleSubmit = async (e) => {
+    e.preventDefault();
+    if(this.state.update === true){
+      this.putAddress();
+    } else {
+      this.postAddress();
+    }
+  }
+
   render() {
     const { classes } = this.props;
     return (
       <div className="content">
         <GridContainer className="p-1">
-          <GridItem md="4">
-            <Card>
-              <CardBody>
-                <Typography className={classes.textRight} color="textSecondary">
-                  <Icon
-                    className={classNames(
-                      classes.icon,
-                      "fas fa-heart",
-                      classes.size
-                    )}
-                  />
-                </Typography>
-                <p>
-                  Rua Doutor Raul Abbott Escobar 549
-                  <br />
-                  Parque Califórnia Campos dos Goytacazes RJ
-                  <br />
-                  28015-312
-                </p>
-              </CardBody>
-              <CardFooter>
-                <Button type="button" color="danger">
-                  Excluir
-                </Button>
-                <Button
-                  type="button"
-                  color="warning"
-                  className="ml-4"
-                  onClick={this.openNewAddressModal}
-                >
-                  Editar
-                </Button>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem md="4">
-            <Card>
-              <CardBody>
-                <Typography className={classes.textRight} color="textSecondary">
-                  <Icon
-                    className={classNames(
-                      classes.icon,
-                      "fas fa-heart",
-                      classes.size
-                    )}
-                  />
-                </Typography>
-                <p>
-                  Rua Doutor Raul Abbott Escobar 549
-                  <br />
-                  Parque Califórnia Campos dos Goytacazes RJ
-                  <br />
-                  28015-312
-                </p>
-              </CardBody>
-              <CardFooter>
-                <Button type="button" color="danger">
-                  Excluir
-                </Button>
-                <Button
-                  type="button"
-                  color="warning"
-                  className="ml-4"
-                  onClick={this.openNewAddressModal}
-                >
-                  Editar
-                </Button>
-              </CardFooter>
-            </Card>
-          </GridItem>
+          {
+            this.state.addresses.map((address, index) => {
+              return (
+                <GridItem md="4" key={index}>
+                  <Card>
+                    <CardBody>
+                      <Typography className={classes.textRight} color="textSecondary">
+                        <Icon
+                          className={classNames(
+                            classes.icon,
+                            "fas fa-heart",
+                            classes.size
+                          )}
+                        />
+                      </Typography>
+                      <p>
+                        {address.street} - {address.number}
+                        <br />
+                        {address.neighborhood} - {address.city.cityName} - {address.city.stateCode}
+                        <br />
+                        {address.zipCode}
+                      </p>
+                    </CardBody>
+                    <CardFooter>
+                      <Button type="button" color="danger" onClick={() => this.deleteAddress(address)}>
+                        Excluir
+                      </Button>
+                      <Button
+                        type="button"
+                        color="warning"
+                        className="ml-4"
+                        onClick={() => this.openNewAddressModal(address)}
+                      >
+                        Editar
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                </GridItem>
+              )
+            })
+          }
           <GridItem md="4">
             <Card>
               <CardBody>
@@ -129,7 +248,7 @@ class MyAddress extends Component {
                   variant="h4"
                   color="textSecondary"
                   className="pointer my-1"
-                  onClick={this.openNewAddressModal}
+                  onClick={() => this.openNewAddressModal({city: {}})}
                 >
                   <Icon className={classNames(classes.icon, "fas fa-plus")} />
                   Novo Endereço
@@ -139,13 +258,25 @@ class MyAddress extends Component {
           </GridItem>
         </GridContainer>
         <ModalNewAddress
+          address ={this.state.address}
+          handleSubmit={this.handleSubmit}
+          handleFieldChange={this.handleFieldChange}
           openNewAddress={this.state.openNewAddress}
           openNewAddressModal={this.openNewAddressModal}
           closeNewAddressModal={this.closeNewAddressModal}
+          update={this.state.update}
         />
       </div>
     );
   }
 }
 
-export default withStyles(style)(MyAddress);
+
+const mapStateToProps = state => ({
+  client: state.client
+})
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(clientActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(MyAddress));
