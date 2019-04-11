@@ -129,6 +129,7 @@ class MyAddress extends Component {
   }
   
   componentDidMount() {
+    console.log(this.props.client)
     if(this.props.client === null){
       this.props.history.push("/login");
     } else {
@@ -158,9 +159,10 @@ class MyAddress extends Component {
           neighborhood: "",
           zipCode: "",
           observation: "",
-          favorite: "",
+          favorite: false,
           cityId: "",
-          stateId: ""
+          stateId: "",
+          residenceTypeId: ""
         }
        })  
     } else {
@@ -202,7 +204,7 @@ class MyAddress extends Component {
           {
             this.state.addresses.map((address, index) => {
               return (
-                <GridItem md="4" key={index}>
+                <GridItem sm="6" key={index}>
                   <Card>
                     <CardBody>
                       <Typography className={classes.textRight} color="textSecondary">
@@ -240,7 +242,7 @@ class MyAddress extends Component {
               )
             })
           }
-          <GridItem md="4">
+          <GridItem sm="6">
             <Card>
               <CardBody>
                 <Typography

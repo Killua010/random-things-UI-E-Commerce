@@ -16,6 +16,7 @@ import * as clientActions from "../../actions/client";
 import { connect } from "react-redux";
 
 import "../../assets/css/index.css";
+import ClientService from "../../services/ClientService";
 
 class Profile extends React.Component {
 
@@ -23,6 +24,8 @@ class Profile extends React.Component {
     super(props);
 
     this.service = new GeneralService("clients");
+    this.clientService = new ClientService("clients");
+
     this.state = {
       openNewClient: false,
       client: {},
@@ -75,10 +78,19 @@ class Profile extends React.Component {
             }
           })
         } else {
-          this.props.setClient(resp);
+          this.clientService.getById(this.state.client.id).then(
+            (resp) => {
+              this.props.setClient(resp)
+              this.setState({
+                openNewClient: false,
+                client: this.props.client
+              })
+            }
+          )
         }
         this.setState({
-          openNewClient: false
+          openNewClient: false,
+          client: this.props.client
         })
       }
     )
@@ -109,6 +121,7 @@ class Profile extends React.Component {
                         type="button"
                         color="warning"
                         className="float-right"
+                        id="editar-dados-basicos"
                         onClick={this.openNewClientModal}
                       >
                         Editar

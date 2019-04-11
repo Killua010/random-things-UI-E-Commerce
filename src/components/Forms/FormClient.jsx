@@ -83,6 +83,7 @@ class FormClient extends Component {
             <CustomInput
               inputProps={{
                 name: "firstName",
+                id: "firstName",
                 onChange: this.props.handleFieldChange,
                 value: this.props.client.firstName,
                 placeholder: "Primeiro Nome...",
@@ -96,8 +97,8 @@ class FormClient extends Component {
           </GridItem>
           <GridItem md="6" className="size-input">
             <CustomInput
-              id="regular"
               inputProps={{
+                id: "lastName",
                 name: "lastName",
                 onChange: this.props.handleFieldChange,
                 value: this.props.client.lastName,
@@ -113,8 +114,8 @@ class FormClient extends Component {
 
           <GridItem md="6" className="size-input">
             <CustomInput
-              id="regular"
               inputProps={{
+                id: "email",
                 name: "email",
                 onChange: this.props.handleFieldChange,
                 value: this.props.client.email,
@@ -142,8 +143,8 @@ class FormClient extends Component {
 
           <GridItem md="6" className="size-input">
             <CustomInput
-              id="regular"
               inputProps={{
+                id: "cpf",
                 name: "cpf",
                 onChange: this.props.handleFieldChange,
                 value: this.props.client.cpf,
@@ -158,9 +159,9 @@ class FormClient extends Component {
           </GridItem>
           <GridItem md="6" className="size-input">
             <CustomInput
-              id="regular"
               inputProps={{
                 name: "birthDate",
+                id: "birthDate",
                 onChange: this.props.handleFieldChange,
                 value: this.props.client.birthDate,
                 type: "date",
@@ -174,8 +175,8 @@ class FormClient extends Component {
 
           <GridItem md="6" className="size-input">
             <CustomInput
-              id="regular"
               inputProps={{
+                id: "phone",
                 name: "phone",
                 onChange: this.props.handleFieldChange,
                 value: this.props.client.phone,
@@ -203,8 +204,8 @@ class FormClient extends Component {
 
           <GridItem md="6" className="size-input">
             <CustomInput
-              id="regular"
               inputProps={{
+                id: "password",
                 name: "password",
                 onChange: this.props.handleFieldChange,
                 value: this.props.client.password,
@@ -219,8 +220,8 @@ class FormClient extends Component {
           </GridItem>
           <GridItem md="6" className="size-input">
             <CustomInput
-              id="regular"
               inputProps={{
+                id: "confirmPassword",
                 name: "confirmPassword",
                 onChange: this.props.handleFieldChange,
                 value: this.props.client.confirmPassword,

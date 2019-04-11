@@ -90,6 +90,7 @@ class ClientRegister extends Component {
                         <FormClient client ={this.state.client}
                         handleFieldChange={this.handleFieldChange} />
                         <Button
+                          id="saveClient"
                           type="submit"
                           color="warning"
                           className="float-right"

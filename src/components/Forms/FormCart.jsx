@@ -61,6 +61,7 @@ class FormCart extends Component {
           <GridItem md="6">
             <CustomInput
               inputProps={{
+                id: "number",
                 type: "text",
                 name: "number",
                 onChange: this.props.handleFieldChange,
@@ -75,6 +76,7 @@ class FormCart extends Component {
           <GridItem md="6">
             <CustomInput
               inputProps={{
+                id: "securityCode",
                 type: "text",
                 name: "securityCode",
                 onChange: this.props.handleFieldChange,
@@ -89,6 +91,7 @@ class FormCart extends Component {
           <GridItem md="6">
             <CustomInput
               inputProps={{
+                id: "printedName",
                 type: "text",
                 name: "printedName",
                 onChange: this.props.handleFieldChange,
@@ -113,7 +116,7 @@ class FormCart extends Component {
             </Input>
           </GridItem>
           <GridItem md="6">
-            <Input type="checkbox" name="favorite"
+            <Input type="checkbox" name="favorite" id="favorite"
                 onChange={this.props.handleFieldChange}
                 value={this.props.card.favorite}
                 onClick={(e) => e.target.value = e.target.checked

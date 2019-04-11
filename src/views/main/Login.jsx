@@ -112,6 +112,7 @@ class Login extends React.Component {
                             fullWidth: true
                           }}
                           inputProps={{
+                            id: "email",
                             name: "email",
                             onChange: this.handleFieldChange,
                             value: this.state.email,
@@ -132,6 +133,7 @@ class Login extends React.Component {
                             fullWidth: true
                           }}
                           inputProps={{
+                            id: "password",
                             name: "password",
                             onChange: this.handleFieldChange,
                             value: this.state.password,
@@ -152,7 +154,7 @@ class Login extends React.Component {
                       </GridItem>
                     </CardBody>
                     <CardFooter className={classes.cardFooter}>
-                      <Button color="warning" size="lg" type="submit">
+                      <Button color="warning" size="lg" type="submit" id="entrar">
                         Entrar
                       </Button>
                     </CardFooter>

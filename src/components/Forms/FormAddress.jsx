@@ -109,6 +109,7 @@ class FormAddress extends Component {
           <GridItem md="6" className="size-input">
             <CustomInput
               inputProps={{
+                id: "fullName",
                 type: "text",
                 name: "fullName",
                 onChange: this.props.handleFieldChange,
@@ -123,6 +124,7 @@ class FormAddress extends Component {
           <GridItem md="6" className="size-input">
             <CustomInput
               inputProps={{
+                id: "zipCode",
                 type: "text",
                 name: "zipCode",
                 onChange: this.props.handleFieldChange,
@@ -137,6 +139,7 @@ class FormAddress extends Component {
           <GridItem md="6" className="size-input">
             <CustomInput
               inputProps={{
+                id: "street",
                 type: "text",
                 name: "street",
                 onChange: this.props.handleFieldChange,
@@ -183,6 +186,7 @@ class FormAddress extends Component {
           <GridItem md="6" className="size-input">
             <CustomInput
               inputProps={{
+                id: "neighborhood",
                 type: "text",
                 name: "neighborhood",
                 onChange: this.props.handleFieldChange,
@@ -197,6 +201,7 @@ class FormAddress extends Component {
           <GridItem md="6" className="size-input">
             <CustomInput
               inputProps={{
+                id: "number",
                 type: "number",
                 name: "number",
                 onChange: this.props.handleFieldChange,
@@ -211,6 +216,7 @@ class FormAddress extends Component {
           <GridItem md="6" className="size-input">
             <CustomInput
               inputProps={{
+                id: "observation",
                 type: "text",
                 name: "observation",
                 onChange: this.props.handleFieldChange,
@@ -223,7 +229,7 @@ class FormAddress extends Component {
             />
           </GridItem>
           <GridItem md="6" className="size-input">
-            <Input type="checkbox" name="favorite"
+            <Input id="favorite" type="checkbox" name="favorite"
                 onChange={this.props.handleFieldChange}
                 value={this.props.address.favorite}
                 onClick={(e) => e.target.value = e.target.checked

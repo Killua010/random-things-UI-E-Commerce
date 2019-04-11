@@ -199,7 +199,7 @@ class MyCarts extends Component {
             {
               this.state.cards.map((card, index) => {
                 return (
-                  <GridItem md="4" key={index}>
+                  <GridItem sm="6" key={index}>
                     <Card>
                       <CardBody>
                         <Typography className={classes.textRight} color="textSecondary">
@@ -235,7 +235,7 @@ class MyCarts extends Component {
                 )
               })
             }
-          <GridItem md="4">
+          <GridItem sm="6">
             <Card>
               <CardBody>
                 <Typography

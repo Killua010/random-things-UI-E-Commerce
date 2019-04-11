@@ -6,7 +6,7 @@ import BlockUi from 'react-block-ui';
 import { Loader } from 'react-loaders';
 import 'react-block-ui/style.css';
 import 'loaders.css/loaders.min.css';
-
+import Dropzone from 'react-dropzone'
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -26,12 +26,13 @@ import {
   Input,
 } from "reactstrap";
 import ModalNewDescriptionField from '../../components/Modal/ModalNewDescriptionField';
+import ProductService from '../../services/ProductService';
 
 export default class ProductNew extends Component {
 
   constructor(props) {
     super(props);
-    this.service = new GeneralService("products");
+    this.service = new ProductService("products");
     this.pricingGroupservice = new GeneralService("pricinggroup");
     this.subCategoryservice = new GeneralService("subcategories");
     this.technicalFieldService = new GeneralService("technicalfields");
@@ -43,8 +44,12 @@ export default class ProductNew extends Component {
         pricingGroupId: '',
         descriptionField: [],
         technicalFieldId: [],
-        barCode: ''
+        barCode: '',
+        imgSrc: [],
+        images: []
       },
+      imgSrc: [],
+      images: [],
       pricingGroup: [],
       subCategories: [],
       technicalFields: [],
@@ -127,6 +132,11 @@ export default class ProductNew extends Component {
   }
 
   executeEvent(product){ 
+    product = {
+      ...product,
+      imgSrc: [...this.state.imgSrc],
+      images: [...this.state.images]
+    }
     if(this.state.update === false)
       this.postProduct(product)
     else  
@@ -144,12 +154,19 @@ export default class ProductNew extends Component {
       let idsSubCategories = [];
       let descriptions = []
       let idsField = []
+      let imgs = []
       for(let i = 0; i < this.props.location.state.product.subCategories.length; i++){
         idsSubCategories.push(this.props.location.state.product.subCategories[i].id)
       }
       for(let i = 0; i < this.props.location.state.product.technicalRow.length; i++){
         descriptions.push(this.props.location.state.product.technicalRow[i].description)
         idsField.push(this.props.location.state.product.technicalRow[i].technicalField.id)
+      }
+      console.log(this.props.location.state.product)
+      if(this.props.location.state.product.imgSrc != null){
+        for(let i = 0; i < this.props.location.state.product.imgSrc.length; i++){
+          imgs.push(this.props.location.state.product.imgSrc[i]);
+        }
       }
       this.setState({
         product: { ...this.props.location.state.product,
@@ -158,6 +175,7 @@ export default class ProductNew extends Component {
           technicalFieldId: idsField,
           pricingGroupId: this.props.location.state.product.pricingGroup.id
         },
+        imgSrc: [...imgs],
         update: true
       })
     } else {
@@ -279,7 +297,35 @@ export default class ProductNew extends Component {
     })
   }
 
+  onDrop = (files, reject) => {
+    // POST to a test endpoint for demo purposes
+    
+    if(reject && reject.length > 0){
+      alert("error")
+      return;
+    }
+
+    for(let i = 0; i < files.length; i++){
+      const fileItemReader = new FileReader();
+      fileItemReader.addEventListener("load", () => {
+        this.setState({
+          imgSrc: [
+            ...this.state.imgSrc,
+            fileItemReader.result
+          ],
+          images: [
+            ...this.state.images,
+            files[i]
+          ]
+        })
+      })
+      fileItemReader.readAsDataURL(files[i]);
+    }
+    
+  }
+
   render() {
+    const { imgSrc } = this.state
     return (
       <div className="content">
         <BlockUi tag="div" blocking={this.state.blocking} loader={<Loader active type={this.state.loaderType} color="#02a17c"/>}>
@@ -370,7 +416,17 @@ export default class ProductNew extends Component {
                     {
                       tabName: "Fotos",
                       tabContent: (
-                        <h1>Em desenvolvimento</h1>
+                        <div>
+                          <Dropzone onDrop={this.onDrop} multiple={true} accept="image/*">
+                          {imgSrc !== undefined ? 
+                            imgSrc.map((img, index) => {
+                              return(
+                                <img key={index} src={img} />
+                              );
+                          }): ''}
+                          </Dropzone>
+                          Imagem dos produtos
+                        </div>
                       )
                     }
                   ]}
