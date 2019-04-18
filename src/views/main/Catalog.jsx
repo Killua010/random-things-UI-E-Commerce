@@ -13,9 +13,13 @@ import Typography from "@material-ui/core/Typography";
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 
+import Paginations from "components/Pagination/Pagination.jsx";
+
 import componentsStyle from "../../assets/jss/material-kit-react/views/components.jsx";
 
 import "../../assets/css/index.css";
+import ProductService from "../../services/ProductService.js";
+import GeneralService from "../../services/GeneralService.js";
 
 const styles = theme => ({
   button: {
@@ -27,13 +31,83 @@ const styles = theme => ({
 });
 
 class Catalog extends Component {
-  createProduct = () => {
-    let product = [];
-    for (let i = 0; i < 9; i++) {
-      product.push(<SimpleProduct md={4} />);
+
+  constructor(props){
+    super(props);
+
+    this.productServie = new ProductService("products");
+    this.categoryService = new GeneralService("categories");
+
+    this.state = {
+      page: 0, 
+      products: [],
+      categories: []
     }
-    return product;
-  };
+
+    this.getPageabled = this.getPageabled.bind(this);
+    this.getCategories = this.getCategories.bind(this);
+
+    this.getFields();
+  }
+
+  getFields = async () => {
+    await this.getCategories();
+    await this.getPageabled(0);
+  }
+
+  async getCategories(){
+    await this.categoryService.getAll().then(val => {
+      this.setState({
+        categories: val
+      })
+    })
+  }
+
+  async getPageabled(page){
+    await this.productServie.getPageabled(page).then(val => {
+      if(val.length === 0){
+        return;
+      }
+      this.setState({
+        products: val
+      })
+    })
+
+  }
+
+  componentDidMount(){
+    this.setState({
+      page:0
+    })
+  }
+
+  renderCategories = (category) => {
+    let array = [];
+    for(let subCategory of category.subCategories) {
+      array.push({
+        name: <Button>{subCategory.name}</Button>, noLink: true
+      })
+    }
+    return array; 
+  }
+
+  prevPage = () => {
+    if(this.state.page === 0)
+      return;
+    this.getPageabled(this.state.page-1)
+    this.setState({
+      page: this.state.page -1
+    })
+  }
+
+  nextPage = () => {
+    if((this.state.page + 1) === this.state.products[0].totalPage)
+      return
+    this.getPageabled(this.state.page+1)
+    this.setState({
+      page:this.state.page+1
+    })
+  }
 
   render() {
     const { classes } = this.props;
@@ -63,40 +137,49 @@ class Catalog extends Component {
                     <CardBody>
                   
                   <Typography variant="h5" className="mt-2 ml-4">Categorias</Typography>
-                  <CustomDropdown
-                    hoverColor="black"
-                    noLiPadding
-                    buttonText="Categoria X"
-                    buttonProps={{
-                      className: classes.navLink,
-                      color: "transparent"
-                    }}
-                    buttonIcon={Apps}
-                    dropdownList={[
-                      { name: <Button>Categoria X</Button>, noLink: true },
-                      { name: <Button>Categoria X</Button>, noLink: true }
-                    ]}
-                  />
-                  <CustomDropdown
-                    hoverColor="black"
-                    noLiPadding
-                    buttonText="Categoria Y"
-                    buttonProps={{
-                      className: classes.navLink,
-                      color: "transparent"
-                    }}
-                    buttonIcon={Apps}
-                    dropdownList={[
-                      { name: <Button>Categoria X</Button>, noLink: true },
-                      { name: <Button>Categoria X</Button>, noLink: true }
-                    ]}
-                  />
-
+                  {
+                     this.state.categories.map((category, key) => {
+                      return(
+                        <CustomDropdown
+                          hoverColor="black"
+                          noLiPadding
+                          buttonText={category.name}
+                          buttonProps={{
+                            className: classes.navLink,
+                            color: "transparent"
+                          }}
+                          buttonIcon={Apps}
+                          dropdownList={
+                            this.renderCategories(category)
+                          }
+                        />
+                       )
+                     })
+                     
+                  }
+                  
                   </CardBody>
                   </Card>
                 </GridItem>
                 <GridItem md={9} xs={12} className="no-hover">
-                  <GridContainer>{this.createProduct()}</GridContainer>
+                  <GridContainer>
+                  {
+                    this.state.products.map((product, key) => {
+                      return(
+                          <SimpleProduct product={product} md={4} key={key} />
+                      );
+                    })
+                  }
+                  </GridContainer>
+                  <div className="text-center">
+                    <Paginations
+                      pages={[
+                        { text: "Anterior", onClick: this.prevPage },
+                        { text: this.state.page+1 },
+                        { text: "Próximo", onClick: this.nextPage },
+                      ]}
+                    />
+                  </div>
                 </GridItem>
               </GridContainer>
               

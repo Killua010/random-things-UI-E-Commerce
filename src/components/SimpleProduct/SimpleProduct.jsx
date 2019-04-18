@@ -38,6 +38,15 @@ const style = {
 };
 
 class SimpleProduct extends Component {
+
+  descriptionFormat = () => {
+    if(this.props.product.description.length > 40) {
+      return this.props.product.description.substring(0,40) + "...";
+    } else {
+      return this.props.product.description;
+    }
+  }
+
   render() {
     const { classes, md } = this.props;
     let mdValue;
@@ -51,30 +60,29 @@ class SimpleProduct extends Component {
           <CardHeader>
             <a href="/produto">
               <img
-                src={image}
+                src={this.props.product.imgSrc[0]}
                 alt=""
               />
             </a>
           </CardHeader>
           <CardBody>
             <Typography className={classes.textRight} color="textSecondary">
-              <span>255</span>
+              <span>0</span>
               <Icon
                 className={classNames(classes.icon, "fas fa-eye", classes.size)}
               />
             </Typography>
 
             <Typography variant="h5" component="h2">
-              Special title treatment
+              {this.props.product.name}
             </Typography>
             <Typography component="p">
-              With supporting text below as a natural lead-in to additional
-              content.
+              {this.descriptionFormat()}
             </Typography>
           </CardBody>
           <CardActions className={classes.actions} disableActionSpacing>
             <GridItem xs={5}>
-              <Typography color="textSecondary">R$ 300,00</Typography>
+              <Typography color="textSecondary">R$ {this.props.product.price}</Typography>
             </GridItem>
             <GridItem xs={7}>
               <IconButton aria-label="Share">
