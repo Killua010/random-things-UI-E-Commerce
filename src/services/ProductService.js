@@ -9,6 +9,21 @@ export default class ProductService {
         this.entityPath = entityPath;
     }
 
+    async getById(entity) {
+        let data = null;
+        await axios.get(`${path}/${this.entityPath}/${entity.id}`)
+        .then((res) => {
+            data = res.data;
+        }).catch(function (error, e) {
+            console.log(error)
+            swal({
+                title: error.response.data,
+                icon: "error",
+            });
+        })
+        return await data;
+    }
+
     async getPageabled(page){
         let data = null;
         await axios.get(`${path}/${this.entityPath}/paging/${page}`)

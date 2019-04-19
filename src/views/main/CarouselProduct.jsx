@@ -9,6 +9,19 @@ import image3 from "../../assets/img/bg3.jpg";
 import "../../assets/css/carouselProduct.css";
 
 export default class CarouselProduct extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      images: []
+    }
+  }
+
+  componentDidMount() {
+    this.setState({
+      images: this.props.img
+    })
+  }
+
   render() {
     const settings = {
       customPaging: i => (
@@ -23,7 +36,7 @@ export default class CarouselProduct extends Component {
               backgroundColor: "aqua"
             }}
           >
-            <img src={image1} />
+            <img src={this.state.images[i]} />
           </a>
         </div>
       ),
@@ -37,18 +50,15 @@ export default class CarouselProduct extends Component {
     };
     return (
       <Carousel {...settings}>
-        <div>
-          <img src={image1} alt="First slide" className="slick-image" />
-        </div>
-        <div>
-          <img src={image2} alt="Second slide" className="slick-image" />
-        </div>
-        <div>
-          <img src={image3} alt="Third slide" className="slick-image" />
-        </div>
-        <div>
-          <img src={image3} alt="Third slide" className="slick-image" />
-        </div>
+        {
+          this.state.images.map((image, index) => {
+            return(
+              <div key={index} >
+                <img src={image} alt="First slide" className="slick-image"  />
+              </div>
+            )
+          })
+        }
       </Carousel>
     );
   }

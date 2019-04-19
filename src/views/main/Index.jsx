@@ -17,6 +17,10 @@ import SimpleProduct from "../../components/SimpleProduct/SimpleProduct.jsx";
 import ParallaxIndex from "../../components/ParallaxIndex/ParallaxIndex";
 
 class Index extends Component {
+  constructor(props){
+    super(props);
+    console.log(props);
+  }
   render() {
     const { classes, ...rest } = this.props;
     return (
@@ -50,10 +54,10 @@ class Index extends Component {
                 Produtos mais vistos
               </h2>
               <GridContainer>
+                {/* <SimpleProduct />
                 <SimpleProduct />
                 <SimpleProduct />
-                <SimpleProduct />
-                <SimpleProduct />
+                <SimpleProduct /> */}
               </GridContainer>
               <h2 className="title text-warning text-center">
                 <a href="#" className="text-warning link">

@@ -22,8 +22,38 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import componentsStyle from "../../assets/jss/material-kit-react/views/components.jsx";
 
 import "../../assets/css/index.css";
+import ProductService from "../../services/ProductService";
 
 class ProductDescription extends Component {
+  
+  constructor(props){
+    super(props);
+
+    this.service = new ProductService("products");
+
+    this.state = {
+      product: {}
+    }
+
+    this.getById = this.getById.bind(this);
+  }
+
+  async getById(product) {
+    await this.service.getById(product).then((res) => {
+      this.setState({
+        product: res[0]
+      })
+    })
+    console.log(this.state.product)
+  }
+  
+  componentDidMount(){
+    if(this.props.location.state === undefined){
+      this.props.history.push("/");
+    }
+    this.getById(this.props.location.state.product);
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -46,9 +76,12 @@ class ProductDescription extends Component {
           <div className={classes.sections}>
             <div className={classes.container + " pt-5 pb-5"}>
               <GridContainer className="p-1">
-                <GridItem md="5">
-                  <CarouselProduct />
-                  <Table className={"mt-5"}>
+                <GridItem md="4">
+                  {
+                    this.state.product.imgSrc !== undefined ? 
+                    <CarouselProduct img={this.state.product.imgSrc} /> : ""
+                  }                  
+                  <Table className={"mt-7"}>
                     <TableHead>
                       <TableRow>
                         <TableCell>Descrição</TableCell>
@@ -56,49 +89,25 @@ class ProductDescription extends Component {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      <TableRow>
-                        <TableCell component="th" scope="row">
-                          dsddsf
-                        </TableCell>
-                        <TableCell align="right">dsddsf</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell component="th" scope="row">
-                          dsddsf
-                        </TableCell>
-                        <TableCell align="right">dsddsf</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell component="th" scope="row">
-                          dsddsf
-                        </TableCell>
-                        <TableCell align="right">dsddsf</TableCell>
-                      </TableRow>
+                      { this.state.product.technicalRow !== undefined ?
+                        this.state.product.technicalRow.map((row, index) => {
+                          return(
+                            <TableRow key={index}>
+                              <TableCell component="th" scope="row">
+                                {row.technicalField.name}
+                              </TableCell>
+                              <TableCell align="right">{row.description}</TableCell>
+                            </TableRow>      
+                          )
+                        }) : ""
+                      }
                     </TableBody>
                   </Table>
                 </GridItem>
-                <GridItem md="7">
-                <Typography variant="h5"  className="text-center">Produto X</Typography>
+                <GridItem md="8">
+                <Typography variant="h5"  className="text-center">{this.state.product.name}</Typography>
                 <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                    nulla metus, congue ac velit id, bibendum lobortis arcu.
-                    Proin id libero non mi fermentum volutpat nec ut nibh.
-                    Mauris consectetur ex a vehicula lobortis. Praesent vehicula
-                    urna scelerisque tortor interdum, gravida euismod justo
-                    varius. Pellentesque maximus nisi eget sapien ullamcorper
-                    vulputate. Sed vulputate vitae sem vitae ornare. In
-                    consectetur facilisis elit, et euismod tortor aliquet non.
-                    Curabitur rhoncus consequat ex, at aliquet erat maximus
-                    quis. Mauris eget sagittis tortor, accumsan pharetra est.
-                    Etiam ipsum neque, eleifend ut sapien ac, congue vehicula
-                    elit. Phasellus eu nunc sodales, tincidunt est vitae,
-                    fringilla mi. Etiam nibh quam, efficitur non arcu id, mattis
-                    accumsan felis. Mauris posuere sapien ut ipsum molestie, at
-                    pharetra lorem gravida. Duis in tortor vitae justo mollis
-                    semper quis id lacus. Suspendisse consectetur dignissim
-                    arcu. Nunc pulvinar in nulla eu aliquam. Duis malesuada
-                    varius tortor fringilla luctus. Cras ultricies neque odio,
-                    ut hendrerit est efficitur vitae. Nullam eget semper est.
+                  {this.state.product.description}
                   </Typography>
                   <Button type="button" color="success">
                     Adicionar aos faoritos
@@ -114,10 +123,10 @@ class ProductDescription extends Component {
         <div className={classes.container}>
           <h2 className="title text-warning text-center">talvez você goste</h2>
           <GridContainer>
+            {/* <SimpleProduct />
             <SimpleProduct />
             <SimpleProduct />
-            <SimpleProduct />
-            <SimpleProduct />
+            <SimpleProduct /> */}
           </GridContainer>
         </div>
       </div>

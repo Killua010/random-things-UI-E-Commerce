@@ -27,6 +27,10 @@ class MainLayout extends Component {
     });
   };
 
+  goTo = () => {
+    this.props.history.push("nova-categoria");
+  }
+
   render() {
     const { classes, ...rest } = this.props;
     return (
@@ -58,7 +62,7 @@ class MainLayout extends Component {
                       placeholder: "Pesquisar",
                       endAdornment: (
                         <InputAdornment position="end">
-                          <a href="/catalogo">
+                          <a href="javascript:void(0)" onClick={() => this.goTo("catalogo")}>
                             <i className="fas fa-search color-white" />
                           </a>
                         </InputAdornment>

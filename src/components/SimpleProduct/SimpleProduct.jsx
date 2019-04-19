@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import GridItem from "../Grid/GridItem.jsx";
 
 import withStyles from "@material-ui/core/styles/withStyles";
-
+import { browserHistory } from 'history'
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
@@ -39,12 +39,21 @@ const style = {
 
 class SimpleProduct extends Component {
 
+  constructor(props){
+    super(props);
+    this.goTo = this.goTo.bind(this);
+  }
+
   descriptionFormat = () => {
     if(this.props.product.description.length > 40) {
       return this.props.product.description.substring(0,40) + "...";
     } else {
       return this.props.product.description;
     }
+  }
+
+  goTo() {
+    this.props.props.history.push({pathname: "produto", state: { product: this.props.product }});    
   }
 
   render() {
@@ -58,7 +67,7 @@ class SimpleProduct extends Component {
       <GridItem md={mdValue} sm={6}>
         <Card className={classes.textCenter}>
           <CardHeader>
-            <a href="/produto">
+            <a href="javascript:void(0)" onClick={this.goTo}>
               <img
                 src={this.props.product.imgSrc[0]}
                 alt=""

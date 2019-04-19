@@ -34,7 +34,6 @@ class Catalog extends Component {
 
   constructor(props){
     super(props);
-
     this.productServie = new ProductService("products");
     this.categoryService = new GeneralService("categories");
 
@@ -166,7 +165,7 @@ class Catalog extends Component {
                   {
                     this.state.products.map((product, key) => {
                       return(
-                          <SimpleProduct product={product} md={4} key={key} />
+                          <SimpleProduct props={this.props} product={product} md={4} key={key} />
                       );
                     })
                   }
