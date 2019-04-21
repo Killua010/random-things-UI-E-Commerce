@@ -18,7 +18,14 @@ import "../../assets/css/index.css";
 
 import navbarsStyle from "../../assets/jss/material-kit-react/views/componentsSections/navbarsStyle.jsx";
 
+import { connect } from "react-redux";
+
 class MainLayout extends Component {
+
+  constructor(props){
+    super(props)
+  }
+
   getRoutes = routes => {
     return routes.map((prop, key) => {
       return (
@@ -27,15 +34,17 @@ class MainLayout extends Component {
     });
   };
 
-  goTo = () => {
-    this.props.history.push("nova-categoria");
+  goTo = (path) => {
+    this.props.history.push(path);
   }
 
   render() {
     const { classes, ...rest } = this.props;
+    console.log(this.props)
     return (
       <div>
         <MainHeader
+          props={this.props}
           brand="Random Things"
           path="/"
           fixed
@@ -48,7 +57,7 @@ class MainLayout extends Component {
             <List className={classes.list}>
               <ListItem className={classes.listItem + " mr-2"}>
                 <Button
-                  href="/catalogo"
+                  href="javascript:void(0)" onClick={() => this.goTo("/catalogo")}
                   className={classes.navLink}
                   color="transparent"
                 >
@@ -77,28 +86,11 @@ class MainLayout extends Component {
             </List>
           }
           rightLinks={
+            (this.props.client === null || this.props.client === undefined) ?
             <List className={classes.list}>
               <ListItem className={classes.listItem}>
-                <Button
-                  href="/favorito"
-                  className={classes.navLink}
-                  color="transparent"
-                >
-                  <i className="fas fa-heart" />
-                </Button>
-              </ListItem>
-              <ListItem className={classes.listItem}>
-                <Button
-                  href="/carrinho"
-                  className={classes.navLink}
-                  color="transparent"
-                >
-                  <i className="fas fa-shopping-cart" />
-                  <Badge color="info">4</Badge>
-                </Button>
-              </ListItem>
-              <ListItem className={classes.listItem}>
                 <CustomDropdown
+                  props={this.props}
                   buttonText="Embarque Conosco"
                   buttonProps={{
                     className: classes.navLink,
@@ -107,6 +99,41 @@ class MainLayout extends Component {
                   dropdownList={[
                     { name: "Novo Usuario", path: "/cadastro" },
                     { name: "Entrar", path: "/login" }
+                  ]}
+                />
+              </ListItem> 
+            </List>
+            :
+            <List className={classes.list}>
+              <ListItem className={classes.listItem}>
+                <Button
+                  href="javascript:void(0)" onClick={() => this.goTo("/favorito")}
+                  className={classes.navLink}
+                  color="transparent"
+                >
+                  <i className="fas fa-heart" />
+                </Button>
+              </ListItem>
+              <ListItem className={classes.listItem}>
+                <Button
+                  href="javascript:void(0)" onClick={() => this.goTo("/carrinho")}
+                  className={classes.navLink}
+                  color="transparent"
+                >
+                  <i className="fas fa-shopping-cart" />
+                  <Badge color="info">{this.props.cart.quantityProduct}</Badge>
+                </Button>
+              </ListItem>
+              <ListItem className={classes.listItem}>
+                <CustomDropdown
+                  buttonText={`Olá ${this.props.client.firstName}`}
+                  buttonProps={{
+                    className: classes.navLink,
+                    color: "transparent"
+                  }}
+                  dropdownList={[
+                    { name: "Meu Perfil", path: "/cadastro" },
+                    { name: "Sair", path: "/login" }
                   ]}
                 />
               </ListItem>
@@ -123,4 +150,10 @@ class MainLayout extends Component {
   }
 }
 
-export default withStyles(navbarsStyle)(MainLayout);
+const mapStateToProps = state => ({
+  client: state.client,
+  cart: state.cart
+})
+
+
+export default connect(mapStateToProps)(withStyles(navbarsStyle)(MainLayout));

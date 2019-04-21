@@ -19,10 +19,99 @@ import TableRow from "@material-ui/core/TableRow";
 import classNames from "classnames";
 
 import withStyles from "@material-ui/core/styles/withStyles";
+import ShoppingCartService from "../../services/ShoppingCartService";
 
 import componentsStyle from "../../assets/jss/material-kit-react/views/components.jsx";
 import "../../assets/css/index.css";
+import { connect } from "react-redux";
+
+import { bindActionCreators } from "redux";
+
+import * as cartActions from "../../actions/shoppingCart";
 class ShoppingCart extends Component {
+
+  constructor(props){
+    super(props);
+
+    this.service = new ShoppingCartService("shoppingCarts");
+
+    this.state = {
+      cart: {},
+      subTotal: 0.0,
+      quantity: 0
+    }
+
+    this.getById = this.getById.bind(this);
+    this.handleFieldChange = this.handleFieldChange.bind(this);
+    this.renderSubTotal = this.renderSubTotal.bind(this);
+    this.removeProduct = this.removeProduct.bind(this);
+  }
+
+  getById() {
+    this.service.getById(this.props.cart.id).then(res => {
+      this.setState({
+        cart: res
+      }, () => this.renderSubTotal())
+    })
+  }
+
+  componentDidMount(){
+    if(this.props.client === null || this.props.client === undefined){
+      this.props.history.push("/perfil");
+    }else if(this.props.cart.id != undefined && this.props.cart.id != null){
+      this.getById();
+    }
+  }
+
+  removeProduct(product){
+    this.service.delete(product, this.props.client.id).then(res => {
+      this.setState({
+        cart: res
+      }, () => {this.renderSubTotal(); this.props.setShoppingCart(res);})
+    })
+  }
+
+  renderSubTotal(){
+    let itens = 0;
+    let subTotal = 0.0;
+    if(this.state.cart.itens === undefined){
+      return;
+    }
+    for(let i = 0; i < this.state.cart.itens.length; i++){
+      if(this.state.cart.itens[i].status != false){
+        itens = itens + this.state.cart.itens[i].quantity * 1
+        subTotal += (this.state.cart.itens[i].quantity * this.state.cart.itens[i].product.price)
+      }
+    }
+
+    this.setState({
+      quantity: itens,
+      subTotal: subTotal
+    })
+  }
+
+  handleFieldChange(event, index) {
+    let itens = [];
+    let item = {};
+    for(let i = 0; i < this.state.cart.itens.length; i++){
+      if (i === index) {
+        item = this.state.cart.itens[i];
+        item.quantity = event.target.value;
+        itens.push(item)
+        continue;
+      }
+      itens.push(this.state.cart.itens[i]);
+    }
+
+    this.setState({
+      cart : {
+        ...this.state.cart,
+        itens: itens
+      }
+    })
+    this.renderSubTotal();
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -48,118 +137,68 @@ class ShoppingCart extends Component {
                 <GridItem md="9">
                   <Table className={"mt-5"}>
                     <TableBody>
-                      <TableRow>
-                        <TableCell>
-                          <img
-                            src="https://images.pexels.com/photos/1073772/pexels-photo-1073772.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                            alt=""
-                            width="100px"
-                          />
-                        </TableCell>
-                        <TableCell align="right">Nome Produto</TableCell>
-                        <TableCell align="right">R$ 3,00</TableCell>
-                        <TableCell align="right">
-                          <GridContainer>
-                            <GridItem xs="9">
-                              <TextField
-                                label="Number"
-                                value={1}
-                                type="number"
-                                margin="normal"
-                              />
-                            </GridItem>
-                            <GridItem xs="3" className="pt-icon-removeProduct">
-                              <IconButton color="secondary">
-                                <DeleteIcon />
-                              </IconButton>
-                            </GridItem>
-                          </GridContainer>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <img
-                            src="https://images.pexels.com/photos/1073772/pexels-photo-1073772.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                            alt=""
-                            width="100px"
-                          />
-                        </TableCell>
-                        <TableCell align="right">Nome Produto</TableCell>
-                        <TableCell align="right">R$ 3,00</TableCell>
-                        <TableCell align="right">
-                          <GridContainer>
-                            <GridItem xs="9">
-                              <TextField
-                                label="Number"
-                                value={1}
-                                type="number"
-                                margin="normal"
-                              />
-                            </GridItem>
-                            <GridItem xs="3" className="pt-icon-removeProduct">
-                              <IconButton color="secondary">
-                                <DeleteIcon />
-                              </IconButton>
-                            </GridItem>
-                          </GridContainer>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <img
-                            src="https://images.pexels.com/photos/1073772/pexels-photo-1073772.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                            alt=""
-                            width="100px"
-                          />
-                        </TableCell>
-                        <TableCell align="right">Nome Produto</TableCell>
-                        <TableCell align="right">R$ 3,00</TableCell>
-                        <TableCell align="right">
-                          <GridContainer>
-                            <GridItem xs="9">
-                              <TextField
-                                label="Number"
-                                value={1}
-                                type="number"
-                                margin="normal"
-                              />
-                            </GridItem>
-                            <GridItem xs="3" className="pt-icon-removeProduct">
-                              <IconButton color="secondary">
-                                <DeleteIcon />
-                              </IconButton>
-                            </GridItem>
-                          </GridContainer>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <img
-                            src="https://images.pexels.com/photos/1073772/pexels-photo-1073772.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                            alt=""
-                            width="100px"
-                          />
-                        </TableCell>
-                        <TableCell align="right">Nome Produto</TableCell>
-                        <TableCell align="right">R$ 3,00</TableCell>
-                        <TableCell align="right">
-                          <GridContainer>
-                            <GridItem xs="9">
-                              <TextField
-                                label="Number"
-                                value={1}
-                                type="number"
-                                margin="normal"
-                              />
-                            </GridItem>
-                            <GridItem xs="3" className="pt-icon-removeProduct">
-                              <IconButton color="secondary">
-                                <DeleteIcon />
-                              </IconButton>
-                            </GridItem>
-                          </GridContainer>
-                        </TableCell>
-                      </TableRow>
+                      { 
+                        (this.state.cart !== null && this.state.cart.itens !== undefined) ?
+                        this.state.cart.itens.map((item, index) => {
+                          if(item.status == false){
+                            return(
+                              <TableRow key={index}>
+                                <TableCell>
+                                  <img
+                                    src={item.product.imgSrc[0]}
+                                    alt=""
+                                    width="100px"
+                                  />
+                                </TableCell>
+                                <TableCell>{item.product.name}</TableCell>
+                                <TableCell>Produto Inativado pelo tempo</TableCell>
+                                <TableCell>
+                                  <GridContainer>
+                                    <GridItem xs="3" className="pt-icon-removeProduct">
+                                      <IconButton color="secondary">
+                                        <DeleteIcon onClick={() => this.removeProduct(item.product)} />
+                                      </IconButton>
+                                    </GridItem>
+                                  </GridContainer>
+                                </TableCell>
+                              </TableRow>
+                            )
+                          } else {
+                            return (
+                              <TableRow key={index}>
+                                <TableCell>
+                                  <img
+                                    src={item.product.imgSrc[0]}
+                                    alt=""
+                                    width="100px"
+                                  />
+                                </TableCell>
+                                <TableCell>{item.product.name}</TableCell>
+                                <TableCell>{`R$${item.product.price}`}</TableCell>
+                                <TableCell>
+                                  <GridContainer>
+                                    <GridItem xs="9">
+                                      <TextField
+                                        onChange={(e) => {this.handleFieldChange(e, index);}}
+                                        label="Quantidade"
+                                        value={item.quantity}
+                                        inputProps={{max: item.product.stockQuantity+1, min: 0}}
+                                        type="number"
+                                        margin="normal"
+                                      />
+                                    </GridItem>
+                                    <GridItem xs="3" className="pt-icon-removeProduct">
+                                      <IconButton color="secondary">
+                                        <DeleteIcon onClick={() => this.removeProduct(item.product)} />
+                                      </IconButton>
+                                    </GridItem>
+                                  </GridContainer>
+                                </TableCell>
+                              </TableRow>
+                            ) 
+                          }
+                        }) : ""
+                      }
                     </TableBody>
                   </Table>
                 </GridItem>
@@ -168,7 +207,7 @@ class ShoppingCart extends Component {
                     <CardBody>
                       <Typography variant="h5">SubTotal:</Typography>
                       <Typography variant="subtitle1">
-                        (4 itens) R$ 12,00
+                        ({this.state.quantity} itens) R$ {this.state.subTotal}
                       </Typography>
                       <Button color="warning" size="lg" href="/pagamento">
                         Comprar
@@ -185,4 +224,13 @@ class ShoppingCart extends Component {
   }
 }
 
-export default withStyles(componentsStyle)(ShoppingCart);
+const mapStateToProps = state => ({
+  client: state.client,
+  cart: state.cart
+})
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(cartActions, dispatch);
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(componentsStyle)(ShoppingCart));

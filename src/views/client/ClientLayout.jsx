@@ -27,7 +27,6 @@ class ClientLayout extends React.Component {
     document.body.classList.add("white-content");
   }
   componentDidMount() {
-
     if(this.props.client === null){
       this.props.history.push("/login");
     } 

@@ -24,6 +24,14 @@ import componentsStyle from "../../assets/jss/material-kit-react/views/component
 import "../../assets/css/index.css";
 import ProductService from "../../services/ProductService";
 
+import { connect } from "react-redux";
+
+import { bindActionCreators } from "redux";
+
+import * as cartActions from "../../actions/shoppingCart";
+
+import shoppingCartService from "../../services/ShoppingCartService";
+
 class ProductDescription extends Component {
   
   constructor(props){
@@ -31,10 +39,14 @@ class ProductDescription extends Component {
 
     this.service = new ProductService("products");
 
+    this.shoppingCartService = new shoppingCartService("shoppingCarts");
+
     this.state = {
       product: {}
     }
 
+    this.postShoppingCart = this.postShoppingCart.bind(this);
+    this.addShoppingCart = this.addShoppingCart.bind(this);
     this.getById = this.getById.bind(this);
   }
 
@@ -44,7 +56,23 @@ class ProductDescription extends Component {
         product: res[0]
       })
     })
-    console.log(this.state.product)
+  }
+
+  async postShoppingCart() {
+    await this.shoppingCartService.post(this.state.product, this.props.client.id).then(res => {
+      if(res !== false) {
+        this.props.setShoppingCart(res);
+      }
+    })
+  }
+
+  addShoppingCart() {
+    if(this.props.client === null || this.props.client === undefined){
+      this.props.history.push("/login");
+    } else {
+      this.postShoppingCart();
+    }
+
   }
   
   componentDidMount(){
@@ -105,14 +133,14 @@ class ProductDescription extends Component {
                   </Table>
                 </GridItem>
                 <GridItem md="8">
-                <Typography variant="h5"  className="text-center">{this.state.product.name}</Typography>
+                <Typography variant="h5"  className="text-center dark-color">{this.state.product.name}</Typography>
                 <Typography>
                   {this.state.product.description}
                   </Typography>
                   <Button type="button" color="success">
                     Adicionar aos faoritos
                   </Button>
-                  <Button type="button" color="warning" className="float-right">
+                  <Button type="button" color="warning" className="float-right" onClick={this.addShoppingCart}>
                     Adicionar ao carrinho
                   </Button>
                 </GridItem>
@@ -134,4 +162,12 @@ class ProductDescription extends Component {
   }
 }
 
-export default withStyles(componentsStyle)(ProductDescription);
+const mapStateToProps = state => ({
+  client: state.client,
+  cart: state.cart
+})
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(cartActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(componentsStyle)(ProductDescription));

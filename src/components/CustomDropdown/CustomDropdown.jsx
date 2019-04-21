@@ -42,6 +42,9 @@ class CustomDropdown extends React.Component {
     }
     this.setState({ open: false });
   };
+  goTo = (path) => {
+    this.props.props.history.push(path);
+  }
   render() {
     const { open } = this.state;
     const {
@@ -164,7 +167,7 @@ class CustomDropdown extends React.Component {
                       return (
                         <MenuItem
                           key={key}
-                          onClick={() => window.location.assign(prop.path)}
+                          onClick={() => this.goTo(prop.path)}
                           className={dropdownItem}
                         >
                           {prop.name}

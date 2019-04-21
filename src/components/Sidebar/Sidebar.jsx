@@ -82,6 +82,11 @@ class Sidebar extends React.Component {
     }
     return links;
   }
+
+  goTo = (path) => {
+    this.props.history.push(path);
+  }
+  
   render() {
     const { bgColor, routes, rtlActive, logo } = this.props;
     let logoImg = null;
@@ -90,10 +95,9 @@ class Sidebar extends React.Component {
       if (logo.outterLink !== undefined) {
         logoImg = (
           <a
-            href={logo.outterLink}
+            href="javascript:void(0)"
             className="simple-text logo-mini"
-            target="_blank"
-            onClick={this.props.toggleSidebar}
+            onClick={() => this.goTo(logo.outterLink)}
           >
             <div className="logo-img">
               <img src={logo.imgSrc} alt="react-logo" />
@@ -102,10 +106,9 @@ class Sidebar extends React.Component {
         );
         logoText = (
           <a
-            href={logo.outterLink}
+          href="javascript:void(0)"
             className="simple-text logo-normal"
-            target="_blank"
-            onClick={this.props.toggleSidebar}
+            onClick={() => this.goTo(logo.outterLink)}
           >
             {logo.text}
           </a>

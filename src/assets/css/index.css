@@ -92,3 +92,11 @@
 .navbar-link{
     font-size: 0.62475rem;
 }
+
+/* .white-content h1, .white-content h2, .white-content h3, .white-content h4, .white-content h6, .white-content p, .white-content ol li, .white-content ul li, .white-content pre{
+    color: #FFFFFF !important;
+} */
+
+.dark-color{
+    /* color: #000 !important; */
+}

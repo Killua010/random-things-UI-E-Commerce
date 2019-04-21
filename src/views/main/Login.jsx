@@ -23,18 +23,21 @@ import { bindActionCreators } from "redux";
 
 import * as clientActions from "../../actions/client";
 
+import * as cartActions from "../../actions/shoppingCart";
+
 import { connect } from "react-redux";
 
 import "../../assets/css/index.css";
 
 import image from "../../assets/img/bg8.jpeg";
 import ClientService from "../../services/ClientService.js";
+import ShoppingCartService from "../../services/ShoppingCartService";
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props)
     this.service = new ClientService("clients");
+    this.shoppingCartService = new ShoppingCartService("shoppingCarts");
     // we use this to make the card to appear after the page has been rendered
     this.state = {
       cardAnimaton: "cardHidden",
@@ -45,22 +48,36 @@ class Login extends React.Component {
     this.handleFieldChange = this.handleFieldChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.login = this.login.bind(this);
-
+    this.getShoppingCart = this.getShoppingCart.bind(this);
   }
 
-  login(){
+  async getShoppingCart(id){
+    await this.shoppingCartService.getByIdClient(id).then(resp => {
+      if(resp !== null){
+        this.props.setShoppingCart(resp)
+      }
+      
+    })
+  }
+
+  async login(){
     let email = this.state.email;
     let password = this.state.password;
-    this.service.login({"email": email, "password": password}).then(resp => {
+    await this.service.login({"email": email, "password": password}).then(resp => {
       if(resp !== null){
         this.props.setClient(resp);
-        this.props.history.push("/perfil");
+        this.getShoppingCart(resp.id).then(() => 
+          this.props.history.push("/perfil"))
+
       }
     })
   }
 
   componentDidMount() {
     // we add a hidden class to the card and after 700 ms we delete it and the transition appears
+    if(this.props.client !== null && this.props.client !== undefined){
+      this.props.history.push("/perfil");
+    } 
     setTimeout(
       function() {
         this.setState({ cardAnimaton: "" });
@@ -179,11 +196,11 @@ class Login extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(clientActions, dispatch);
-
+const mapDispatchToProps = dispatch => 
+      bindActionCreators({...clientActions, ...cartActions}, dispatch);
   const mapStateToProps = state => ({
-    client: state.client
+    client: state.client,
+    cart: state.cart
   })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(loginPageStyle)(Login));

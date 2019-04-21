@@ -57,6 +57,9 @@ class MainHeader extends React.Component {
       window.removeEventListener("scroll", this.headerColorChange);
     }
   }
+  goTo = (path) => {
+    this.props.props.history.push(path);
+  }
   render() {
     const {
       classes,
@@ -75,7 +78,9 @@ class MainHeader extends React.Component {
       [classes.fixed]: fixed
     });
     const brandComponent = (
-      <Button href={path} className={classes.title}>
+      <Button 
+        href="javascript:void(0)" onClick={() => this.goTo(path)}
+        className={classes.title}>
         {brand}
       </Button>
     );
