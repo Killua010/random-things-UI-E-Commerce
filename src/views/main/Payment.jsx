@@ -19,11 +19,131 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 import componentsStyle from "../../assets/jss/material-kit-react/views/components.jsx";
 
+import { connect } from "react-redux";
+import ShippingPriceService from "../../services/ShippingPriceService";
+import OrderService from "../../services/OrderService";
+
 class Payment extends Component {
-  state = {
-    openCartao: false,
-    openAddress: false
-  };
+
+  constructor(props){
+    super(props);
+
+    this.shippingService = new ShippingPriceService("shipping")
+    this.orderService = new OrderService("orders");
+
+    this.state = {
+      openCartao: false,
+      openAddress: false, 
+      cart: {},
+      total: 0.0,
+      quantity: 0,
+      frete: 0.0,
+      favoriteCard: {
+        printedName: "",
+        number: "",
+        flag: {
+          name: "name"
+        }
+      }, 
+      favoriteAddress: {
+        street: "",
+        number: "",
+        neighborhood: "",
+        city: {
+          cityName: "",
+          stateCode: ""
+        },
+        zipCode: ""
+        
+      }
+    };
+
+    this.renderSubTotal = this.renderSubTotal.bind(this);
+    this.calculateShipping = this.calculateShipping.bind(this)
+    this.finishOrder = this.finishOrder.bind(this);
+  }
+
+  finishOrder(){
+    this.orderService.post({
+      clientId: this.props.client.id,
+      addressId: this.state.favoriteAddress.id,
+      cardId: this.state.favoriteCard.id,
+      orderValue: this.state.subTotal,
+      shippingValue: this.state.frete,
+      cart: this.state.cart
+    })
+  }
+
+  async calculateShipping(){
+    await this.shippingService.getByIdClient(this.props.client.id, this.state.favoriteAddress)
+      .then(res => {
+        this.setState({
+          frete: res
+        })
+      })
+  }
+
+  renderSubTotal(){
+    let itens = 0;
+    let subTotal = 0.0;
+    if(this.state.cart.itens === undefined){
+      return;
+    }
+    for(let i = 0; i < this.state.cart.itens.length; i++){
+      if(this.state.cart.itens[i].status != false){
+        itens = itens + this.state.cart.itens[i].quantity * 1
+        subTotal += (this.state.cart.itens[i].quantity * this.state.cart.itens[i].product.price)
+      }
+    }
+
+    this.setState({
+      quantity: itens,
+      subTotal: subTotal
+    })
+  }
+
+  componentDidMount(){
+    if(this.props.client === null || this.props.client === undefined){
+      this.props.history.push("/login");
+    } else {
+      this.setState({
+        cart: this.props.cart
+      }, () => this.renderSubTotal())
+      let address = null;
+      let card = null;
+      if(this.props.client.deliveryAddress.length !== 0) {
+        for(let i = 0; i < this.props.client.deliveryAddress.length; i++){
+          if(this.props.client.deliveryAddress[i].favorite == true){
+            address = this.props.client.deliveryAddress[i];
+          }
+        }
+
+        if(address === null){
+          address = this.props.client.deliveryAddress[0];
+        }
+
+        this.setState({
+          favoriteAddress: address
+        }, () => this.calculateShipping())
+      }
+
+      if(this.props.client.cards.length !== 0) {
+        for(let i = 0; i < this.props.client.cards.length; i++){
+          if(this.props.client.cards[i].favorite == true){
+            card = this.props.client.cards[i];
+          }
+        }
+
+        if(card === null){
+          card = this.props.client.cards[0];
+        }
+
+        this.setState({
+          favoriteCard: card
+        })
+      }
+    }
+  }
 
   openCartaoModal = () => {
     this.setState({ openCartao: true });
@@ -40,6 +160,10 @@ class Payment extends Component {
   closeAddressModal = () => {
     this.setState({ openAddress: false });
   };
+
+  goTo = (path) => {
+    this.props.history.push(path);
+  }
 
   render() {
     const { classes } = this.props;
@@ -69,11 +193,13 @@ class Payment extends Component {
                     
                     <Typography component="h4" variant="h5" className={classes.cardTitle}>Endereço favorito</Typography>
                       <Typography>
-                        Rua Doutor Raul Abbott Escobar 549
+                      <p>
+                        {this.state.favoriteAddress.street} - {this.state.favoriteAddress.number}
                         <br />
-                        Parque Califórnia Campos dos Goytacazes RJ
+                        {this.state.favoriteAddress.neighborhood} - {this.state.favoriteAddress.city.cityName} - {this.state.favoriteAddress.city.stateCode}
                         <br />
-                        28015-312
+                        {this.state.favoriteAddress.zipCode}
+                      </p>
                       </Typography>
                     </CardBody>
                     <CardFooter>
@@ -92,9 +218,11 @@ class Payment extends Component {
                     <CardBody>
                     <Typography component="h4" variant="h5" className={classes.cardTitle}>Cartão favorito</Typography>
                       <Typography>
-                        Edson Benjamin da Paz <br />
-                        1234.1234.1234.1234 <br />
-                        Visa
+                        <p>
+                          {this.state.favoriteCard.printedName} <br />
+                          {this.state.favoriteCard.number} <br />
+                          {this.state.favoriteCard.flag.name}
+                        </p>
                       </Typography>
                     </CardBody>
                     <CardFooter>
@@ -113,17 +241,18 @@ class Payment extends Component {
                     <CardBody>
                       <Typography variant="h5">Detalhes:</Typography>
                       <Typography variant="subtitle1">
-                        (4 itens) R$ 12,00
+                      ({this.state.quantity} itens) R$ {this.state.subTotal}
                       </Typography>
                       <Typography variant="subtitle1">
-                        Frete: R$ 15,00
+                        Frete: R$ {this.state.frete}
                       </Typography>
-                      <Typography variant="subtitle1">Peso: 1.5 Kg</Typography>
-                      <Typography variant="h5">Total: R$ 27,00</Typography>
+                      <Typography variant="h5">Total: R$ {this.state.subTotal + this.state.frete}</Typography>
                       <Button
                         color="warning"
                         size="lg"
-                        href="/pedidoFinalizado"
+                        href="javascript:void(0)" onClick={this.finishOrder
+                          // () => this.goTo("/pedidoFinalizado")
+                        }
                       >
                         Finalizar Comprar
                       </Button>
@@ -134,7 +263,7 @@ class Payment extends Component {
             </div>
           </div>
         </div>
-        <ModalCard
+        {/* <ModalCard
           openCartao={this.state.openCartao}
           openCartaoModal={this.openCartaoModal}
           closeCartaoModal={this.closeCartaoModal}
@@ -143,10 +272,15 @@ class Payment extends Component {
           openAddress={this.state.openAddress}
           openAddressModal={this.openAddressModal}
           closeAddressModal={this.closeAddressModal}
-        />
+        /> */}
       </div>
     );
   }
 }
 
-export default withStyles(componentsStyle)(Payment);
+const mapStateToProps = state => ({
+  client: state.client,
+  cart: state.cart
+})
+
+export default connect(mapStateToProps)(withStyles(componentsStyle)(Payment));

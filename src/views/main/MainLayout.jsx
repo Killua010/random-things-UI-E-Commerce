@@ -40,7 +40,6 @@ class MainLayout extends Component {
 
   render() {
     const { classes, ...rest } = this.props;
-    console.log(this.props)
     return (
       <div>
         <MainHeader

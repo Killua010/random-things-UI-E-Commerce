@@ -28,6 +28,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import * as cartActions from "../../actions/shoppingCart";
+import ShippingPriceService from "../../services/ShippingPriceService";
 class ShoppingCart extends Component {
 
   constructor(props){
@@ -45,12 +46,31 @@ class ShoppingCart extends Component {
     this.handleFieldChange = this.handleFieldChange.bind(this);
     this.renderSubTotal = this.renderSubTotal.bind(this);
     this.removeProduct = this.removeProduct.bind(this);
+    this.updateCart = this.updateCart.bind(this)
+    
+  }
+
+  async updateCart(){
+    await this.service.put(this.state.cart).then(res => {
+      this.props.setShoppingCart(res);
+      this.goTo("/pagamento");
+    })
   }
 
   getById() {
     this.service.getById(this.props.cart.id).then(res => {
+      let idItem = [];
+      let quantityItem = []
+      for(let i = 0; i < res.itens.length; i++){
+        idItem.push(res.itens[i].id);
+        quantityItem.push(res.itens[i].quantity)
+      } 
       this.setState({
-        cart: res
+        cart: {
+          ...res, 
+          idItem: idItem,
+          quantityItem: quantityItem
+        }
       }, () => this.renderSubTotal())
     })
   }
@@ -91,25 +111,38 @@ class ShoppingCart extends Component {
   }
 
   handleFieldChange(event, index) {
+
+    let idItem = [];
+    let quantityItem = []
     let itens = [];
     let item = {};
     for(let i = 0; i < this.state.cart.itens.length; i++){
       if (i === index) {
         item = this.state.cart.itens[i];
         item.quantity = event.target.value;
+        idItem.push(this.state.cart.itens[i].id);
+        quantityItem.push(event.target.value);
         itens.push(item)
         continue;
       }
+      idItem.push(this.state.cart.itens[i].id);
+      quantityItem.push(this.state.cart.itens[i].quantity)
       itens.push(this.state.cart.itens[i]);
     }
 
     this.setState({
       cart : {
         ...this.state.cart,
-        itens: itens
+        itens: itens,
+        idItem: idItem,
+        quantityItem: quantityItem
       }
     })
     this.renderSubTotal();
+  }
+
+  goTo = (path) => {
+    this.props.history.push(path);
   }
 
   render() {
@@ -209,7 +242,8 @@ class ShoppingCart extends Component {
                       <Typography variant="subtitle1">
                         ({this.state.quantity} itens) R$ {this.state.subTotal}
                       </Typography>
-                      <Button color="warning" size="lg" href="/pagamento">
+                      <Button color="warning" size="lg" 
+                        href="javascript:void(0)" onClick={this.updateCart}>
                         Comprar
                       </Button>
                     </CardBody>
