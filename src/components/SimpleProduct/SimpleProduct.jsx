@@ -16,9 +16,15 @@ import Icon from "@material-ui/core/Icon";
 import classNames from "classnames";
 import { cardTitle } from "assets/jss/material-kit-react.jsx";
 
+import { connect } from "react-redux";
+
+import { bindActionCreators } from "redux";
+
+import * as cartActions from "../../actions/shoppingCart";
+
 import "../../assets/css/index.css";
 
-import image from "../../assets/img/product.jpeg";
+import shoppingCartService from "../../services/ShoppingCartService";
 
 const style = {
   cardTitle,
@@ -41,7 +47,12 @@ class SimpleProduct extends Component {
 
   constructor(props){
     super(props);
+
+    this.shoppingCartService = new shoppingCartService("shoppingCarts");
+
     this.goTo = this.goTo.bind(this);
+    this.addShoppingCart = this.addShoppingCart.bind(this);
+    this.postShoppingCart = this.postShoppingCart.bind(this);
   }
 
   descriptionFormat = () => {
@@ -50,6 +61,23 @@ class SimpleProduct extends Component {
     } else {
       return this.props.product.description;
     }
+  }
+
+  addShoppingCart() {
+    if(this.props.client === null || this.props.client === undefined){
+      this.props.props.history.push("/login");
+    } else {
+      this.postShoppingCart();
+    }
+
+  }
+
+  async postShoppingCart() {
+    await this.shoppingCartService.post(this.props.product, this.props.client.id).then(res => {
+      if(res !== false) {
+        this.props.setShoppingCart(res);
+      }
+    })
   }
 
   goTo() {
@@ -94,7 +122,7 @@ class SimpleProduct extends Component {
               <Typography color="textSecondary">R$ {this.props.product.price}</Typography>
             </GridItem>
             <GridItem xs={7}>
-              <IconButton aria-label="Share">
+              <IconButton aria-label="Share" onClick={this.addShoppingCart}>
                 <ShopIcon />
               </IconButton>
               <IconButton aria-label="Add to favorites">
@@ -108,4 +136,12 @@ class SimpleProduct extends Component {
   }
 }
 
-export default withStyles(style)(SimpleProduct);
+const mapStateToProps = state => ({
+  client: state.client,
+  cart: state.cart
+})
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(cartActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(SimpleProduct));
