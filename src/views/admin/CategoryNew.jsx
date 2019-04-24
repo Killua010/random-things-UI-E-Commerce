@@ -89,7 +89,7 @@ export default class CategoryNew extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.location.state)
+    
     if(this.props.location.state !== undefined){
       this.setState({
         category: this.props.location.state.category,

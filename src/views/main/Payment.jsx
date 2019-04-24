@@ -22,12 +22,14 @@ import componentsStyle from "../../assets/jss/material-kit-react/views/component
 import { connect } from "react-redux";
 import ShippingPriceService from "../../services/ShippingPriceService";
 import OrderService from "../../services/OrderService";
-
+import ShoppingCartService from "../../services/ShoppingCartService";
+import { bindActionCreators } from "redux";
+import * as cartActions from "../../actions/shoppingCart";
 class Payment extends Component {
 
   constructor(props){
     super(props);
-
+    this.shoppingCartService = new ShoppingCartService("shoppingCarts");
     this.shippingService = new ShippingPriceService("shipping")
     this.orderService = new OrderService("orders");
 
@@ -71,6 +73,15 @@ class Payment extends Component {
       orderValue: this.state.subTotal,
       shippingValue: this.state.frete,
       cart: this.state.cart
+    }).then(res => {
+      if(res !== false) {
+        this.shoppingCartService.getByIdClient(this.props.client.id).then(res => {
+          if(res !== false) {
+            this.props.setShoppingCart(res);
+          }
+        })
+        this.props.history.push({ pathname: "/pedidoFinalizado", state: { order: res.data } });
+      }
     })
   }
 
@@ -160,10 +171,6 @@ class Payment extends Component {
   closeAddressModal = () => {
     this.setState({ openAddress: false });
   };
-
-  goTo = (path) => {
-    this.props.history.push(path);
-  }
 
   render() {
     const { classes } = this.props;
@@ -283,4 +290,7 @@ const mapStateToProps = state => ({
   cart: state.cart
 })
 
-export default connect(mapStateToProps)(withStyles(componentsStyle)(Payment));
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(cartActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(componentsStyle)(Payment));

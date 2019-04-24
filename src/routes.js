@@ -10,11 +10,15 @@ import ProductList from "views/admin/ProductList.jsx";
 import ProductNew from "views/admin/ProductNew.jsx";
 import PricingGroupList from "views/admin/PricingGroupList.jsx";
 import PricingGroupNew from "views/admin/PricingGroupNew.jsx";
+import ApprovedOrder from "views/admin/ApprovedOrder.jsx";
+import CarriageOrder from "views/admin/CarriageOrder.jsx";
+import DeliveredOrder from "views/admin/DeliveredOrder.jsx";
+import PurchaseOrders from "./views/client/PurchaseOrders";
+import ChangeOrder from "views/admin/ChangeOrder.jsx";
 
 import Profile from "./views/client/Profile";
 import MyCarts from "./views/client/MyCarts";
 import MyAddress from "./views/client/MyAddress";
-import PurchaseOrders from "./views/client/PurchaseOrders";
 
 import Index from "./views/main/Index";
 import Catalog from "./views/main/Catalog";
@@ -99,6 +103,19 @@ export const adminRoutes = [
     icon: "fas fa-money-bill-wave",
     iconChild: ["fas fa-bars", "fas fa-dollar-sign"],
     component: [PricingGroupList, PricingGroupNew],
+    layout: "/admin"
+  },
+  {
+    path: ["/pedidos/aprovado", "/pedidos/em-transporte",
+    "/pedidos/entregues", "/pedidos/trocas"],
+    name: "Pedidos",
+    nameChild: ["Aprovados", "Em transportes",
+                "Entregues", "Trocas"],
+    icon: "fab fa-jedi-order",
+    iconChild: ["fas fa-check-circle", "fas fa-shipping-fast",
+                "fas fa-vihara", "fas fa-people-carry"],
+    component: [ApprovedOrder, CarriageOrder,
+                DeliveredOrder, ChangeOrder],
     layout: "/admin"
   }
 ];

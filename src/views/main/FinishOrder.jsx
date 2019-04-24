@@ -13,6 +13,7 @@ import componentsStyle from "../../assets/jss/material-kit-react/views/component
 import Parallax from "../../components/Parallax/Parallax";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
+import { connect } from "react-redux";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -21,7 +22,31 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
 class FinishOrder extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      order: {
+        id: "",
+        creationDate: "",
+        totalPrice: "",
+        itens: []
+      }
+    }
+  }
+
+  componentDidMount(){
+    if(this.props.location.state === undefined || this.props.client === null || this.props.client === undefined){
+      this.props.history.push("/login");
+    }
+
+    this.setState({
+      order: this.props.location.state.order
+    })
+  }
+
   render() {
+    console.log(this.state.order)
     const { classes } = this.props;
     return (
       <div>
@@ -55,9 +80,9 @@ class FinishOrder extends Component {
                 </TableHead>
                 <TableBody>
                   <TableRow>
-                    <TableCell>123456</TableCell>
-                    <TableCell>02/02/2019</TableCell>
-                    <TableCell>R$ 34,00</TableCell>
+                    <TableCell>{this.state.order.id}</TableCell>
+                    <TableCell>{this.state.order.creationDate}</TableCell>
+                    <TableCell>{this.state.order.totalPrice}</TableCell>
                     <TableCell>Cartão de credito</TableCell>
                   </TableRow>
                 </TableBody>
@@ -71,31 +96,27 @@ class FinishOrder extends Component {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableRow>
-                    <TableCell>Produto X × 2</TableCell>
-                    <TableCell>R$ 8,00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Produto Y × 1</TableCell>
-                    <TableCell>R$ 2,00</TableCell>
-                  </TableRow>
+                  {
+                    this.state.order.itens.map((item, index) => {
+                      return(
+                        <TableRow>
+                          <TableCell>{item.product.name} × {item.quantity}</TableCell>
+                          <TableCell>R$ {item.subTotal}</TableCell>
+                        </TableRow>
+                      )
+                    })
+                  }
                 </TableBody>
                 <TableHead>
                   <TableRow>
-                    <TableCell>SubTotal</TableCell>
-                    <TableCell>R$ 10,00</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableHead>
-                  <TableRow>
                     <TableCell>Frete</TableCell>
-                    <TableCell>R$ 24,00</TableCell>
+                    <TableCell>R$ {this.state.order.shippingPrice}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableHead>
                   <TableRow>
                     <TableCell>Total</TableCell>
-                    <TableCell>R$ 34,00</TableCell>
+                    <TableCell>R$ {this.state.order.totalPrice}</TableCell>
                   </TableRow>
                 </TableHead>
               </Table>
@@ -107,4 +128,9 @@ class FinishOrder extends Component {
   }
 }
 
-export default withStyles(componentsStyle)(FinishOrder);
+const mapStateToProps = state => ({
+  client: state.client
+})
+
+
+export default connect(mapStateToProps)(withStyles(componentsStyle)(FinishOrder));

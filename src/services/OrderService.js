@@ -9,6 +9,21 @@ export default class GeneralService {
         this.entityPath = entityPath;
     }
 
+    async getAllByStatus(status) {
+        let data = null;
+        await axios.get(`${path}/${this.entityPath}/${status}`)
+        .then(res => {
+            data = res.data;
+        }).catch(function (error, e) {
+            swal({
+                title: error,
+                icon: "error",
+            });
+        })
+        
+        return await data;
+    }
+
     async post(order) {
         let response;
         await axios.post(`${path}/${this.entityPath}`, order, {
@@ -17,8 +32,38 @@ export default class GeneralService {
             }
         })
         .then(res => {
-            response = true;
+            response = res;
         }).catch(function (error, e) {
+            if(undefined === error.response){
+                console.log(error)
+                response = false
+            }
+            if(undefined === error.response.data.errors){
+                swal({
+                    title: error.response.data,
+                    icon: "error",
+                });
+                response = false;
+            } else {
+                let errors = "";
+                error.response.data.errors.map((err) => {
+                    errors += err.defaultMessage
+                })
+                swal({
+                    title: "Erro na requisição",
+                    text: errors,
+                    icon: "error",
+                });
+                response = false;
+            }
+        })
+        return response;
+    }
+
+    async nextStep(order) {
+        let response;
+        await axios.put(`${path}/${this.entityPath}/${order.id}/nextStep`)
+        .catch(function (error, e) {
             if(undefined === error.response){
                 console.log(error)
                 response = false
