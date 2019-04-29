@@ -55,7 +55,13 @@ export default class GeneralService {
             }
         })
         .catch(function (error, e) {
-            if(undefined === error.response.data.errors){
+            console.log(error.response)
+            if(undefined !== error.response.data.msg) {
+                swal({
+                    title: error.response.data.msg,
+                    icon: "error",
+                });
+            } else if(undefined === error.response.data.errors){
                 swal({
                     title: error.response.data,
                     icon: "error",

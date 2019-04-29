@@ -73,7 +73,7 @@ class ModalAddress extends Component {
             <Typography component="h4" variant="h5" className={classes.modalTitle}>Meus Endereços</Typography>
           </DialogTitle>
           <DialogContent
-            id="modal-slide-description"
+            id="modal-address-order"
             className={classes.modalBody}
           >
             

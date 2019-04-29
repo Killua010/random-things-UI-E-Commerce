@@ -6,6 +6,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "components/CustomButtons/Button.jsx";
+import swal from 'sweetalert';
 
 import * as clientActions from "../../actions/client";
 
@@ -63,6 +64,10 @@ class PurchaseOrders extends React.Component {
       quantityItem
     }
     this.changeService.post(newChange);
+    swal({
+      title: "Envie os seus itens para Rua das Flores 123, São Paulo - SP - 01234-567",
+      icon: "success",
+  });
     this.modal(order);
   }
 
