@@ -15,10 +15,14 @@ import CarriageOrder from "views/admin/CarriageOrder.jsx";
 import DeliveredOrder from "views/admin/DeliveredOrder.jsx";
 import PurchaseOrders from "./views/client/PurchaseOrders";
 import ChangeOrder from "views/admin/ChangeOrder.jsx";
+import AprovedChange from "views/admin/AprovedChange.jsx";
+import ReprovedChange from "views/admin/ReprovedChange.jsx";
 
 import Profile from "./views/client/Profile";
 import MyCarts from "./views/client/MyCarts";
 import MyAddress from "./views/client/MyAddress";
+import MyChanges from "./views/client/MyChanges";
+import MyCoupons from "./views/client/MyCoupons";
 
 import Index from "./views/main/Index";
 import Catalog from "./views/main/Catalog";
@@ -107,15 +111,28 @@ export const adminRoutes = [
   },
   {
     path: ["/pedidos/aprovado", "/pedidos/em-transporte",
-    "/pedidos/entregues", "/pedidos/trocas"],
+    "/pedidos/entregues"],
     name: "Pedidos",
     nameChild: ["Aprovados", "Em transportes",
-                "Entregues", "Trocas"],
+                "Entregues"],
     icon: "fab fa-jedi-order",
     iconChild: ["fas fa-check-circle", "fas fa-shipping-fast",
-                "fas fa-vihara", "fas fa-people-carry"],
+                "fas fa-vihara"],
     component: [ApprovedOrder, CarriageOrder,
-                DeliveredOrder, ChangeOrder],
+                DeliveredOrder],
+    layout: "/admin"
+  },
+  {
+    path: ["/trocas/solicitacoes","/trocas/aprovadas",
+          "/trocas/reprovadas"],
+    name: "Troca",
+    nameChild: ["Solicitações", "Aprovadas",
+         "Reprovadas"],
+    icon: "fas fa-people-carry",
+    iconChild: ["fas fa-people-carry", "fas fa-check-double",
+            "fas fa-times"],
+    component: [ChangeOrder, AprovedChange,
+          ReprovedChange],
     layout: "/admin"
   }
 ];
@@ -147,6 +164,20 @@ export const clientRoutes = [
     name: "Meus pedidos",
     icon: "nc-icon nc-bag-16",
     component: PurchaseOrders,
+    layout: "/perfil"
+  },
+  {
+    path: "/trocas",
+    name: "Minhas Trocas",
+    icon: "nc-icon nc-gift-2",
+    component: MyChanges,
+    layout: "/perfil"
+  },
+  {
+    path: "/cupons",
+    name: "Meus Cupons",
+    icon: "nc-icon nc-coins",
+    component: MyCoupons,
     layout: "/perfil"
   }
 ];

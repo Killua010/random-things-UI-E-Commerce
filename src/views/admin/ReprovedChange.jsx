@@ -21,7 +21,7 @@ import {
 import ChangeService from '../../services/ChangeService';
 import ModalChangeDercription from '../../components/Modal/ModalChangeDescription';
 
-export default class ChangeOrder extends Component {
+export default class ReprovedChange extends Component {
 
   constructor(props) {
     super(props);
@@ -36,21 +36,12 @@ export default class ChangeOrder extends Component {
     };
 
     this.getAll = this.getAll.bind(this);
-    this.aprovedChange = this.aprovedChange.bind(this)
-    this.reprovedChange = this.reprovedChange.bind(this)
     this.getAll();
   }
 
-  async aprovedChange(change){
-    await this.changeService.aproved(change).then(() => this.getAll())
-  }
-
-  async reprovedChange(change){
-    await this.changeService.reproved(change).then(() => this.getAll())
-  }
 
   async getAll(){
-    await this.changeService.getAllByStatus("EMTROCA").then(val => {
+    await this.changeService.getAllByStatus("TROCAREPROVADA").then(val => {
       this.setState({
         changes: val
       })
@@ -74,7 +65,7 @@ export default class ChangeOrder extends Component {
                 <CardHeader>
                 <Row>
                   <Col sm="6">
-                    <h4 className="title dark-color">Pedidos de trocas</h4>
+                    <h4 className="title dark-color">Trocas reprovadas</h4>
                   </Col>
                   </Row>
                 </CardHeader>
@@ -84,8 +75,6 @@ export default class ChangeOrder extends Component {
                       <tr>
                         <th className="text-center">Código da troca</th>
                         <th className="text-center">Data da troca</th>
-                        <th className="text-center">Reprovar</th>
-                        <th className="text-center">Aceitar</th>
                       </tr>
                     </thead>
                     <tbody id="tableList">
@@ -96,8 +85,6 @@ export default class ChangeOrder extends Component {
                               <tr key={index}>
                                 <td className="text-center hover-point" onClick={() => this.openCloseModal(change)}>{change.id}</td>
                                 <td className="text-center hover-point" onClick={() => this.openCloseModal(change)}>{change.creationDate}</td>
-                                <td className="text-center" ><a href="#" onClick={() => this.reprovedChange(change)}className="text-danger"><i class="fas fa-times"></i></a></td>
-                                <td className="text-center"><a href="#" onClick={() => this.aprovedChange(change)}className="text-success"><i className="fas fa-check"></i></a></td>
                               </tr>
                             )
                         })

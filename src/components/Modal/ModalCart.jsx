@@ -76,54 +76,33 @@ class ModalCart extends Component {
             id="modal-slide-description"
             className={classes.modalBody}
           >
-            <Card className="pointer" onClick={this.props.closeCartaoModal}>
-              <CardBody>
-                <Typography>
-                  Edson Benjamin da Paz <br />
-                  1234.1234.1234.1234 <br />
-                  Visa
-                </Typography>
-              </CardBody>
-            </Card>
-            <Card className="pointer" onClick={this.props.closeCartaoModal}>
-              <CardBody>
-                <Typography>
-                  Edson Benjamin da Paz <br />
-                  1234.1234.1234.1234 <br />
-                  Visa
-                </Typography>
-              </CardBody>
-            </Card>
-            <Card className="pointer" onClick={this.props.closeCartaoModal}>
-              <CardBody>
-                <Typography>
-                  Edson Benjamin da Paz <br />
-                  1234.1234.1234.1234 <br />
-                  Visa
-                </Typography>
-              </CardBody>
-            </Card>
-            <Card className="pointer" onClick={this.props.closeCartaoModal}>
-              <CardBody>
-                <Typography>
-                  Edson Benjamin da Paz <br />
-                  1234.1234.1234.1234 <br />
-                  Visa
-                </Typography>
-              </CardBody>
-            </Card>
+          {
+            this.props.cards.map((card, index) => {
+              return(
+                <Card className="pointer" key={index} onClick={() => {this.props.closeCartaoModal();this.props.alterFavoriteCard(card)}}>
+                  <CardBody>
+                    <Typography>
+                      {card.printedName} <br />
+                      {card.number} <br />
+                      {card.flag.name}
+                    </Typography>
+                  </CardBody>
+                </Card>
+              )
+            })
+          }
           </DialogContent>
-          <DialogActions
+          {/* <DialogActions
             className={classes.modalFooter + " " + classes.modalFooterCenter}
           >
             <Button onClick={this.newCart} color="warning">Outro Cartão</Button>
-          </DialogActions>
+          </DialogActions> */}
         </Dialog>
-        <ModalNewCart
+        {/* <ModalNewCart
           openNewCart={this.state.openNewCart}
           openNewCartModal={this.openNewCartModal}
           closeNewCartModal={this.closeNewCartModal}
-        />
+        /> */}
       </div>
     );
   }

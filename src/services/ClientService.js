@@ -16,6 +16,7 @@ export default class ClientService extends GeneralService {
             resp = res.data;
         })
         .catch(function (error, e) {
+            console.log(error)
             if(error.response.data.msg !== undefined) {
                 swal({
                     title: error.response.data.msg,

@@ -125,14 +125,15 @@ class MainLayout extends Component {
               </ListItem>
               <ListItem className={classes.listItem}>
                 <CustomDropdown
+                  props={this.props}
                   buttonText={`Olá ${this.props.client.firstName}`}
                   buttonProps={{
                     className: classes.navLink,
                     color: "transparent"
                   }}
                   dropdownList={[
-                    { name: "Meu Perfil", path: "/cadastro" },
-                    { name: "Sair", path: "/login" }
+                    { name: "Meu Perfil", path: "/perfil/inicio" },
+                    // { name: "Sair", path: "/login" }
                   ]}
                 />
               </ListItem>

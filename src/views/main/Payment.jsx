@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import Parallax from "../../components/Parallax/Parallax";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
-
+import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import ModalCard from "../../components/Modal/ModalCart.jsx";
 import ModalAddress from "../../components/Modal/ModalAddress.jsx";
 import Card from "components/Card/Card.jsx";
@@ -36,6 +36,7 @@ class Payment extends Component {
     this.state = {
       openCartao: false,
       openAddress: false, 
+      coupon:"",
       cart: {},
       total: 0.0,
       quantity: 0,
@@ -65,6 +66,18 @@ class Payment extends Component {
     this.finishOrder = this.finishOrder.bind(this);
   }
 
+  alterFavoriteCard = (card) => {
+    this.setState({
+      favoriteCard: card
+    })
+  }
+
+  alterFavoriteAdderss = (address) =>{
+    this.setState({
+      favoriteAddress: address
+    })
+  }
+
   finishOrder(){
     this.orderService.post({
       clientId: this.props.client.id,
@@ -72,6 +85,7 @@ class Payment extends Component {
       cardId: this.state.favoriteCard.id,
       orderValue: this.state.subTotal,
       shippingValue: this.state.frete,
+      coupon: this.state.coupon,
       cart: this.state.cart
     }).then(res => {
       if(res !== false) {
@@ -172,6 +186,12 @@ class Payment extends Component {
     this.setState({ openAddress: false });
   };
 
+  handleCoupon = (e) => {
+    this.setState({
+      coupon: e.target.value
+    })
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -254,6 +274,20 @@ class Payment extends Component {
                         Frete: R$ {this.state.frete}
                       </Typography>
                       <Typography variant="h5">Total: R$ {this.state.subTotal + this.state.frete}</Typography>
+                      <CustomInput
+                        inputProps={{
+                          id: "coupon",
+                          name: "coupon",
+                          onChange: this.handleCoupon,
+                          value: this.state.coupon,
+                          
+                          type: "text",
+                          placeholder: "Cupom"
+                        }}
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                      />
                       <Button
                         color="warning"
                         size="lg"
@@ -270,16 +304,21 @@ class Payment extends Component {
             </div>
           </div>
         </div>
-        {/* <ModalCard
+        <ModalCard
           openCartao={this.state.openCartao}
           openCartaoModal={this.openCartaoModal}
           closeCartaoModal={this.closeCartaoModal}
+          cards={this.props.client.cards}
+          alterFavoriteCard={this.alterFavoriteCard}
         />
+       
         <ModalAddress
           openAddress={this.state.openAddress}
           openAddressModal={this.openAddressModal}
           closeAddressModal={this.closeAddressModal}
-        /> */}
+          address={this.props.client.deliveryAddress}
+          alterFavoriteAdderss={this.alterFavoriteAdderss}
+        /> 
       </div>
     );
   }

@@ -76,62 +76,35 @@ class ModalAddress extends Component {
             id="modal-slide-description"
             className={classes.modalBody}
           >
-            <Card className="pointer" onClick={this.props.closeAddressModal}>
-              <CardBody>
-                <Typography>
-                  Rua Doutor Raul Abbott Escobar 549
-                  <br />
-                  Parque Califórnia Campos dos Goytacazes RJ
-                  <br />
-                  28015-312
-                </Typography>
-              </CardBody>
-            </Card>
-            <Card className="pointer" onClick={this.props.closeAddressModal}>
-              <CardBody>
-                <Typography>
-                  Rua Doutor Raul Abbott Escobar 549
-                  <br />
-                  Parque Califórnia Campos dos Goytacazes RJ
-                  <br />
-                  28015-312
-                </Typography>
-              </CardBody>
-            </Card>
-            <Card className="pointer" onClick={this.props.closeAddressModal}>
-              <CardBody>
-                <Typography>
-                  Rua Doutor Raul Abbott Escobar 549
-                  <br />
-                  Parque Califórnia Campos dos Goytacazes RJ
-                  <br />
-                  28015-312
-                </Typography>
-              </CardBody>
-            </Card>
-            <Card className="pointer" onClick={this.props.closeAddressModal}>
-              <CardBody>
-                <Typography>
-                  Rua Doutor Raul Abbott Escobar 549
-                  <br />
-                  Parque Califórnia Campos dos Goytacazes RJ
-                  <br />
-                  28015-312
-                </Typography>
-              </CardBody>
-            </Card>
+            
+              {this.props.address.map((add, index) => {
+                return(
+                  <Card className="pointer" key={index} onClick={() => {this.props.closeAddressModal();this.props.alterFavoriteAdderss(add)}}>
+                    <CardBody>
+                      <Typography>
+                        {add.street} - {add.number}
+                        <br />
+                        {add.neighborhood} - {add.city.cityName} - {add.city.stateCode}
+                        <br />
+                        {add.zipCode}
+                      </Typography>
+                    </CardBody>
+                  </Card>
+                )
+              })}
+             
           </DialogContent>
-          <DialogActions
+          {/* <DialogActions
             className={classes.modalFooter + " " + classes.modalFooterCenter}
           >
             <Button onClick={this.newAddress} color="warning">Outro Endereço</Button>
-          </DialogActions>
+          </DialogActions> */}
         </Dialog>
-        <ModalNewAddress
+        {/* <ModalNewAddress
           openNewAddress={this.state.openNewAddress}
           openNewAddressModal={this.openNewAddressModal}
           closeNewAddressModal={this.closeNewAddressModal}
-        />
+        /> */}
       </div>
     );
   }
