@@ -11,7 +11,7 @@ import {
   DropdownItem,
   UncontrolledDropdown,
   Input,
-  InputGroup,
+  NavItem,
   NavbarBrand,
   Navbar,
   NavLink,
@@ -72,7 +72,7 @@ class AdminNavbar extends React.Component {
     return (
       <>
         <Navbar
-          className={classNames("navbar-absolute", this.state.color)}
+          className={classNames("navbar-absolute")}
           expand="lg"
         >
           <Container fluid>
@@ -91,8 +91,8 @@ class AdminNavbar extends React.Component {
                   <span className="navbar-toggler-bar bar2" />
                   <span className="navbar-toggler-bar bar3" />
                 </button>
-              </div>
-              <NavbarBrand href="#pablo" onClick={e => e.preventDefault()}>
+              </div>              
+              <NavbarBrand href="#" className="mt-05px" onClick={e => e.preventDefault()}>
                 {this.props.brandText}
               </NavbarBrand>
             </div>

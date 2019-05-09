@@ -39,6 +39,40 @@ export default class ProductService {
         return await data;
     }
 
+    async findBy(param){
+        let data = null;
+        await axios.get(`${path}/${this.entityPath}/findBy/${param}`)
+        .then(res => {
+            data = res.data;
+        }).catch(function (error, e) {
+            swal({
+                title: error,
+                icon: "error",
+            });
+        })
+        
+        return await data;
+    }
+
+    async getPageabledByCategory(page, category){
+        let data = null;
+        await axios.get(`${path}/${this.entityPath}/paging/${page}`, {
+            params: {
+                categoryId: category.id
+            }
+          })
+        .then(res => {
+            data = res.data;
+        }).catch(function (error, e) {
+            swal({
+                title: error,
+                icon: "error",
+            });
+        })
+        
+        return await data;
+    }
+
     async getAll() {
         let data = null;
         await axios.get(`${path}/${this.entityPath}`)

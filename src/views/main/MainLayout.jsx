@@ -19,11 +19,29 @@ import "../../assets/css/index.css";
 import navbarsStyle from "../../assets/jss/material-kit-react/views/componentsSections/navbarsStyle.jsx";
 
 import { connect } from "react-redux";
+import ProductService from "../../services/ProductService.js";
+
+import { bindActionCreators } from "redux";
+
+import * as searchAction from "../../actions/search";
+
 
 class MainLayout extends Component {
 
   constructor(props){
-    super(props)
+    super(props);
+    this.productServie = new ProductService("products");
+    this.state = {
+      search: ""
+    }
+
+    this.handleFieldChange = this.handleFieldChange.bind(this);
+  }
+
+  handleFieldChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value 
+    })
   }
 
   getRoutes = routes => {
@@ -36,6 +54,11 @@ class MainLayout extends Component {
 
   goTo = (path) => {
     this.props.history.push(path);
+  }
+
+  filterProduct = async () => {
+    this.props.setSearch(this.state.search);
+      this.props.history.push({pathname: "catalogo"});
   }
 
   render() {
@@ -66,11 +89,16 @@ class MainLayout extends Component {
               <ListItem className={classes.listItem}>
                 <div id="nav-catalogo" className="color-white">
                   <CustomInput
-                    inputProps={{
+                     inputProps={{
+                      id: "search",
+                      type: "text",
+                      name: "search",
+                      onChange: this.handleFieldChange,
+                      value: this.state.search,
                       placeholder: "Pesquisar",
                       endAdornment: (
                         <InputAdornment position="end">
-                          <a href="javascript:void(0)" onClick={() => this.goTo("catalogo")}>
+                          <a href="javascript:void(0)" onClick={this.filterProduct}>
                             <i className="fas fa-search color-white" />
                           </a>
                         </InputAdornment>
@@ -152,8 +180,13 @@ class MainLayout extends Component {
 
 const mapStateToProps = state => ({
   client: state.client,
-  cart: state.cart
+  cart: state.cart,
+  search: state.search
 })
 
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(searchAction, dispatch);
 
-export default connect(mapStateToProps)(withStyles(navbarsStyle)(MainLayout));
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(navbarsStyle)(MainLayout));

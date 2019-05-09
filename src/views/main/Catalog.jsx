@@ -21,6 +21,14 @@ import "../../assets/css/index.css";
 import ProductService from "../../services/ProductService.js";
 import GeneralService from "../../services/GeneralService.js";
 
+import { connect } from "react-redux";
+
+import { bindActionCreators } from "redux";
+
+import * as searchAction from "../../actions/search";
+
+
+
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit
@@ -45,13 +53,18 @@ class Catalog extends Component {
 
     this.getPageabled = this.getPageabled.bind(this);
     this.getCategories = this.getCategories.bind(this);
+    this.getPageabledByCategory = this.getPageabledByCategory.bind(this);
 
     this.getFields();
   }
 
   getFields = async () => {
     await this.getCategories();
-    await this.getPageabled(0);
+    if(this.props.search === undefined || this.props.search === ""){
+      await this.getPageabled(0);
+    } else {
+      this.props.setSearch("");
+    }
   }
 
   async getCategories(){
@@ -74,7 +87,37 @@ class Catalog extends Component {
 
   }
 
+  async getPageabledByCategory(page, category){
+    await this.productServie.getPageabledByCategory(page, category).then(val => {      
+      this.setState({
+        products: val
+      })
+    })
+
+  }
+
+  componentDidUpdate(){
+    if(this.props.search !== undefined && this.props.search !== ""){
+      this.productServie.findBy(this.props.search).then(val => {
+        this.setState({
+          products: val
+        })
+      }).then(() => {
+        this.props.setSearch("");
+      })
+    }
+  }
+
   componentDidMount(){
+    
+    if(this.props.search !== undefined && this.props.search !== ""){
+      this.productServie.findBy(this.props.search).then(val => {
+        this.setState({
+          products: val
+        })
+      })
+    }
+    
     this.setState({
       page:0
     })
@@ -84,7 +127,7 @@ class Catalog extends Component {
     let array = [];
     for(let subCategory of category.subCategories) {
       array.push({
-        name: <Button>{subCategory.name}</Button>, noLink: true
+        name: <Button onClick={() => {this.getPageabledByCategory(0, subCategory)}}>{subCategory.name}</Button>, noLink: true
       })
     }
     return array; 
@@ -190,4 +233,11 @@ class Catalog extends Component {
   }
 }
 
-export default withStyles(componentsStyle, styles)(Catalog);
+const mapStateToProps = state => ({
+  search: state.search
+})
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(searchAction, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(componentsStyle, styles)(Catalog));

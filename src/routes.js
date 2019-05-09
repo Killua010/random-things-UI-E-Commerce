@@ -17,6 +17,12 @@ import PurchaseOrders from "./views/client/PurchaseOrders";
 import ChangeOrder from "views/admin/ChangeOrder.jsx";
 import AprovedChange from "views/admin/AprovedChange.jsx";
 import ReprovedChange from "views/admin/ReprovedChange.jsx";
+import PromotionalCouponList from "views/admin/PromotionalCouponList.jsx";
+import PromotionalCouponNew from "views/admin/PromotionalCouponNew.jsx";
+import ProviderList from "views/admin/ProviderList.jsx";
+import ProviderNew from "views/admin/ProviderNew.jsx";
+import StockList from "views/admin/StockList.jsx";
+import StockNew from "views/admin/StockNew.jsx";
 
 import Profile from "./views/client/Profile";
 import MyCarts from "./views/client/MyCarts";
@@ -133,6 +139,30 @@ export const adminRoutes = [
             "fas fa-times"],
     component: [ChangeOrder, AprovedChange,
           ReprovedChange],
+    layout: "/admin"
+  },{
+    path: ["/cupons/novo", "/cupons/listar"],
+    name: "Cupons Promocionais",
+    nameChild: ["Novo", "Todos"],
+    icon: "fas fa-ticket-alt",
+    iconChild: ["fas fa-tag", "fas fa-tags"],
+    component: [PromotionalCouponNew, PromotionalCouponList],
+    layout: "/admin"
+  },{
+    path: ["/estoque/novo", "/estoque/lista"],
+    name: "Estoque",
+    nameChild: ["Atual", "Nova entrada"],
+    icon: "fas fa-boxes",
+    iconChild: ["fas fa-box-open", "fas fa-box"],
+    component: [StockList, StockNew],
+    layout: "/admin"
+  },{
+    path: ["/fornecedores/novo", "/fornecedores/lista"],
+    name: "Fornecedores",
+    nameChild: ["Novo", "Todos"],
+    icon: "far fa-building",
+    iconChild: ["fas fa-industry", "fas fa-city"],
+    component: [ProviderNew, ProviderList],
     layout: "/admin"
   }
 ];

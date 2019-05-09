@@ -3,6 +3,7 @@ import {withRouter} from "react-router-dom";
 import GeneralService from '../../services/GeneralService';
 import SimpleService from '../../services/SimpleService';
 import swal from 'sweetalert';
+import { MDBDataTable } from 'mdbreact';
 
 import BlockUi from 'react-block-ui';
 import { Loader } from 'react-loaders';
@@ -35,7 +36,28 @@ export default class ProductList extends Component {
       products: [],
       product: {},
       loaderType: 'ball-pulse-sync',
-      blocking: true
+      blocking: true,
+      data: {
+        columns: [{
+          label: 'Nome',
+          field: 'name',
+          sort: 'asc'
+        },{
+          label: 'GRUPO PRECIFICAÇÃO	',
+          field: 'pricingGroup',
+          sort: 'asc'
+        },
+        {
+          label: 'Editar',
+          field: 'edit',
+          width: 15
+        },
+        {
+          label: 'Remover',
+          field: 'remove',
+          width: 15
+        }]    
+      }
     };
 
     this.getAllProduct = this.getAllProduct.bind(this);
@@ -87,7 +109,25 @@ export default class ProductList extends Component {
   async getAllProduct(){
     await this.service.getAll().then(val => this.setState({
       products: val
-    }))
+    })).then(() => {
+      
+      let data = []
+      this.state.products.map((product, index) => {
+        data.push({
+          name: product.name,
+          pricingGroup: product.pricingGroup.name,
+          edit: <a href="javascript:void(0)" className="text-warning" onClick={() => this.editProduct(product) }><i className="tim-icons icon-pencil"></i></a>,
+          remove: <a href="#" className="text-danger" onClick={() => this.statusModal(product)}><i className="tim-icons icon-trash-simple"></i></a>
+        });
+      })
+
+      this.setState({
+        data: {
+          ...this.state.data,
+          rows: data
+        }
+      })
+    })
   }
 
   async deleteProduct(inactivation){
@@ -152,29 +192,16 @@ export default class ProductList extends Component {
                   </Row>
                 </CardHeader>
                 <CardBody>
-                  <Table hover>
-                    <thead>
-                      <tr>
-                        <th className="text-center">Nome</th>
-                        <th className="text-center">Grupo precificação</th>
-                        <th className="text-center">Remover</th>
-                      </tr>
-                    </thead>
-                    <tbody id="tableList">
-                    { 
-                      
-                        this.state.products.map((product, index) => {
-                            return (
-                              <tr key={index}>
-                                <td className="text-center hover-point" onClick={() => this.editProduct(product) }>{product.name}</td>
-                                <td className="text-center hover-point" onClick={() => this.editProduct(product) }>{product.pricingGroup.name}</td>
-                                <td className="text-center"><a href="#" className="text-danger" onClick={() => this.statusModal(product)}><i className="tim-icons icon-trash-simple"></i></a></td>
-                              </tr>
-                            )
-                        })
-                    }
-                    </tbody>
-                  </Table>
+                  <MDBDataTable
+                    className="mb-4 text-center"
+                    striped
+                    hover
+                    data={this.state.data}
+                    searchLabel = "Buscar..."
+                    entriesLabel = "Quantidade de elementos"
+                    infoLabel = {["Mostrando", "de", "de", "elementos"]}
+                    paginationLabel= {["Anterior", "Próximo"]}
+                  />
                 </CardBody>
             </Card>
           </Col>

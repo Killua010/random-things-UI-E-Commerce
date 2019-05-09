@@ -342,7 +342,7 @@
     }
   }
   &[data="orange"]{
-    @include linear-gradient($danger-states, $warning);
+    @include linear-gradient($danger-states, $danger-states);
   }
   &[data="blue"]{
     @include linear-gradient($info-states, $info);

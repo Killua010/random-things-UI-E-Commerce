@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {withRouter} from "react-router-dom";
 import GeneralService from '../../services/GeneralService';
 import swal from 'sweetalert';
+import { MDBDataTable } from 'mdbreact';
 
 import BlockUi from 'react-block-ui';
 import { Loader } from 'react-loaders';
@@ -29,7 +30,28 @@ export default class SubCategoryList extends Component {
       subCategories: [],
       subCategory: {},
       loaderType: 'ball-pulse-sync',
-      blocking: true
+      blocking: true,
+      data: {
+        columns: [{
+          label: 'Nome',
+          field: 'name',
+          sort: 'asc'
+        },{
+          label: 'Categoria',
+          field: 'category',
+          sort: 'asc'
+        },
+        {
+          label: 'Editar',
+          field: 'edit',
+          width: 15
+        },
+        {
+          label: 'Remover',
+          field: 'remove',
+          width: 15
+        }]    
+      }
     };
 
     this.getAllSubCategory = this.getAllSubCategory.bind(this);
@@ -50,9 +72,26 @@ export default class SubCategoryList extends Component {
   getAllSubCategory(){
     this.service.getAll().then(val => this.setState({
       subCategories: val
-    })).then(() => this.setState({
-              blocking: false
-            }))
+    })).then(() => {
+      
+      let data = []
+      this.state.subCategories.map((subCategory, index) => {
+        data.push({
+          name: subCategory.name,
+          category: subCategory.category.name,
+          edit: <a href="javascript:void(0)" className="text-warning"  onClick={() => this.editSubCategory(subCategory) }><i className="tim-icons icon-pencil"></i></a>,
+          remove: <a href="#" className="text-danger" onClick={() => this.removeSubCategory(subCategory)}><i className="tim-icons icon-trash-simple"></i></a>
+        });
+      })
+
+      this.setState({
+        data: {
+          ...this.state.data,
+          rows: data
+        },
+          blocking: false
+        })
+      })
   }
 
   async deleteSubCategory(subCategory){
@@ -109,29 +148,16 @@ export default class SubCategoryList extends Component {
                   </Row>
                 </CardHeader>
                 <CardBody>
-                  <Table hover>
-                    <thead>
-                      <tr>
-                        <th className="text-center">Nome</th>
-                        <th className="text-center">Categoria</th>
-                        <th className="text-center">Remover</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    { 
-                      
-                        this.state.subCategories.map((subCategory, index) => {
-                            return (
-                              <tr key={index}>
-                                <td className="text-center hover-point" onClick={() => this.editSubCategory(subCategory) }>{subCategory.name}</td>
-                                <td className="text-center hover-point" onClick={() => this.editSubCategory(subCategory) }>{subCategory.category.name}</td>
-                                <td className="text-center"><a href="#" className="text-danger" onClick={() => this.removeSubCategory(subCategory)}><i className="tim-icons icon-trash-simple"></i></a></td>
-                              </tr>
-                            )
-                        })
-                    }
-                    </tbody>
-                  </Table>
+                <MDBDataTable
+                    className="mb-4 text-center"
+                    striped
+                    hover
+                    data={this.state.data}
+                    searchLabel = "Buscar..."
+                    entriesLabel = "Quantidade de elementos"
+                    infoLabel = {["Mostrando", "de", "de", "elementos"]}
+                    paginationLabel= {["Anterior", "Próximo"]}
+                  />
                 </CardBody>
             </Card>
           </Col>

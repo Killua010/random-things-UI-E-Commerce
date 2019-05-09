@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {withRouter} from "react-router-dom";
 import GeneralService from '../../services/GeneralService';
 import swal from 'sweetalert';
+import { MDBDataTable } from 'mdbreact';
 
 import BlockUi from 'react-block-ui';
 import { Loader } from 'react-loaders';
@@ -30,7 +31,25 @@ export default class CategoryList extends Component {
       category: {},
       update: false,
       loaderType: 'ball-pulse-sync',
-      blocking: true
+      blocking: true,
+      data: {
+          columns: [{
+            label: 'Nome',
+            field: 'name',
+            sort: 'asc'
+          },
+          {
+            label: 'Editar',
+            field: 'edit',
+            width: 15
+          },
+          {
+            label: 'Remover',
+            field: 'remove',
+            width: 15
+          }]    
+        }
+      
     };
 
     this.getAllCategory = this.getAllCategory.bind(this);
@@ -51,9 +70,28 @@ export default class CategoryList extends Component {
   getAllCategory(){
     this.service.getAll().then(val => this.setState({
       categories: val
-    })).then(() => this.setState({
-              blocking: false
-            }))
+    })).then(() =>{ 
+      let data = []
+      this.state.categories.map((category, index) => {
+        data.push({
+          name: category.name,
+          edit: <a href="javascript:void(0)" className="text-warning"  onClick={() => this.editCategory(category) }><i className="tim-icons icon-pencil"></i></a>,
+          remove: <a href="#" className="text-danger" onClick={() => this.removeCategory(category)}><i className="tim-icons icon-trash-simple"></i></a>
+        });
+      })
+
+      this.setState({
+        data: {
+          ...this.state.data,
+          rows: data
+        },
+        blocking: false
+      })
+  });
+   
+
+
+
   }
 
   async deleteCategory(category){
@@ -87,6 +125,8 @@ export default class CategoryList extends Component {
     })
   }
 
+  
+
   render() {
     return (
       <div className="content">
@@ -110,7 +150,7 @@ export default class CategoryList extends Component {
                   </Row>
                 </CardHeader>
                 <CardBody>
-                  <Table hover>
+                  {/* <Table hover>
                     <thead>
                       <tr>
                         <th className="text-center">Nome</th>
@@ -130,7 +170,17 @@ export default class CategoryList extends Component {
                         })
                     }
                     </tbody>
-                  </Table>
+                  </Table> */}
+                  <MDBDataTable
+                    className="mb-4 text-center"
+                    striped
+                    hover
+                    data={this.state.data}
+                    searchLabel = "Buscar..."
+                    entriesLabel = "Quantidade de elementos"
+                    infoLabel = {["Mostrando", "de", "de", "elementos"]}
+                    paginationLabel= {["Anterior", "Próximo"]}
+                  />
                 </CardBody>
             </Card>
           </Col>
