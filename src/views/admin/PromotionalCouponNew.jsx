@@ -23,10 +23,13 @@ export default class TableFieldNew extends Component {
 
   constructor(props) {
     super(props);
-    this.service = new GeneralService("technicalfields");
+    this.service = new GeneralService("promotionalCoupons");
 
     this.state = {
-      field: {},
+      coupon: {
+        value: '',
+        shelfLife: ''
+      },
       update: false,
       loaderType: 'ball-pulse-sync',
       blocking: false
@@ -42,22 +45,22 @@ export default class TableFieldNew extends Component {
   async putField(field){
     this.alterBlockUI()
     await this.service.put(field)
-    this.props.history.push("listar-campo-tecnico");
+    this.props.history.push("listar");
     this.alterBlockUI()
   }
 
   async postField(field){
     this.alterBlockUI()
     await this.service.post(field)
-    this.props.history.push("listar-campo-tecnico");
+    this.props.history.push("listar");
     this.alterBlockUI()
   }
 
   updateData(value){
     this.setState({
-      field: {
-        ...this.state.field,
-        name: value.target.value
+      coupon: {
+        ...this.state.coupon,
+        [value.target.name]: value.target.value
       }
     })
   }
@@ -76,15 +79,14 @@ export default class TableFieldNew extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.location.state)
     if(this.props.location.state !== undefined){
       this.setState({
-        field: this.props.location.state.field,
+        coupon: this.props.location.state.coupon,
         update: true
       })
     } else {
       this.setState({
-        field: {},
+        coupon: {},
         update: false
       })
     }
@@ -95,7 +97,7 @@ export default class TableFieldNew extends Component {
       <div className="content">
         <BlockUi tag="div" blocking={this.state.blocking} loader={<Loader active type={this.state.loaderType} color="#02a17c"/>}>
             <Col xs="12">
-            <h4 className="title">Dados do Campo Tecnico</h4>
+            <h4 className="title">Dados do cupom promocional</h4>
             <Card>
             <CustomTabs
                   plainTabs
@@ -105,8 +107,10 @@ export default class TableFieldNew extends Component {
                       tabName: "Dados básicos",
                       tabContent: (
                         <div>
-                          <Label for="fieldName">Nome do campo tecnico</Label>
-                          <Input type="text" id="fieldName" name="fieldName" value={this.state.field.name} onChange={this.updateData}></Input>
+                          <Label for="value">Valor</Label>
+                          <Input type="number" id="fildValue" name="value" value={this.state.coupon.value} onChange={this.updateData}></Input>
+                          <Label for="shelfLife">Data de expiração</Label>
+                          <Input type="date" id="fieldDate" name="shelfLife" value={this.state.coupon.shelfLife} onChange={this.updateData}></Input>
                         </div>
                       )
                     }
@@ -117,7 +121,7 @@ export default class TableFieldNew extends Component {
                       className="btn-simple float-right"
                       color="warning"
                       size="md"
-                      onClick={() => { this.executeEvent(this.state.field) } }>
+                      onClick={() => { this.executeEvent(this.state.coupon) } }>
                       Salvar
                 </Button>
                 </CardFooter>

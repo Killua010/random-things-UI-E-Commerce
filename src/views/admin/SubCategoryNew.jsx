@@ -86,7 +86,6 @@ export default class SubCategoryNew extends Component {
   }
 
   executeEvent(subCategory){ 
-    console.log(subCategory)
     if(this.state.update === false)
       this.postSubCategory(subCategory)
     else  

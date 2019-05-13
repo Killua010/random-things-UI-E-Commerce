@@ -148,23 +148,24 @@ export const adminRoutes = [
     iconChild: ["fas fa-tag", "fas fa-tags"],
     component: [PromotionalCouponNew, PromotionalCouponList],
     layout: "/admin"
-  },{
-    path: ["/estoque/novo", "/estoque/lista"],
-    name: "Estoque",
-    nameChild: ["Atual", "Nova entrada"],
-    icon: "fas fa-boxes",
-    iconChild: ["fas fa-box-open", "fas fa-box"],
-    component: [StockList, StockNew],
-    layout: "/admin"
-  },{
-    path: ["/fornecedores/novo", "/fornecedores/lista"],
-    name: "Fornecedores",
-    nameChild: ["Novo", "Todos"],
-    icon: "far fa-building",
-    iconChild: ["fas fa-industry", "fas fa-city"],
-    component: [ProviderNew, ProviderList],
-    layout: "/admin"
   }
+  // ,{
+  //   path: ["/estoque/novo", "/estoque/lista"],
+  //   name: "Estoque",
+  //   nameChild: ["Atual", "Nova entrada"],
+  //   icon: "fas fa-boxes",
+  //   iconChild: ["fas fa-box-open", "fas fa-box"],
+  //   component: [StockList, StockNew],
+  //   layout: "/admin"
+  // },{
+  //   path: ["/fornecedores/novo", "/fornecedores/lista"],
+  //   name: "Fornecedores",
+  //   nameChild: ["Novo", "Todos"],
+  //   icon: "far fa-building",
+  //   iconChild: ["fas fa-industry", "fas fa-city"],
+  //   component: [ProviderNew, ProviderList],
+  //   layout: "/admin"
+  // }
 ];
 
 export const clientRoutes = [

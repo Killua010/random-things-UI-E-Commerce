@@ -22,12 +22,12 @@ export default class TableFieldList extends Component {
 
   constructor(props) {
     super(props);
-    this.service = new GeneralService("technicalfields");
+    this.service = new GeneralService("promotionalCoupons");
 
     this.state = {
       statusModal: false,
-      fields: [],
-      field: {},
+      coupons: [],
+      coupon: {},
       loaderType: 'ball-pulse-sync',
       blocking: true
     };
@@ -39,20 +39,16 @@ export default class TableFieldList extends Component {
     this.getAllField();
   }
 
-  editField(field){
-    this.props.history.push({pathname: "novo-campo-tecnico", state: { field: field }});
-  }
-
   newField() {
-    this.props.history.push("novo-campo-tecnico");
+    this.props.history.push("novo");
   }
 
   getAllField(){
     this.service.getAll().then(val => this.setState({
-      fields: val
+      coupons: val
     })).then(() => this.setState({
-              blocking: false
-            }))
+      blocking: false
+    }))
   }
 
   async deleteField(field){
@@ -113,17 +109,19 @@ export default class TableFieldList extends Component {
                     <thead>
                       <tr>
                         <th className="text-center">Nome</th>
+                        <th className="text-center">Data de validade</th>
                         <th className="text-center">Remover</th>
                       </tr>
                     </thead>
                     <tbody>
                     { 
                       
-                        this.state.fields.map((field, index) => {
+                        this.state.coupons.map((cp, index) => {
                             return (
                               <tr key={index}>
-                                <td className="text-center hover-point" onClick={() => this.editField(field) }>{field.name}</td>
-                                <td className="text-center"><a href="#" className="text-danger" onClick={() => this.removeField(field)}><i className="tim-icons icon-trash-simple"></i></a></td>
+                                <td className="text-center">{cp.name}</td>
+                                <td className="text-center">{cp.shelfLife}</td>
+                                <td className="text-center"><a href="#" className="text-danger" onClick={() => this.removeField(cp)}><i className="tim-icons icon-trash-simple"></i></a></td>
                               </tr>
                             )
                         })

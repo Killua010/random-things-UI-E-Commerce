@@ -25,6 +25,8 @@ import OrderService from "../../services/OrderService";
 import ShoppingCartService from "../../services/ShoppingCartService";
 import { bindActionCreators } from "redux";
 import * as cartActions from "../../actions/shoppingCart";
+import CouponPromotionalService from "../../services/CouponPromotionalService";
+import CouponChangeService from "../../services/CouponChangeService";
 class Payment extends Component {
 
   constructor(props){
@@ -32,15 +34,22 @@ class Payment extends Component {
     this.shoppingCartService = new ShoppingCartService("shoppingCarts");
     this.shippingService = new ShippingPriceService("shipping")
     this.orderService = new OrderService("orders");
+    this.promotionalCouponService = new CouponPromotionalService("promotionalCoupons")
+    this.changeCouponService = new CouponChangeService("coupons");
 
     this.state = {
       openCartao: false,
       openAddress: false, 
       coupon:"",
-      cart: {},
+      changeCoupon: {
+        name: ''
+      },
       total: 0.0,
       quantity: 0,
       frete: 0.0,
+      promotionalCoupon: {
+        name: ''
+      },
       favoriteCard: {
         printedName: "",
         number: "",
@@ -85,7 +94,8 @@ class Payment extends Component {
       cardId: this.state.favoriteCard.id,
       orderValue: this.state.subTotal,
       shippingValue: this.state.frete,
-      coupon: this.state.coupon,
+      changeCoupon: this.state.changeCoupon.name,
+      promotionalCoupon: this.state.promotionalCoupon.name,
       cart: this.state.cart
     }).then(res => {
       if(res !== false) {
@@ -118,6 +128,21 @@ class Payment extends Component {
       if(this.state.cart.itens[i].status != false){
         itens = itens + this.state.cart.itens[i].quantity * 1
         subTotal += (this.state.cart.itens[i].quantity * this.state.cart.itens[i].product.price)
+      }
+    }
+    if(this.state.promotionalCoupon.value !== undefined){
+      if(this.state.promotionalCoupon.value > subTotal){
+        subTotal = 0;
+      } else {
+        subTotal -= this.state.promotionalCoupon.value;
+      }
+    }
+
+    if(this.state.changeCoupon.value !== undefined){
+      if(this.state.changeCoupon.value > subTotal){
+        subTotal = 0;
+      } else {
+        subTotal -= this.state.changeCoupon.value;
       }
     }
 
@@ -186,9 +211,58 @@ class Payment extends Component {
     this.setState({ openAddress: false });
   };
 
-  handleCoupon = (e) => {
+  findPromotionalCoupon = () => {
+    this.promotionalCouponService.getByName(this.state.promotionalCoupon.name)
+    .then(res => {
+      if(res != null){
+        document.getElementById("btnPromotionalCoupon").style.pointerEvents = "none";
+        document.getElementById("btnPromotionalCoupon").parentElement.style.cursor = "not-allowed";
+        document.getElementById("btnPromotionalCoupon").style.backgroundColor = "#5a5a5a";
+        document.getElementById("txtPromotionalCoupon").disabled = true;
+        document.getElementById("txtPromotionalCoupon").style.cursor = "not-allowed";
+       
+        var divNova = document.createElement("div"); 
+        var conteudoNovo = document.createTextNode(`valor cupom: R$ ${res.value}`); 
+        divNova.appendChild(conteudoNovo); 
+
+        document.getElementById("divPromotionalCoupon").appendChild(divNova);
+
+        this.setState({
+          promotionalCoupon: res
+        },() => this.renderSubTotal())
+      }
+    })
+  }
+
+  findChangeCoupon = () => {
+    this.changeCouponService.getByIdClientAndName(this.props.client.id, this.state.changeCoupon.name)
+    .then(res => {
+      if(res != null){
+        document.getElementById("btnChangeCoupon").style.pointerEvents = "none";
+        document.getElementById("btnChangeCoupon").parentElement.style.cursor = "not-allowed";
+        document.getElementById("btnChangeCoupon").style.backgroundColor = "#5a5a5a";
+        document.getElementById("txtChangeCoupon").disabled = true;
+        document.getElementById("txtChangeCoupon").style.cursor = "not-allowed";
+       
+        var divNova = document.createElement("div"); 
+        var conteudoNovo = document.createTextNode(`valor cupom: R$ ${res.value}`); 
+        divNova.appendChild(conteudoNovo); 
+
+        document.getElementById("divChangeCoupon").appendChild(divNova);
+
+        this.setState({
+          changeCoupon: res
+        },() => this.renderSubTotal())
+      }
+    })
+  }
+
+  handleInput = (e) => {
     this.setState({
-      coupon: e.target.value
+      [e.target.name]: {
+        ...[e.target.name],
+         name: e.target.value
+        }
     })
   }
 
@@ -274,26 +348,68 @@ class Payment extends Component {
                         Frete: R$ {this.state.frete}
                       </Typography>
                       <Typography variant="h5">Total: R$ {this.state.subTotal + this.state.frete}</Typography>
-                      <CustomInput
-                        inputProps={{
-                          id: "coupon",
-                          name: "coupon",
-                          onChange: this.handleCoupon,
-                          value: this.state.coupon,
-                          
-                          type: "text",
-                          placeholder: "Cupom"
-                        }}
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                      />
+                      <div className="row" id="divPromotionalCoupon">
+                        <div className="col-xs-9 mr-3">
+                          <CustomInput
+                            inputProps={{
+                              id: "txtPromotionalCoupon",
+                              name: "promotionalCoupon",
+                              onChange: this.handleInput,
+                              value: this.state.promotionalCoupon.name,
+                              
+                              type: "text",
+                              placeholder: "Cupom promocional"
+                            }}
+                            formControlProps={{
+                              fullWidth: true
+                            }}
+                          />
+                        </div>
+                        <div className="col-xs-3">
+                        <Button
+                          id="btnPromotionalCoupon"
+                          color="success"
+                          size="sm"
+                          href="javascript:void(0)" onClick={this.findPromotionalCoupon}
+                          >
+                            +
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="row" id="divChangeCoupon">
+                        <div className="col-xs-9 mr-3">
+                          <CustomInput
+                            inputProps={{
+                              id: "txtChangeCoupon",
+                              name: "changeCoupon",
+                              onChange: this.handleInput,
+                              value: this.state.changeCoupon.name,
+                              
+                              type: "text",
+                              placeholder: "Cupom troca"
+                            }}
+                            formControlProps={{
+                              fullWidth: true
+                            }}
+                          />
+                        </div>
+                        <div className="col-xs-3">
+                        <Button
+                          id="btnChangeCoupon"
+                          color="success"
+                          size="sm"
+                          href="javascript:void(0)" onClick={this.findChangeCoupon
+                            // () => this.goTo("/pedidoFinalizado")
+                          }
+                          >
+                            +
+                          </Button>
+                        </div>
+                      </div>
                       <Button
                         color="warning"
                         size="lg"
-                        href="javascript:void(0)" onClick={this.finishOrder
-                          // () => this.goTo("/pedidoFinalizado")
-                        }
+                        href="javascript:void(0)" onClick={this.finishOrder}
                       >
                         Finalizar Comprar
                       </Button>
