@@ -18,11 +18,11 @@ import {
   Table,
 } from "reactstrap";
 
-export default class TableFieldList extends Component {
+export default class ProviderList extends Component {
 
   constructor(props) {
     super(props);
-    this.service = new GeneralService("technicalfields");
+    this.service = new GeneralService("providers");
 
     this.state = {
       statusModal: false,
@@ -39,20 +39,20 @@ export default class TableFieldList extends Component {
     this.getAllField();
   }
 
-  editField(field){
-    this.props.history.push({pathname: "novo-campo-tecnico", state: { field: field }});
+  editField(provider){
+    this.props.history.push({pathname: "novo", state: { provider: provider }});
   }
 
   newField() {
-    this.props.history.push("novo-campo-tecnico");
+    this.props.history.push("novo");
   }
 
   getAllField(){
     this.service.getAll().then(val => this.setState({
       fields: val
     })).then(() => this.setState({
-              blocking: false
-            }))
+      blocking: false
+    }))
   }
 
   async deleteField(field){
@@ -95,7 +95,7 @@ export default class TableFieldList extends Component {
                 <CardHeader>
                 <Row>
                   <Col sm="6">
-                    <h4 className="title">Dados Tecnicos Atuais</h4>
+                    <h4 className="title">Dados Fornecedores</h4>
                   </Col>
                   <Col sm="6">
                     <Button tag="label"
@@ -103,7 +103,7 @@ export default class TableFieldList extends Component {
                             color="warning"
                             size="md"
                             onClick={() => { this.newField() } }>
-                            Novo Campo Tecnico
+                            Novo Fornecedor
                       </Button>
                     </Col>
                   </Row>
@@ -113,6 +113,7 @@ export default class TableFieldList extends Component {
                     <thead>
                       <tr>
                         <th className="text-center">Nome</th>
+                        <th className="text-center">Categoria</th>
                         <th className="text-center">Remover</th>
                       </tr>
                     </thead>
@@ -123,6 +124,7 @@ export default class TableFieldList extends Component {
                             return (
                               <tr key={index}>
                                 <td className="text-center hover-point" onClick={() => this.editField(field) }>{field.name}</td>
+                                <td className="text-center hover-point" onClick={() => this.editField(field) }>{field.category.name}</td>
                                 <td className="text-center"><a href="#" className="text-danger" onClick={() => this.removeField(field)}><i className="tim-icons icon-trash-simple"></i></a></td>
                               </tr>
                             )

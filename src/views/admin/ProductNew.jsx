@@ -213,6 +213,7 @@ export default class ProductNew extends Component {
         barCode: value.target.value
       }
     })
+    
   }
 
   updateDataPricingGroup(value){

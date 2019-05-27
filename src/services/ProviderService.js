@@ -3,16 +3,17 @@ import swal from 'sweetalert';
 import GeneralService from './GeneralService';
 
 import { path } from './GeneralService';
+
 // dev path
 //http://localhost:8080
-export default class CouponChangeService extends GeneralService {
+export default class ProviderService extends GeneralService{
     constructor(entityPath){
         super(entityPath);
     }
 
-    async getByIdClientAndName(id, name) {
+    async getByIdCategory(id) {
         let data = null;
-        await axios.get(`${path}/${this.entityPath}/byIdClientAndName/${id}/${name}`)
+        await axios.get(`${path}/${this.entityPath}/findByCategory/${id}`)
         .then(res => {
             data = res.data;
         }).catch(function (error, e) {
@@ -41,5 +42,4 @@ export default class CouponChangeService extends GeneralService {
         
         return await data;
     }
-
 }

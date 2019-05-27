@@ -1,27 +1,13 @@
 import axios from 'axios';
 import swal from 'sweetalert';
 
-export const path = "http://localhost:8080";
+import { path } from './GeneralService';
+import SimpleService from './SimpleService';
 // dev path
 //http://localhost:8080
-export default class ShoppingCart {
+export default class ShoppingCart extends SimpleService{
     constructor(entityPath){
-        this.entityPath = entityPath;
-    }
-
-    async getById(id) {
-        let data = null;
-        await axios.get(`${path}/${this.entityPath}/${id}`)
-        .then(res => {
-            data = res.data;
-        }).catch(function (error, e) {
-            swal({
-                title: error,
-                icon: "error",
-            });
-        })
-        
-        return await data;
+        super(entityPath);
     }
 
     async getByIdClient(id) {
@@ -37,37 +23,6 @@ export default class ShoppingCart {
         })
         
         return await data;
-    }
-
-    async put(entity) {
-        let resp;
-        await axios.put(`${path}/${this.entityPath}/${entity.id}`, entity, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res => {
-            resp = res.data;
-        }).catch(function (error, e) {
-            resp = false;
-            if(undefined === error.response.data.errors){
-                swal({
-                    title: error.response.data,
-                    icon: "error",
-                });
-            } else {
-                let errors = "";
-                error.response.data.errors.map((err) => {
-                    errors += err.defaultMessage
-                })
-                swal({
-                    title: "Erro na requisição",
-                    text: errors,
-                    icon: "error",
-                });
-            }
-        })
-        return resp;
     }
 
     async post(entity, clientId) {
@@ -109,7 +64,6 @@ export default class ShoppingCart {
 
     async delete(entity, clientId) {
         let response;
-        console.log(entity)
         await axios.delete(`${path}/${this.entityPath}/client/${clientId}`, { data: entity }).then(res => {
             response = res.data;
         })

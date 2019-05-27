@@ -23,50 +23,68 @@ export default class TableFieldNew extends Component {
 
   constructor(props) {
     super(props);
-    this.service = new GeneralService("technicalfields");
+    this.service = new GeneralService("providers");
+    this.categoryservice = new GeneralService("categories");
 
     this.state = {
-      field: {},
+      provider: {
+        name: "",
+        cnpj: "",
+        category: {},
+        categoryId: ""
+      },
+      categories: [],
       update: false,
       loaderType: 'ball-pulse-sync',
       blocking: false
     };
 
     this.updateData = this.updateData.bind(this)
-    this.putField = this.putField.bind(this)
-    this.postField = this.postField.bind(this)
+    this.putProvider = this.putProvider.bind(this)
+    this.postProvider = this.postProvider.bind(this)
     this.executeEvent = this.executeEvent.bind(this)
     this.alterBlockUI = this.alterBlockUI.bind(this)
+    this.getAllCategory = this.getAllCategory.bind(this);
+
+    this.getAllCategory();
   }
 
-  async putField(field){
+  getAllCategory(){
+    this.categoryservice.getAll().then(val => this.setState({
+      categories: val
+    })).then(() => this.setState({
+      blocking: false
+    }))
+  }
+
+  async putProvider(provider){
     this.alterBlockUI()
-    await this.service.put(field)
-    this.props.history.push("listar-campo-tecnico");
+    await this.service.put(provider)
+    this.props.history.push("lista");
     this.alterBlockUI()
   }
 
-  async postField(field){
+  async postProvider(provider){
     this.alterBlockUI()
-    await this.service.post(field)
-    this.props.history.push("listar-campo-tecnico");
+    await this.service.post(provider)
+    this.props.history.push("lista");
     this.alterBlockUI()
   }
 
   updateData(value){
     this.setState({
-      field: {
-        ...this.state.field,
-        name: value.target.value
+      provider: {
+        ...this.state.provider,
+        [value.target.name]: value.target.value
       }
     })
   }
 
-  executeEvent(field){ 
+  executeEvent(provider){ 
     if(this.state.update === false)
-      this.postField(field)
+      this.postProvider(provider)
     else  
-      this.putField(field)
+      this.putProvider(provider)
   }
 
   alterBlockUI(){
@@ -76,15 +94,15 @@ export default class TableFieldNew extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.location.state)
     if(this.props.location.state !== undefined){
+      
       this.setState({
-        field: this.props.location.state.field,
+        provider: this.props.location.state.provider,
         update: true
       })
     } else {
       this.setState({
-        field: {},
+        provider: {},
         update: false
       })
     }
@@ -105,8 +123,25 @@ export default class TableFieldNew extends Component {
                       tabName: "Dados básicos",
                       tabContent: (
                         <div>
-                          <Label for="fieldName">Nome do campo tecnico</Label>
-                          <Input type="text" id="fieldName" name="fieldName" value={this.state.field.name} onChange={this.updateData}></Input>
+                          <Label for="name">Nome</Label>
+                          <Input type="text" id="name" name="name" value={this.state.provider.name} onChange={this.updateData}></Input>
+                          <Label for="cnpj">CNPJ</Label>
+                          <Input type="text" id="cnpj" name="cnpj" value={this.state.provider.cnpj} onChange={this.updateData}></Input>
+                          <Label for="categoryId">Categoria</Label>
+                          <Input type="select" name="categoryId" id="exampleSelect1" value={this.state.provider.categoryId} onChange={this.updateData}>
+                          {
+                            this.state.categories.map((category, index) => {
+                              if(this.state.provider.category !== undefined && this.state.provider.category.id === category.id){
+                                return(
+                                  <option selected value={category.id} key={index}>{category.name}</option>
+                                )  
+                              }
+                              return(
+                                <option value={category.id} key={index}>{category.name}</option>
+                              )
+                            })
+                          }
+                          </Input>
                         </div>
                       )
                     }
@@ -117,7 +152,7 @@ export default class TableFieldNew extends Component {
                       className="btn-simple float-right"
                       color="warning"
                       size="md"
-                      onClick={() => { this.executeEvent(this.state.field) } }>
+                      onClick={() => { this.executeEvent(this.state.provider) } }>
                       Salvar
                 </Button>
                 </CardFooter>

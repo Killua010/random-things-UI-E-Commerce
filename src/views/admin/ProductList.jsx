@@ -103,7 +103,6 @@ export default class ProductList extends Component {
     await this.inactiveStatusService.getAll().then(val => this.setState({
       statusInactive: val
     }))
-    console.log(this.state.statusInactive)
   }
 
   async getAllProduct(){

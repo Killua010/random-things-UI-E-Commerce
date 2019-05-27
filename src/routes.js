@@ -22,7 +22,11 @@ import PromotionalCouponNew from "views/admin/PromotionalCouponNew.jsx";
 import ProviderList from "views/admin/ProviderList.jsx";
 import ProviderNew from "views/admin/ProviderNew.jsx";
 import StockList from "views/admin/StockList.jsx";
+import StockInputList from "views/admin/StockInputList.jsx";
 import StockNew from "views/admin/StockNew.jsx";
+import ReportGeneralOrder from "views/admin/ReportGeneralOrder.jsx";
+import ReportCategoryOrder from "views/admin/ReportCategoryOrder.jsx";
+import ReportProductOrder from "views/admin/ReportProductOrder.jsx";
 
 import Profile from "./views/client/Profile";
 import MyCarts from "./views/client/MyCarts";
@@ -140,7 +144,19 @@ export const adminRoutes = [
     component: [ChangeOrder, AprovedChange,
           ReprovedChange],
     layout: "/admin"
-  },{
+  }, {
+    path: ["/relatorio/vendas", "/relatoria/vendas/categoria",
+    "/relatoria/vendas/produtos"],
+    name: "Relatorios",
+    nameChild: ["Vendas Geral", "Vendas por Categoria",
+    "Vendas por Produto"],
+    icon: "fas fa-bars",
+    iconChild: ["fas fa-barcode", "fas fa-city",
+    "fas fa-city"],
+    component: [ReportGeneralOrder, ReportCategoryOrder,
+      ReportProductOrder],
+    layout: "/admin"
+  }, {
     path: ["/cupons/novo", "/cupons/listar"],
     name: "Cupons Promocionais",
     nameChild: ["Novo", "Todos"],
@@ -148,24 +164,25 @@ export const adminRoutes = [
     iconChild: ["fas fa-tag", "fas fa-tags"],
     component: [PromotionalCouponNew, PromotionalCouponList],
     layout: "/admin"
+  },
+  {
+    path: ["/estoque/atual", "/estoque/novo", "/estoque/lista"],
+    name: "Estoque",
+    nameChild: ["Atual", "Nova entrada", "Todas entradas"],
+    icon: "fas fa-boxes",
+    iconChild: ["fas fa-box-open", "fas fa-box-open", "fas fa-box"],
+    component: [StockList, StockNew, StockInputList],
+    layout: "/admin"
+  },
+  {
+    path: ["/fornecedores/novo", "/fornecedores/lista"],
+    name: "Fornecedores",
+    nameChild: ["Novo", "Todos"],
+    icon: "far fa-building",
+    iconChild: ["fas fa-industry", "fas fa-city"],
+    component: [ProviderNew, ProviderList],
+    layout: "/admin"
   }
-  // ,{
-  //   path: ["/estoque/novo", "/estoque/lista"],
-  //   name: "Estoque",
-  //   nameChild: ["Atual", "Nova entrada"],
-  //   icon: "fas fa-boxes",
-  //   iconChild: ["fas fa-box-open", "fas fa-box"],
-  //   component: [StockList, StockNew],
-  //   layout: "/admin"
-  // },{
-  //   path: ["/fornecedores/novo", "/fornecedores/lista"],
-  //   name: "Fornecedores",
-  //   nameChild: ["Novo", "Todos"],
-  //   icon: "far fa-building",
-  //   iconChild: ["fas fa-industry", "fas fa-city"],
-  //   component: [ProviderNew, ProviderList],
-  //   layout: "/admin"
-  // }
 ];
 
 export const clientRoutes = [

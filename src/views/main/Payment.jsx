@@ -98,13 +98,15 @@ class Payment extends Component {
       promotionalCoupon: this.state.promotionalCoupon.name,
       cart: this.state.cart
     }).then(res => {
-      if(res !== false) {
+      console.log(res)
+      if(res !== null) {
         this.shoppingCartService.getByIdClient(this.props.client.id).then(res => {
-          if(res !== false) {
+          if(res !== null) {
             this.props.setShoppingCart(res);
           }
         })
-        this.props.history.push({ pathname: "/pedidoFinalizado", state: { order: res.data } });
+        
+        this.props.history.push({ pathname: "/pedidoFinalizado", state: { order: res } });
       }
     })
   }

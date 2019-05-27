@@ -1,12 +1,14 @@
 import axios from 'axios';
 import swal from 'sweetalert';
+import GeneralService from './GeneralService';
 
-export const path = "http://localhost:8080";
+import { path } from './GeneralService';
+
 // dev path
 //http://localhost:8080
-export default class ProductService {
+export default class ProductService extends GeneralService {
     constructor(entityPath){
-        this.entityPath = entityPath;
+        super(entityPath);
     }
 
     async getById(entity) {
@@ -42,6 +44,21 @@ export default class ProductService {
     async findBy(param){
         let data = null;
         await axios.get(`${path}/${this.entityPath}/findBy/${param}`)
+        .then(res => {
+            data = res.data;
+        }).catch(function (error, e) {
+            swal({
+                title: error,
+                icon: "error",
+            });
+        })
+        
+        return await data;
+    }
+
+    async findByCategory(id){
+        let data = null;
+        await axios.get(`${path}/${this.entityPath}/findByCategory/${id}`)
         .then(res => {
             data = res.data;
         }).catch(function (error, e) {
@@ -91,11 +108,9 @@ export default class ProductService {
     async put(entity) {
         let resp;
         const data = new FormData();
-    
         data.append("barCode", entity.barCode);
         data.append("description", entity.description);
         data.append("name", entity.name)
-        data.append("barCode", entity.barCode);
         data.append("pricingGroupId", entity.pricingGroupId);
 
         for(let i = 0; i < entity.subCategoryId.length; i++){

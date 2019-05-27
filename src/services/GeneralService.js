@@ -9,37 +9,89 @@ export default class GeneralService {
         this.entityPath = entityPath;
     }
 
+    async getById(entity) {
+        let data = null;
+        await axios.get(`${path}/${this.entityPath}/${entity.id}`)
+        .then((res) => {
+            data = res.data;
+        }).catch(function (error, e) {
+            if(undefined !== error.response.data.msg) {
+                swal({
+                    title: error.response.data.msg,
+                    icon: "error",
+                });
+            } else if(undefined === error.response.data.errors){
+                swal({
+                    title: error.response.data,
+                    icon: "error",
+                });
+            } else {
+                let errors = "";
+                error.response.data.errors.map((err) => {
+                    errors += err.defaultMessage
+                })
+                swal({
+                    title: "Erro na requisição",
+                    text: errors,
+                    icon: "error",
+                });
+            }
+        })
+        return await data;
+    }
+
     async getAll() {
         let data = null;
         await axios.get(`${path}/${this.entityPath}`)
         .then(res => {
             data = res.data;
         }).catch(function (error, e) {
-            swal({
-                title: error,
-                icon: "error",
-            });
+            if(undefined !== error.response.data.msg) {
+                swal({
+                    title: error.response.data.msg,
+                    icon: "error",
+                });
+            } else if(undefined === error.response.data.errors){
+                swal({
+                    title: error.response.data,
+                    icon: "error",
+                });
+            } else {
+                let errors = "";
+                error.response.data.errors.map((err) => {
+                    errors += err.defaultMessage
+                })
+                swal({
+                    title: "Erro na requisição",
+                    text: errors,
+                    icon: "error",
+                });
+            }
         })
         
         return await data;
     }
 
     async put(entity) {
-        let resp;
+        let resp = null;
         await axios.put(`${path}/${this.entityPath}/${entity.id}`, entity, {
             headers: {
                 'Content-Type': 'application/json'
             }
         })
-        .then(() => {
-            resp = true;
+        .then((res) => {
+            resp = res.data;
             swal({
                 title: "Atualizado com Sucesso",
                 icon: "success",
               });
         }).catch(function (error, e) {
-            resp = false;
-            if(undefined === error.response.data.errors){
+            if(undefined !== error.response.data.msg) {
+                swal({
+                    title: error.response.data.msg,
+                    icon: "error",
+                });
+            } else if(undefined === error.response.data.errors){
                 swal({
                     title: error.response.data,
                     icon: "error",
@@ -60,7 +112,7 @@ export default class GeneralService {
     }
 
     async post(entity) {
-        let response;
+        let response = null;
         await axios.post(`${path}/${this.entityPath}`, entity, {
             headers: {
                 'Content-Type': 'application/json'
@@ -71,18 +123,18 @@ export default class GeneralService {
                 title: "Cadastrado com Sucesso",
                 icon: "success",
             });
-            response = true;
+            response = res.data;
         }).catch(function (error, e) {
-            if(undefined === error.response){
-                console.log(error)
-                response = false
-            }
-            if(undefined === error.response.data.errors){
+            if(undefined !== error.response.data.msg) {
+                swal({
+                    title: error.response.data.msg,
+                    icon: "error",
+                });
+            } else if(undefined === error.response.data.errors){
                 swal({
                     title: error.response.data,
                     icon: "error",
                 });
-                response = false;
             } else {
                 let errors = "";
                 error.response.data.errors.map((err) => {
@@ -93,7 +145,6 @@ export default class GeneralService {
                     text: errors,
                     icon: "error",
                 });
-                response = false;
             }
         })
         return response;
@@ -107,10 +158,27 @@ export default class GeneralService {
                 icon: "success",
             });
         }).catch(function (error, e) {
-            swal({
-                title: error.response.data,
-                icon: "error",
-            });
+            if(undefined !== error.response.data.msg) {
+                swal({
+                    title: error.response.data.msg,
+                    icon: "error",
+                });
+            } else if(undefined === error.response.data.errors){
+                swal({
+                    title: error.response.data,
+                    icon: "error",
+                });
+            } else {
+                let errors = "";
+                error.response.data.errors.map((err) => {
+                    errors += err.defaultMessage
+                })
+                swal({
+                    title: "Erro na requisição",
+                    text: errors,
+                    icon: "error",
+                });
+            }
         })
     }
 }

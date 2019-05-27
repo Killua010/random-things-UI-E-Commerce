@@ -65,21 +65,21 @@ let chartExample1 = {
     gradientStroke.addColorStop(1, "rgba(29,140,248,0.2)");
     gradientStroke.addColorStop(0.4, "rgba(29,140,248,0.0)");
     gradientStroke.addColorStop(0, "rgba(29,140,248,0)"); //blue colors
-
+    
     return {
       labels: [
         "JAN",
-        "FEB",
+        "FEV",
         "MAR",
-        "APR",
-        "MAY",
+        "ABR",
+        "MAI",
         "JUN",
         "JUL",
-        "AUG",
-        "SEP",
-        "OCT",
+        "AGO",
+        "SET",
+        "OUT",
         "NOV",
-        "DEC"
+        "DEZ"
       ],
       datasets: [
         {
@@ -87,15 +87,15 @@ let chartExample1 = {
           fill: true,
           backgroundColor: gradientStroke,
           borderColor: "#1f8ef1",
-          borderWidth: 2,
+          borderWidth: 1,
           borderDash: [],
           borderDashOffset: 0.0,
           pointBackgroundColor: "#1f8ef1",
           pointBorderColor: "rgba(255,255,255,0)",
           pointHoverBackgroundColor: "#1f8ef1",
-          pointBorderWidth: 20,
+          pointBorderWidth: 10,
           pointHoverRadius: 4,
-          pointHoverBorderWidth: 15,
+          pointHoverBorderWidth: 5,
           pointRadius: 4,
           data: [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100]
         }
@@ -128,20 +128,12 @@ let chartExample1 = {
       ],
       datasets: [
         {
-          label: "My First dataset",
-          fill: true,
-          backgroundColor: gradientStroke,
-          borderColor: "#1f8ef1",
-          borderWidth: 2,
-          borderDash: [],
-          borderDashOffset: 0.0,
-          pointBackgroundColor: "#1f8ef1",
-          pointBorderColor: "rgba(255,255,255,0)",
-          pointHoverBackgroundColor: "#1f8ef1",
-          pointBorderWidth: 20,
-          pointHoverRadius: 4,
-          pointHoverBorderWidth: 15,
-          pointRadius: 4,
+          label: 'My First dataset',
+      backgroundColor: 'rgba(255,99,132,0.2)',
+      borderColor: 'rgba(255,99,132,1)',
+      borderWidth: 1,
+      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+
           data: [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120]
         }
       ]
@@ -248,7 +240,20 @@ let chartExample3 = {
     gradientStroke.addColorStop(0, "rgba(119,52,169,0)"); //purple colors
 
     return {
-      labels: ["USA", "GER", "AUS", "UK", "RO", "BR"],
+      labels: [
+        "JAN",
+        "FEV",
+        "MAR",
+        "ABR",
+        "MAI",
+        "JUN",
+        "JUL",
+        "AGO",
+        "SET",
+        "OUT",
+        "NOV",
+        "DEZ"
+      ],
       datasets: [
         {
           label: "Countries",
@@ -259,7 +264,7 @@ let chartExample3 = {
           borderWidth: 2,
           borderDash: [],
           borderDashOffset: 0.0,
-          data: [53, 20, 10, 80, 100, 45]
+          data: [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130]
         }
       ]
     };

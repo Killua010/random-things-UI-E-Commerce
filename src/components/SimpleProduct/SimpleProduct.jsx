@@ -96,10 +96,13 @@ class SimpleProduct extends Component {
         <Card className={classes.textCenter}>
           <CardHeader>
             <a href="javascript:void(0)" onClick={this.goTo}>
-              <img
+            {
+              (this.props.product.imgSrc != null ? <img
                 src={this.props.product.imgSrc[0]}
                 alt=""
-              />
+              /> : <h3>Sem foto Disponivel</h3>)
+            }
+              
             </a>
           </CardHeader>
           <CardBody>

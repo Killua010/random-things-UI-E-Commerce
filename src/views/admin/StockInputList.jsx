@@ -19,60 +19,98 @@ import {
   Table,
 } from "reactstrap";
 
-export default class StockList extends Component {
+export default class StockInputList extends Component {
 
   constructor(props) {
     super(props);
-    this.service = new GeneralService("products");
+    this.service = new GeneralService("stockInputs");
 
     this.state = {
       statusModal: false,
-      products: [],
+      stocksInput: [],
+      stockInput: {},
       data: {
         columns: [{
           label: 'Produto',
           field: 'product',
           sort: 'asc'
         },{
+          label: 'Fornecedor',
+          field: 'provider',
+          sort: 'asc'
+        },
+        {
           label: 'Quantidade',
           field: 'quantity',
           sort: 'asc'
         },
         {
-          label: 'Preço',
-          field: 'priece',
+          label: 'Preço de compra',
+          field: 'price',
           sort: 'asc'
+        },
+        {
+          label: 'Data da entrada',
+          field: 'date'
         }]    
       },
       loaderType: 'ball-pulse-sync',
       blocking: true
     };
 
-    this.getAllProduct = this.getAllProduct.bind(this);
-    this.getAllProduct();
+    this.getAllStock = this.getAllStock.bind(this);
+    this.alterBlockUI = this.alterBlockUI.bind(this)
+    
+    this.getAllStock();
   }
-  async getAllProduct(){
-    await this.service.getAll().then(val => this.setState({
-      products: val
-    })).then(() => {
+
+  newStockInput() {
+    this.props.history.push("novo");
+  }
+
+  getAllStock(){
+    this.service.getAll().then(val => this.setState({
+      stocks: val
+    })).then(() => {  
+      if(this.state.stocks.length == 0){
+        this.setState({
+          data: {
+            ...this.state.data,
+            rows: {
+                product: "nenhum",
+                provider: "nenhum",
+                quantity: "nenhum",
+                date: "nenhum",
+                price: "nenhum"
+              }
+          },
+          blocking: false
+        })
+        return;
+      }
       
       let data = []
-      this.state.products.map((product, index) => {
+      this.state.stocks.map((stock, index) => {
+        
         data.push({
-          product: product.name,
-          quantity: product.stockQuantity,
-          priece: product.price
+          product: stock.product.name,
+          provider: stock.provider.name,
+          quantity: stock.quantity,
+          price: stock.value,
+          date: stock.creationDate
         });
+        
       })
-
       this.setState({
         data: {
           ...this.state.data,
           rows: data
-        }
-      }, this.alterBlockUI())
+        },
+        blocking: false
+      })
     })
   }
+
 
   alterBlockUI(){
     this.setState({

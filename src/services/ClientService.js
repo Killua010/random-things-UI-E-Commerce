@@ -2,9 +2,13 @@ import GeneralService from "./GeneralService";
 import axios from 'axios';
 import swal from 'sweetalert';
 
-export const path = "http://localhost:8080";
+import { path } from "./GeneralService";
 
 export default class ClientService extends GeneralService {
+    constructor(entityPath){
+        super(entityPath);
+    }
+
     async login(entity) {
         let resp = null;
         await axios.post(`${path}/${this.entityPath}/login`, entity, {
@@ -44,18 +48,4 @@ export default class ClientService extends GeneralService {
 
     }
 
-    async getById(id) {
-        let data = null;
-        await axios.get(`${path}/${this.entityPath}/${id}`)
-        .then(res => {
-            data = res.data;
-        }).catch(function (error, e) {
-            swal({
-                title: error,
-                icon: "error",
-            });
-        })
-        
-        return await data;
-    }
 }

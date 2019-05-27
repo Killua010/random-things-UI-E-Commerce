@@ -1,12 +1,14 @@
 import axios from 'axios';
 import swal from 'sweetalert';
+import GeneralService from './GeneralService';
 
-export const path = "http://localhost:8080";
+import { path } from './GeneralService';
+
 // dev path
 //http://localhost:8080
-export default class ShippingPriceService {
+export default class ShippingPriceService extends GeneralService{
     constructor(entityPath){
-        this.entityPath = entityPath;
+        super(entityPath);
     }
 
     async getByIdClient(id, entity) {

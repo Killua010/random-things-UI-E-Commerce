@@ -52,26 +52,29 @@ class ShoppingCart extends Component {
 
   async updateCart(){
     await this.service.put(this.state.cart).then(res => {
+      console.log(res)
       this.props.setShoppingCart(res);
       this.goTo("/pagamento");
     })
   }
 
   getById() {
-    this.service.getById(this.props.cart.id).then(res => {
-      let idItem = [];
-      let quantityItem = []
-      for(let i = 0; i < res.itens.length; i++){
-        idItem.push(res.itens[i].id);
-        quantityItem.push(res.itens[i].quantity)
-      } 
-      this.setState({
-        cart: {
-          ...res, 
-          idItem: idItem,
-          quantityItem: quantityItem
-        }
-      }, () => this.renderSubTotal())
+    this.service.getById(this.props.cart).then(res => {
+      if(res !== null){
+        let idItem = [];
+        let quantityItem = []
+        for(let i = 0; i < res.itens.length; i++){
+          idItem.push(res.itens[i].id);
+          quantityItem.push(res.itens[i].quantity)
+        } 
+        this.setState({
+          cart: {
+            ...res, 
+            idItem: idItem,
+            quantityItem: quantityItem
+          }
+        }, () => this.renderSubTotal())
+      }
     })
   }
 

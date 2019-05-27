@@ -1,12 +1,13 @@
 import axios from 'axios';
 import swal from 'sweetalert';
+import GeneralService from './GeneralService';
 
-export const path = "http://localhost:8080";
+import { path } from './GeneralService';
 // dev path
 //http://localhost:8080
-export default class CreditCardService {
+export default class CreditCardService extends GeneralService {
     constructor(entityPath){
-        this.entityPath = entityPath;
+        super(entityPath);
     }
 
     async put(idClient, entity) {
@@ -84,19 +85,5 @@ export default class CreditCardService {
         return response;
     }
 
-    async delete(entity) {
-        await axios.delete(`${path}/${this.entityPath}/${entity.id}`)
-        .then(() => {
-            swal({
-                title: "Deletado com Sucesso",
-                icon: "success",
-            });
-        }).catch(function (error, e) {
-            swal({
-                title: error.response.data,
-                icon: "error",
-            });
-        })
-    }
 }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import CategoryService from '../../services/CategoryService';
+import MultiPartFileService from '../../services/MultiPartFileService';
 import swal from 'sweetalert';
 import CustomTabs from "components/CustomTabs/CustomTabs.jsx";
 import BlockUi from 'react-block-ui';
@@ -24,7 +24,7 @@ export default class CategoryNew extends Component {
 
   constructor(props) {
     super(props);
-    this.service = new CategoryService("categories");
+    this.service = new MultiPartFileService("categories");
     
     this.state = {
       category: {
@@ -121,32 +121,8 @@ export default class CategoryNew extends Component {
         }
       })
     })
-
-    // let data = new FormData();
-    // const config = {
-    //     headers: { 'content-type': 'multipart/form-data;boundary=gc0p4Jq0M2Yt08jU534c0p' }
-    // };
-    // axios.post("localhost:8080/categories", data, config);
-
-    // let data = new FormData();
-    //     for (let i = 0; i < this.state.files.length; i++) {
-    //         let file = accepted[i];
-    //         data.append("file" + i, file, file.name);
-    //     }
-    //     const config = {
-    //         headers: { 'content-type': 'multipart/form-data;boundary=gc0p4Jq0M2Yt08jU534c0p' }
-    //     };
-    //     axios.post("categories", data, config);
-    // }
     
     fileItemReader.readAsDataURL(files[0])
-    // const req = request.post('https://httpbin.org/post');
-
-    // files.forEach(file => {
-    //   req.attach(file.name, file);
-    // });
-
-    // req.end();
   }
 
   render() {
