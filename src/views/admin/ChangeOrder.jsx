@@ -1,120 +1,114 @@
-import React, { Component } from 'react';
-import {withRouter} from "react-router-dom";
-import GeneralService from '../../services/GeneralService';
-import OrderService from '../../services/OrderService';
-import swal from 'sweetalert';
+/* eslint-disable no-unused-vars */
+import React, { Component } from "react";
 
-import BlockUi from 'react-block-ui';
-import { Loader } from 'react-loaders';
-import 'react-block-ui/style.css';
-import 'loaders.css/loaders.min.css';
-import ModalInactiveProduct from '../../components/Modal/ModalInactiveProduct';
+import "react-block-ui/style.css";
+import "loaders.css/loaders.min.css";
 import {
-  Card, 
-  Row,
-  Col,
-  CardHeader,
-  CardBody,
-  Button,
-  Table,
+	Card, 
+	Row,
+	Col,
+	CardHeader,
+	CardBody,
+	Table,
 } from "reactstrap";
-import ChangeService from '../../services/ChangeService';
-import ModalChangeDercription from '../../components/Modal/ModalChangeDescription';
+import ChangeService from "../../services/ChangeService";
+import ModalChangeDercription from "../../components/Modal/ModalChangeDescription";
 
 export default class ChangeOrder extends Component {
 
-  constructor(props) {
-    super(props);
-    this.changeService = new ChangeService("changes");
+	constructor(props) {
+		super(props);
+		this.changeService = new ChangeService("changes");
 
-    this.state = {
-      changes: [],
-      change:{
-        itens: []
-      },
-      statusModal: false
-    };
+		this.state = {
+			changes: [],
+			change:{
+				itens: []
+			},
+			statusModal: false
+		};
 
-    this.getAll = this.getAll.bind(this);
-    this.aprovedChange = this.aprovedChange.bind(this)
-    this.reprovedChange = this.reprovedChange.bind(this)
-    this.getAll();
-  }
+		this.getAll = this.getAll.bind(this);
+		this.aprovedChange = this.aprovedChange.bind(this);
+		this.reprovedChange = this.reprovedChange.bind(this);
+		this.openCloseModal = this.openCloseModal.bind(this);
 
-  async aprovedChange(change){
-    await this.changeService.aproved(change).then(() => this.getAll())
-  }
+		this.getAll();
+	}
 
-  async reprovedChange(change){
-    await this.changeService.reproved(change).then(() => this.getAll())
-  }
+	async aprovedChange(change){
+		await this.changeService.aproved(change).then(() => this.getAll());
+	}
 
-  async getAll(){
-    await this.changeService.getAllByStatus("EMTROCA").then(val => {
-      this.setState({
-        changes: val
-      })
-    })
-  }
+	async reprovedChange(change){
+		await this.changeService.reproved(change).then(() => this.getAll());
+	}
 
-  openCloseModal = (change) => {
-    this.setState({
-      change: change,
-      statusModal: !this.state.statusModal
-    })
-  }
+	async getAll(){
+		await this.changeService.getAllByStatus("EMTROCA").then(val => {
+			this.setState({
+				changes: val
+			});
+		});
+	}
 
-  render() {
-    console.log(this.state.changes)
-    return (
-      <div className="content">
+	openCloseModal(change) {
+		this.setState({
+			change: change,
+			statusModal: !this.state.statusModal
+		});
+	}
 
-            <Col xs="12">
-              <Card className="card-chart">
-                <CardHeader>
-                <Row>
-                  <Col sm="6">
-                    <h4 className="title dark-color">Pedidos de trocas</h4>
-                  </Col>
-                  </Row>
-                </CardHeader>
-                <CardBody>
-                  <Table hover>
-                    <thead>
-                      <tr>
-                        <th className="text-center">Código da troca</th>
-                        <th className="text-center">Data da troca</th>
-                        <th className="text-center">Reprovar</th>
-                        <th className="text-center">Aceitar</th>
-                      </tr>
-                    </thead>
-                    <tbody id="tableList">
-                    { 
+	render() {
+		return (
+			<div className="content">
+
+				<Col xs="12">
+					<Card className="card-chart">
+						<CardHeader>
+							<Row>
+								<Col sm="6">
+									<h4 className="title dark-color">Pedidos de trocas</h4>
+								</Col>
+							</Row>
+						</CardHeader>
+						<CardBody>
+							<Table hover>
+								<thead>
+									<tr>
+										<th className="text-center">Código da troca</th>
+										<th className="text-center">Data da troca</th>
+										<th className="text-center">Reprovar</th>
+										<th className="text-center">Aceitar</th>
+									</tr>
+								</thead>
+								<tbody id="tableList">
+									{ 
                       
-                        this.state.changes.map((change, index) => {
-                            return (
-                              <tr key={index}>
-                                <td className="text-center hover-point" onClick={() => this.openCloseModal(change)}>{change.id}</td>
-                                <td className="text-center hover-point" onClick={() => this.openCloseModal(change)}>{change.creationDate}</td>
-                                <td className="text-center" ><a href="#" onClick={() => this.reprovedChange(change)}className="text-danger"><i class="fas fa-times"></i></a></td>
-                                <td className="text-center"><a href="#" onClick={() => this.aprovedChange(change)}className="text-success"><i className="fas fa-check"></i></a></td>
-                              </tr>
-                            )
-                        })
-                    }
-                    </tbody>
-                  </Table>
-                </CardBody>
-            </Card>
-          </Col>
-          <ModalChangeDercription
-            change={this.state.change}
-            statusModal={this.state.statusModal}
-            modal={this.openCloseModal} 
-            nextStep={this.nextStep}
-            description={"Pedido enviado"}
-          />
-      </div>
-    )
-  }
+										this.state.changes.map((change, index) => {
+											return (
+												<tr key={index}>
+													<td className="text-center hover-point" onClick={() => this.openCloseModal(change)}>{change.id}</td>
+													<td className="text-center hover-point" onClick={() => this.openCloseModal(change)}>{change.creationDate}</td>
+													<td className="text-center" ><a href="#" onClick={() => this.reprovedChange(change)}className="text-danger"><i class="fas fa-times"></i></a></td>
+													<td className="text-center"><a href="#" onClick={() => this.aprovedChange(change)}className="text-success"><i className="fas fa-check"></i></a></td>
+												</tr>
+											);
+										})
+									}
+								</tbody>
+							</Table>
+						</CardBody>
+					</Card>
+				</Col>
+				<ModalChangeDercription
+					change={this.state.change}
+					statusModal={this.state.statusModal}
+					modal={this.openCloseModal} 
+					nextStep={this.nextStep}
+					description={"Pedido enviado"}
+				/>
+			</div>
+		);
+	}
 }

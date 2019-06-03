@@ -151,8 +151,8 @@ export const adminRoutes = [
     nameChild: ["Vendas Geral", "Vendas por Categoria",
     "Vendas por Produto"],
     icon: "fas fa-bars",
-    iconChild: ["fas fa-barcode", "fas fa-city",
-    "fas fa-city"],
+    iconChild: ["fas fa-barcode", "fas fa-suitcase-rolling",
+    "fas fa-dolly-flatbed"],
     component: [ReportGeneralOrder, ReportCategoryOrder,
       ReportProductOrder],
     layout: "/admin"

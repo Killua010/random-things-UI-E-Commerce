@@ -1,96 +1,49 @@
-import axios from 'axios';
-import swal from 'sweetalert';
+import axios from "axios";
 
-import { path } from './GeneralService';
-import SimpleService from './SimpleService';
-// dev path
-//http://localhost:8080
+import { path } from "./GeneralService";
+import SimpleService from "./SimpleService";
+
 export default class ShoppingCart extends SimpleService{
-    constructor(entityPath){
-        super(entityPath);
-    }
+	constructor(entityPath){
+		super(entityPath);
+	}
 
-    async getByIdClient(id) {
-        let data = null;
-        await axios.get(`${path}/${this.entityPath}/client/${id}`)
-        .then(res => {
-            data = res.data;
-        }).catch(function (error, e) {
-            swal({
-                title: error,
-                icon: "error",
-            });
-        })
+	async getByIdClient(id) {
+		let data = null;
+		await axios.get(`${path}/${this.entityPath}/client/${id}`)
+			.then(res => {
+				data = res.data;
+			}).catch(function (error) {
+				this.errorResponse(error);
+			});
         
-        return await data;
-    }
+		return await data;
+	}
 
-    async post(entity, clientId) {
-        let response;
-        await axios.post(`${path}/${this.entityPath}/client/${clientId}`, entity, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(res => {
-            console.log(res)
-            response = res.data;
-        })
-        .catch(function (error, e) {
-            if(undefined === error.response){
-                console.log(error)
-                response = false
-            }
-            if(undefined === error.response.data.errors){
-                swal({
-                    title: error.response.data.msg,
-                    icon: "error",
-                });
-                response = false;
-            } else {
-                let errors = "";
-                error.response.data.errors.map((err) => {
-                    errors += err.defaultMessage
-                })
-                swal({
-                    title: "Erro na requisição",
-                    text: errors,
-                    icon: "error",
-                });
-                response = false;
-            }
-        })
-        return response;
-    }
+	async post(entity, clientId) {
+		let response;
+		await axios.post(`${path}/${this.entityPath}/client/${clientId}`, entity, {
+			headers: {
+				"Content-Type": "application/json"
+			}
+		}).then(res => {
+			response = res.data;
+		}).catch(function (error) {
+			response = false;	
+			this.errorResponse(error);
+		});
+		return response;
+	}
 
-    async delete(entity, clientId) {
-        let response;
-        await axios.delete(`${path}/${this.entityPath}/client/${clientId}`, { data: entity }).then(res => {
-            response = res.data;
-        })
-        .catch(function (error, e) {
-            if(undefined === error.response){
-                response = false
-            }
-            if(undefined === error.response.data.errors){
-                swal({
-                    title: error.response.data.msg,
-                    icon: "error",
-                });
-                response = false;
-            } else {
-                let errors = "";
-                error.response.data.errors.map((err) => {
-                    errors += err.defaultMessage
-                })
-                swal({
-                    title: "Erro na requisição",
-                    text: errors,
-                    icon: "error",
-                });
-                response = false;
-            }
-        })
-        return response;
-    }
+	async delete(entity, clientId) {
+		let response;
+		await axios.delete(`${path}/${this.entityPath}/client/${clientId}`, { data: entity }).then(res => {
+			response = res.data;
+		}).catch(function (error) {
+			response = false;
+			this.errorResponse(error);
+		});
+		return response;
+	}
 }
 

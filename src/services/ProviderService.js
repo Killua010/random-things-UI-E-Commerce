@@ -1,45 +1,22 @@
-import axios from 'axios';
-import swal from 'sweetalert';
-import GeneralService from './GeneralService';
+import axios from "axios";
+import GeneralService from "./GeneralService";
 
-import { path } from './GeneralService';
+import { path } from "./GeneralService";
 
-// dev path
-//http://localhost:8080
 export default class ProviderService extends GeneralService{
-    constructor(entityPath){
-        super(entityPath);
-    }
+	constructor(entityPath){
+		super(entityPath);
+	}
 
-    async getByIdCategory(id) {
-        let data = null;
-        await axios.get(`${path}/${this.entityPath}/findByCategory/${id}`)
-        .then(res => {
-            data = res.data;
-        }).catch(function (error, e) {
-            if(undefined !== error.response.data.msg) {
-                swal({
-                    title: error.response.data.msg,
-                    icon: "error",
-                });
-            } else if(undefined === error.response.data.errors){
-                swal({
-                    title: error.response.data,
-                    icon: "error",
-                });
-            } else {
-                let errors = "";
-                error.response.data.errors.map((err) => {
-                    errors += err.defaultMessage
-                })
-                swal({
-                    title: "Erro na requisição",
-                    text: errors,
-                    icon: "error",
-                });
-            }
-        })
+	async getByIdCategory(id) {
+		let data = null;
+		await axios.get(`${path}/${this.entityPath}/findByCategory/${id}`)
+			.then(res => {
+				data = res.data;
+			}).catch(function (error) {
+				this.errorResponse(error);
+			});
         
-        return await data;
-    }
+		return await data;
+	}
 }

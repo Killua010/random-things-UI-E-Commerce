@@ -1,4 +1,5 @@
-/* eslint-disable react/jsx-key */
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 import React, { Component } from "react";
 import Parallax from "../../components/Parallax/Parallax";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
@@ -12,57 +13,63 @@ import componentsStyle from "../../assets/jss/material-kit-react/views/component
 import "../../assets/css/index.css";
 
 const styles = theme => ({
-  button: {
-    margin: theme.spacing.unit
-  },
-  input: {
-    display: "none"
-  }
+	button: {
+		margin: theme.spacing.unit
+	},
+	input: {
+		display: "none"
+	}
 });
 
 class Favorite extends Component {
-  createProduct = () => {
-    let product = [];
-    for (let i = 0; i < 3; i++) {
-      product.push(<SimpleProduct />);
-    }
-    return product;
-  };
+	constructor(props){
+		super(props);
 
-  render() {
-    const { classes } = this.props;
-    return (
-      <div>
-        <Parallax image={require("assets/img/bg2.jpg")}>
-          <div className={classes.container}>
-            <GridContainer>
-              <GridItem>
-                <div className={classes.brand}>
-                  <h1 className={classes.title}>Random Things</h1>
-                  <h3 className={classes.subtitle}>
+		this.createProduct = this.createProduct.bind(this);
+	}
+
+	createProduct() {
+		let product = [];
+		for (let i = 0; i < 3; i++) {
+			product.push(<SimpleProduct />);
+		}
+		return product;
+	}
+
+	render() {
+		const { classes } = this.props;
+		return (
+			<div>
+				<Parallax image={require("assets/img/bg2.jpg")}>
+					<div className={classes.container}>
+						<GridContainer>
+							<GridItem>
+								<div className={classes.brand}>
+									<h1 className={classes.title}>Random Things</h1>
+									<h3 className={classes.subtitle}>
                     Compre diversos tipos de produtos sem sair de casa
-                  </h3>
-                </div>
-              </GridItem>
-            </GridContainer>
-          </div>
-        </Parallax>
+									</h3>
+								</div>
+							</GridItem>
+						</GridContainer>
+					</div>
+				</Parallax>
 
-        <div className={classNames(classes.main, classes.mainRaised)}>
-          <div className={classes.sections}>
-            <div className={classes.container}>
-              <GridContainer className="p-1">
-              <GridItem md={12}>
-              <Typography variant="h5" className="text-center">Itens favoritos</Typography>
-              </GridItem>
-                {this.createProduct()}
-              </GridContainer>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+				<div className={classNames(classes.main, classes.mainRaised)}>
+					<div className={classes.sections}>
+						<div className={classes.container}>
+							<GridContainer className="p-1">
+								<GridItem md={12}>
+									<Typography variant="h5" className="text-center">Itens favoritos</Typography>
+								</GridItem>
+								{this.createProduct()}
+							</GridContainer>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	}
 }
 
 export default withStyles(componentsStyle, styles)(Favorite);
