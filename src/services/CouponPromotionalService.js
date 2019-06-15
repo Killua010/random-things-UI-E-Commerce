@@ -10,11 +10,12 @@ export default class CouponPromotionalService extends GeneralService {
 
 	async getByName(name) {
 		let data = null;
+		let obj = this;
 		await axios.get(`${path}/${this.entityPath}/findByName/${name}`)
 			.then(res => {
 				data = res.data;
 			}).catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
         
 		return await data;

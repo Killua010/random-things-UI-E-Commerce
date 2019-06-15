@@ -32,14 +32,16 @@ img {
     z-index: 10;
     /* font-size: 45px; */
     /* right: 70%; */
-    top: 18em;
-    padding-left: 15%;
+    top: 25em;
+    margin: 0 auto;
+    width: 45%; /* Valor da Largura */
     /* left: 15%; */
 }
 
 .carousel-caption h5{
     color: #fff !important;
-    font-size: 45px;
+    font-size: 3em;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 
 @media only screen and (max-width: 991px) {

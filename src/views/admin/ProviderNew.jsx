@@ -94,7 +94,10 @@ export default class TableFieldNew extends Component {
 		if(this.props.location.state !== undefined){
       
 			this.setState({
-				provider: this.props.location.state.provider,
+				provider: {
+					...this.props.location.state.provider,
+					categoryId: this.props.location.state.provider.category.id
+				},
 				update: true
 			});
 		} else {

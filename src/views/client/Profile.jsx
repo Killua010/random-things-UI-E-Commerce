@@ -74,7 +74,7 @@ class Profile extends React.Component {
 		this.alterBlockUI();
 		await this.service.put(this.state.client).then(
 			(resp) => {
-				if(resp === false){
+				if(resp === null){
 					this.setState({
 						client: {
 							...this.props.client,
@@ -82,12 +82,15 @@ class Profile extends React.Component {
 						}
 					});
 				} else {
-					this.clientService.getById(this.state.client.id).then(
+					this.clientService.getById(this.state.client).then(
 						(resp) => {
-							this.props.setClient(resp);
+							this.props.setClient(resp[0]);
 							this.setState({
 								openNewClient: false,
-								client: this.props.client
+								client: {
+									...this.props.client,
+									confirmPassword: this.props.client.password
+								}
 							});
 						}
 					);

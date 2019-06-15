@@ -10,9 +10,10 @@ export default class SimpleService extends GeneralService {
 
 	async getAll() {
 		let data = null;
+		let obj = this;
 		await axios.get(`${path}/${this.entityPath}`)
 			.catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
         
 		return await data;
@@ -20,34 +21,37 @@ export default class SimpleService extends GeneralService {
 
 	async put(entity) {
 		let resp = null;
+		let obj = this;
 		await axios.put(`${path}/${this.entityPath}/${entity.id}`, entity, {
 			headers: {
 				"Content-Type": "application/json"
 			}
 		}).then((res) => resp = res.data)
 			.catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
 		return resp;
 	}
 
 	async post(entity) {
 		let resp = null;
+		let obj = this;
 		await axios.post(`${path}/${this.entityPath}`, entity, {
 			headers: {
 				"Content-Type": "application/json"
 			}
 		}).then((res) => resp = res.data)
 			.catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
 		return resp;
 	}
 
 	async delete(entity) {
+		let obj = this;
 		await axios.delete(`${path}/${this.entityPath}/${entity.id}`)
 			.catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
 	}
 }

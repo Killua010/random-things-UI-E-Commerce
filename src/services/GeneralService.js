@@ -1,7 +1,7 @@
 import axios from "axios";
 import swal from "sweetalert";
 
-export const path = "http://localhost:8080";
+export const path = "http://192.168.9.237:8080";
 // dev path
 //http://localhost:8080
 export default class GeneralService {
@@ -11,22 +11,24 @@ export default class GeneralService {
 
 	async getById(entity) {
 		let data = null;
+		let obj = this;
 		await axios.get(`${path}/${this.entityPath}/${entity.id}`)
 			.then((res) => {
 				data = res.data;
 			}).catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
 		return await data;
 	}
 
 	async getAll() {
 		let data = null;
+		let obj = this;
 		await axios.get(`${path}/${this.entityPath}`)
 			.then(res => {
 				data = res.data;
 			}).catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
         
 		return await data;
@@ -34,6 +36,7 @@ export default class GeneralService {
 
 	async put(entity) {
 		let resp = null;
+		let obj = this;
 		await axios.put(`${path}/${this.entityPath}/${entity.id}`, entity, {
 			headers: {
 				"Content-Type": "application/json"
@@ -46,13 +49,14 @@ export default class GeneralService {
 					icon: "success",
 				});
 			}).catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
 		return resp;
 	}
 
 	async post(entity) {
 		let response = null;
+		let obj = this;
 		await axios.post(`${path}/${this.entityPath}`, entity, {
 			headers: {
 				"Content-Type": "application/json"
@@ -65,12 +69,13 @@ export default class GeneralService {
 				});
 				response = res.data;
 			}).catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
 		return response;
 	}
 
 	async delete(entity) {
+		let obj = this;
 		await axios.delete(`${path}/${this.entityPath}/${entity.id}`)
 			.then(() => {
 				swal({
@@ -78,7 +83,7 @@ export default class GeneralService {
 					icon: "success",
 				});
 			}).catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
 	}
     

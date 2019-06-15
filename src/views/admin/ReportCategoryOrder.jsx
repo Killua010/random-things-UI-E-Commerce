@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from "react";
 // react plugin used to create charts
-import { Polar, Pie } from "react-chartjs-2";
+import { Polar, Bar } from "react-chartjs-2";
 
 // reactstrap components
 import {
@@ -27,6 +27,9 @@ export default class ReportGeneralOrder extends Component {
 		this.service = new ReportOrderService("reports");
 		this.state = {
 			mounth: 0,
+			date1: "2019-01-01",
+			date2: "2019-12-31",
+			ordersCategoryByMounth: [],
 			ordersByCategory: [],
 			ordersCategoryMale: [],
 			ordersCategoryFemale: [],
@@ -50,18 +53,20 @@ export default class ReportGeneralOrder extends Component {
 
 	async updateFilter(value) {
 		await this.setState({
-			mounth: value.target.value
+			[value.target.name]: value.target.value
 		});
 		this.getAllOrders();
 	}
 
 	async getAllOrders(){
-		await this.service.getAllOrdersByCategories(this.state.mounth).then((res) => {
-			this.setState({
-				ordersByCategory: res
+		if(!isNaN(new Date(this.state.date1)) && !isNaN(new Date(this.state.date2))){
+			await this.service.getAllOrdersCategoryByDate(this.state.date1, this.state.date2).then((res) => {
+				this.setState({
+					ordersCategoryByMounth: res
+				});
 			});
-		});
-    
+		}
+
 		await this.service.getAllOrdersCategoryGender("MASCULINO", this.state.mounth).then((res) => {
 			this.setState({
 				ordersCategoryMale: res
@@ -149,6 +154,36 @@ export default class ReportGeneralOrder extends Component {
 					</CardHeader>
 					<CardBody>
 						<Row>
+							<Col md="2" />
+							<Col md="4">
+								<Label for="date1">De:</Label>
+								<Input type="date" name="date1" id="date1" value={this.state.date1} onChange={this.updateFilter} />
+							</Col>
+							<Col md="4">
+								<Label for="date2">Até:</Label>
+								<Input type="date" name="date2" id="date2" value={this.state.date2} onChange={this.updateFilter} />
+							</Col>					
+						</Row>
+						<Row>
+							<Col md="12">
+								<Card className="card-chart">
+									<CardHeader>
+										<Row>
+											<Col className="text-center">
+												<CardTitle tag="h2">Top 3 categorias mais vendidas por periodo</CardTitle>
+											</Col>
+										</Row>
+									</CardHeader>
+									<CardBody>
+										<Bar
+											data={(e) => orderCategoryByMounth.data(e, this.state.ordersCategoryByMounth)}
+											options={orderCategoryByMounth.options}
+										/>
+									</CardBody>
+								</Card>
+							</Col>
+						</Row>
+						<Row>
 							<Col className="text-center ml-5" lg="2">
 								<Label for="mounth">Filtrar por mês:</Label>
 								<Input type="select" name="mounth" id="mounth" value={this.state.mounth} onChange={this.updateFilter}>
@@ -166,25 +201,6 @@ export default class ReportGeneralOrder extends Component {
 									<option value="11" >Novembro</option>
 									<option value="12" >Dezembro</option>
 								</Input>
-							</Col>
-						</Row>
-						<Row>
-							<Col md="3" />
-							<Col md="6">
-								<Card className="card-chart">
-									<CardHeader>
-										<Row>
-											<Col className="text-center">
-												<CardTitle tag="h2">Top 4 categorias mais vendidas</CardTitle>
-											</Col>
-										</Row>
-									</CardHeader>
-									<CardBody>
-										<Pie
-											data={() => MainCategoryes(this.state.ordersByCategory)}
-										/>
-									</CardBody>
-								</Card>
 							</Col>
 						</Row>
 						<Row>

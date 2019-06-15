@@ -73,8 +73,8 @@ class MyCarts extends Component {
 
 	async deleteCard(card){
 		this.service.delete(card).then(() => {
-			this.clientService.getById(this.props.client.id).then((resp) => {
-				this.props.setClient(resp);
+			this.clientService.getById(this.props.client).then((resp) => {
+				this.props.setClient(resp[0]);
 				this.setState({
 					cards: [
 						...this.props.client.cards
@@ -88,9 +88,9 @@ class MyCarts extends Component {
 		this.alterBlockUI();
 		await this.service.put(this.props.client.id, this.state.card).then(
 			(resp) => {
-				if(resp === true){
-					this.clientService.getById(this.props.client.id).then((resp) => {
-						this.props.setClient(resp);
+				if(resp !== null){
+					this.clientService.getById(this.props.client).then((resp) => {
+						this.props.setClient(resp[0]);
 						this.setState({
 							cards: [
 								...this.props.client.cards
@@ -115,9 +115,9 @@ class MyCarts extends Component {
 		this.alterBlockUI();
 		await this.service.post(this.props.client.id, this.state.card).then(
 			(resp) => {
-				if(resp === true){
-					this.clientService.getById(this.props.client.id).then((resp) => {
-						this.props.setClient(resp);
+				if(resp !== null){
+					this.clientService.getById(this.props.client).then((resp) => {
+						this.props.setClient(resp[0]);
 						this.setState({
 							cards: [
 								...this.props.client.cards

@@ -7,7 +7,6 @@ let orderCategoryByMounth = {
     gradientStroke.addColorStop(1, "rgba(72,72,176,0.1)");
     gradientStroke.addColorStop(0.4, "rgba(72,72,176,0.0)");
     gradientStroke.addColorStop(0, "rgba(119,52,169,0)"); //purple colors
-    console.log(data)
     return {
       labels: [
         "JAN",

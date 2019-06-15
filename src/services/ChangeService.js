@@ -10,11 +10,12 @@ export default class ChangeService extends GeneralService {
 
 	async getAllByStatus(status) {
 		let data = null;
+		let obj = this;
 		await axios.get(`${path}/${this.entityPath}/${status}`)
 			.then(res => {
 				data = res.data;
 			}).catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
         
 		return await data;
@@ -22,20 +23,22 @@ export default class ChangeService extends GeneralService {
 
 	async aproved(change) {
 		let response;
+		let obj = this;
 		await axios.post(`${path}/${this.entityPath}/aproved/${change.id}`)
 			.catch(function (error) {
 				response = false;
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
 		return response;
 	}
 
 	async reproved(change) {
 		let response;
+		let obj = this;
 		await axios.post(`${path}/${this.entityPath}/reproved/${change.id}`)
 			.catch(function (error) {
 				response = false;
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
 		return response;
 	}

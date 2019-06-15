@@ -5,26 +5,26 @@ export default class NotFound extends Component {
 	render() {
 		return (
 			<div>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
-				<h1>404</h1>
+				<marquee><h3>404</h3></marquee>
+      			<marquee direction = "up"><h3>404</h3></marquee>
+				  <marquee><h3>404</h3></marquee>
+      			<marquee direction = "up"><h3>404</h3></marquee>
+				  <marquee><h3>404</h3></marquee>
+      			<marquee direction = "up"><h3>404</h3></marquee>
+				  <marquee><h3>404</h3></marquee>
+      			<marquee direction = "up"><h3>404</h3></marquee>
+				  <marquee><h3>404</h3></marquee>
+      			<marquee direction = "up"><h3>404</h3></marquee>
+				  <marquee><h3>404</h3></marquee>
+      			<marquee direction = "up"><h3>404</h3></marquee>
+				  <marquee><h3>404</h3></marquee>
+      			<marquee direction = "up"><h3>404</h3></marquee>
+				  <marquee><h3>404</h3></marquee>
+      			<marquee direction = "up"><h3>404</h3></marquee>
+				<marquee><h3>404</h3></marquee>
+      			<marquee direction = "up"><h3>404</h3></marquee>
+				  <marquee><h3>404</h3></marquee>
+      			<marquee direction = "up"><h3>404</h3></marquee>
 			</div>
 		);
 	}

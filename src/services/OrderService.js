@@ -10,11 +10,12 @@ export default class OrderService extends SimpleService {
 
 	async getAllByClientId(id) {
 		let data = null;
+		let obj = this;
 		await axios.get(`${path}/${this.entityPath}/byIdClient/${id}`)
 			.then(res => {
 				data = res.data;
 			}).catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
         
 		return await data;
@@ -22,11 +23,12 @@ export default class OrderService extends SimpleService {
 
 	async getAllByStatus(status) {
 		let data = null;
+		let obj = this;
 		await axios.get(`${path}/${this.entityPath}/${status}`)
 			.then(res => {
 				data = res.data;
 			}).catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
         
 		return await data;
@@ -34,10 +36,11 @@ export default class OrderService extends SimpleService {
 
 	async nextStep(order) {
 		let response;
+		let obj = this;
 		await axios.put(`${path}/${this.entityPath}/${order.id}/nextStep`)
 			.catch(function (error) {
 				response = false;
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
 		return response;
 	}

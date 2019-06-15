@@ -10,6 +10,7 @@ export default class ClientService extends GeneralService {
 
 	async login(entity) {
 		let resp = null;
+		let obj = this;
 		await axios.post(`${path}/${this.entityPath}/login`, entity, {
 			headers: {
 				"Content-Type": "application/json"
@@ -17,11 +18,10 @@ export default class ClientService extends GeneralService {
 		}).then(res => {
 			resp = res.data;
 		}).catch(function (error) {
-			this.errorResponse(error);
+			obj.errorResponse(error);
 		});
 
 		return resp;
-
 	}
 
 }

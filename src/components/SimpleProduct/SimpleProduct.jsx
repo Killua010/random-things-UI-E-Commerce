@@ -82,6 +82,10 @@ class SimpleProduct extends Component {
 
   goTo() {
     this.props.props.history.push({pathname: "produto", state: { product: this.props.product }});    
+    if(this.props.props.history.location.pathname == "/produto"){
+      if(this.props.getById != undefined)
+      this.props.getById(this.props.product)
+    }
   }
 
   render() {
@@ -98,7 +102,7 @@ class SimpleProduct extends Component {
             <a href="javascript:void(0)" onClick={this.goTo}>
             {
               (this.props.product.imgSrc != null ? <img
-                // src={this.props.product.imgSrc[0].replace("http://localhost:8080","##")}
+                src={this.props.product.imgSrc[0].replace("http://localhost:8080","http://192.168.9.237:8080")}
                 src={this.props.product.imgSrc[0]}
                 alt=""
               /> : <h3>Sem foto Disponivel</h3>)

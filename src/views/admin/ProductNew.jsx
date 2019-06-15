@@ -416,6 +416,7 @@ export default class ProductNew extends Component {
 									},
 									{
 										tabName: "Fotos",
+										tabId: "tabFotos",
 										tabContent: (
 											<div>
 												<Dropzone onDrop={this.onDrop} multiple={true} accept="image/*">

@@ -58,7 +58,7 @@ class ClientRegister extends Component {
 	handleSubmit(e) {
 		e.preventDefault();
 		this.service.post(this.state.client).then(resp => {
-			if(resp === true){
+			if(resp !== null){
 				this.props.history.push("login");
 			}
 		});

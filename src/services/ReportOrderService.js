@@ -57,6 +57,30 @@ export default class ReportOrderService extends GeneralService {
 		return await data;
 	}
 
+	async getAllOrdersCategoryByDate(date1, date2) {
+		let data = null;
+		await axios.get(`${path}/${this.entityPath}/ordersCategory/${date1}/${date2}`)
+			.then(res => {
+				data = res.data;
+			}).catch(function (error) {
+				this.errorResponse(error);
+			});
+        
+		return await data;
+	}
+
+	async getAllOrdersByProductByDate(date1, date2) {
+		let data = null;
+		await axios.get(`${path}/${this.entityPath}/ordersProduct/${date1}/${date2}`)
+			.then(res => {
+				data = res.data;
+			}).catch(function (error) {
+				this.errorResponse(error);
+			});
+        
+		return await data;
+	}
+
 	async getAllOrdersCategoryGender(gender, mounth) {
 		let data = null;
 		await axios.get(`${path}/${this.entityPath}/ordersCategory/gender/${gender}/${mounth}`)

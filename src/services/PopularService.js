@@ -3,15 +3,15 @@ import GeneralService from "./GeneralService";
 
 import { path } from "./GeneralService";
 
-export default class ShippingPriceService extends GeneralService{
+export default class PopularService extends GeneralService{
 	constructor(entityPath){
 		super(entityPath);
 	}
 
-	async getByIdClient(id, entity) {
+	async getPopular() {
 		let data = null;
 		let obj = this;
-		await axios.post(`${path}/${this.entityPath}/calculete/client/${id}`, entity )
+		await axios.get(`${path}/${this.entityPath}/popular`)
 			.then(res => {
 				data = res.data;
 			}).catch(function (error) {

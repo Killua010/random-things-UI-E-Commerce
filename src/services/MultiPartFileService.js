@@ -10,6 +10,7 @@ export default class MultiPartFileService extends GeneralService {
 
 	async put(entity) {
 		let resp;
+		let obj = this;
 		const data = new FormData();
 
 		for(var prop in entity) {
@@ -32,14 +33,14 @@ export default class MultiPartFileService extends GeneralService {
 			});
 		}).catch(function (error) {
 			resp = false;
-			this.errorResponse(error);
+			obj.errorResponse(error);
 		});
 		return resp;
 	}
 
 	async post(entity) {
 		let response;
-        
+        let obj = this;
 		const data = new FormData();
 
 		for(var prop in entity) {
@@ -60,7 +61,7 @@ export default class MultiPartFileService extends GeneralService {
 			});
 			response = true;
 		}).catch(function (error) {
-			this.errorResponse(error);
+			obj.errorResponse(error);
 		});
 		return response;
 	}

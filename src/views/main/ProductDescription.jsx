@@ -24,6 +24,7 @@ import componentsStyle from "../../assets/jss/material-kit-react/views/component
 
 import "../../assets/css/index.css";
 import ProductService from "../../services/ProductService";
+import SimpleProduct from "../../components/SimpleProduct/SimpleProduct.jsx";
 
 import { connect } from "react-redux";
 
@@ -43,12 +44,24 @@ class ProductDescription extends Component {
 		this.shoppingCartService = new shoppingCartService("shoppingCarts");
 
 		this.state = {
-			product: {}
+			product: {},
+			products: []
 		};
 
 		this.postShoppingCart = this.postShoppingCart.bind(this);
 		this.addShoppingCart = this.addShoppingCart.bind(this);
+		this.getByCategory = this.getByCategory.bind(this);
 		this.getById = this.getById.bind(this);
+	}
+
+	async getByCategory(){
+		await this.service.findByCategory(this.state.product.subCategories[0].category.id).then((res) => {
+			if(res != null){
+				this.setState({
+					products: res
+				});
+			}
+		});
 	}
 
 	async getById(product) {
@@ -57,6 +70,9 @@ class ProductDescription extends Component {
 				product: res[0]
 			});
 		});
+		this.getByCategory();
+		this.forceUpdate();
+		window.scrollTo(0, 0);
 	}
 
 	async postShoppingCart() {
@@ -75,7 +91,12 @@ class ProductDescription extends Component {
 		}
 
 	}
-  
+
+	renderCarousel = () =>{
+		return this.state.product.imgSrc !== undefined ? 
+		<CarouselProduct key={Math.random()} img={this.state.product.imgSrc} /> : ""
+	}
+
 	componentDidMount(){
 		if(this.props.location.state === undefined){
 			this.props.history.push("/");
@@ -106,9 +127,8 @@ class ProductDescription extends Component {
 						<div className={classes.container + " pt-5 pb-5"}>
 							<GridContainer className="p-1">
 								<GridItem md="4">
-									{
-										this.state.product.imgSrc !== undefined ? 
-											<CarouselProduct img={this.state.product.imgSrc} /> : ""
+									{	
+										this.renderCarousel()
 									}                  
 									<Table className={"mt-7"}>
 										<TableHead>
@@ -152,10 +172,13 @@ class ProductDescription extends Component {
 				<div className={classes.container}>
 					<h2 className="title text-warning text-center">talvez você goste</h2>
 					<GridContainer>
-						{/* <SimpleProduct />
-            <SimpleProduct />
-            <SimpleProduct />
-            <SimpleProduct /> */}
+						{
+							this.state.products.map((product, index) => {
+								if(index >= 4)
+									return;
+								return <SimpleProduct props={this.props} product={product} md={3} key={index} getById={this.getById} />;
+							})
+						}
 					</GridContainer>
 				</div>
 			</div>

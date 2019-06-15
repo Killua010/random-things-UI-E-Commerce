@@ -11,22 +11,24 @@ export default class ProductService extends GeneralService {
 
 	async getById(entity) {
 		let data = null;
+		let obj = this;
 		await axios.get(`${path}/${this.entityPath}/${entity.id}`)
 			.then((res) => {
 				data = res.data;
 			}).catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
 		return await data;
 	}
 
 	async getPageabled(page){
 		let data = null;
+		let obj = this;
 		await axios.get(`${path}/${this.entityPath}/paging/${page}`)
 			.then(res => {
 				data = res.data;
 			}).catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
         
 		return await data;
@@ -34,11 +36,12 @@ export default class ProductService extends GeneralService {
 
 	async findBy(param){
 		let data = null;
+		let obj = this;
 		await axios.get(`${path}/${this.entityPath}/findBy/${param}`)
 			.then(res => {
 				data = res.data;
 			}).catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
         
 		return await data;
@@ -46,11 +49,12 @@ export default class ProductService extends GeneralService {
 
 	async findByCategory(id){
 		let data = null;
+		let obj = this;
 		await axios.get(`${path}/${this.entityPath}/findByCategory/${id}`)
 			.then(res => {
 				data = res.data;
 			}).catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
         
 		return await data;
@@ -58,6 +62,7 @@ export default class ProductService extends GeneralService {
 
 	async getPageabledByCategory(page, category){
 		let data = null;
+		let obj = this;
 		await axios.get(`${path}/${this.entityPath}/paging/${page}`, {
 			params: {
 				categoryId: category.id
@@ -65,19 +70,20 @@ export default class ProductService extends GeneralService {
 		}).then(res => {
 			data = res.data;
 		}).catch(function (error) {
-			this.errorResponse(error);
+			obj.errorResponse(error);
 		});
         
 		return await data;
 	}
 
 	async getAll() {
+		let obj = this;
 		let data = null;
 		await axios.get(`${path}/${this.entityPath}`)
 			.then(res => {
 				data = res.data;
 			}).catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
         
 		return await data;
@@ -85,6 +91,7 @@ export default class ProductService extends GeneralService {
 
 	async put(entity) {
 		let resp;
+		let obj = this;
 		const data = new FormData();
 		data.append("barCode", entity.barCode);
 		data.append("description", entity.description);
@@ -120,13 +127,14 @@ export default class ProductService extends GeneralService {
 				});
 			}).catch(function (error) {
 				resp = false;
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
 		return resp;
 	}
 
 	async post(entity) {
 		let response;
+		let obj = this;
 		const data = new FormData();
 		data.append("barCode", entity.barCode);
 		data.append("description", entity.description);
@@ -162,12 +170,13 @@ export default class ProductService extends GeneralService {
 			response = true;
 		}).catch(function (error) {
 			response = false;
-			this.errorResponse(error);
+			obj.errorResponse(error);
 		});
 		return response;
 	}
 
 	async delete(entity) {
+		let obj = this;
 		await axios.delete(`${path}/${this.entityPath}/${entity.id}`)
 			.then(() => {
 				swal({
@@ -175,7 +184,7 @@ export default class ProductService extends GeneralService {
 					icon: "success",
 				});
 			}).catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
 	}
 }

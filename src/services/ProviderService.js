@@ -10,11 +10,12 @@ export default class ProviderService extends GeneralService{
 
 	async getByIdCategory(id) {
 		let data = null;
+		let obj = this;
 		await axios.get(`${path}/${this.entityPath}/findByCategory/${id}`)
 			.then(res => {
 				data = res.data;
 			}).catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
         
 		return await data;

@@ -10,11 +10,12 @@ export default class ShoppingCart extends SimpleService{
 
 	async getByIdClient(id) {
 		let data = null;
+		let obj = this;
 		await axios.get(`${path}/${this.entityPath}/client/${id}`)
 			.then(res => {
 				data = res.data;
 			}).catch(function (error) {
-				this.errorResponse(error);
+				obj.errorResponse(error);
 			});
         
 		return await data;
@@ -22,6 +23,7 @@ export default class ShoppingCart extends SimpleService{
 
 	async post(entity, clientId) {
 		let response;
+		let obj = this;
 		await axios.post(`${path}/${this.entityPath}/client/${clientId}`, entity, {
 			headers: {
 				"Content-Type": "application/json"
@@ -30,18 +32,19 @@ export default class ShoppingCart extends SimpleService{
 			response = res.data;
 		}).catch(function (error) {
 			response = false;	
-			this.errorResponse(error);
+			obj.errorResponse(error);
 		});
 		return response;
 	}
 
 	async delete(entity, clientId) {
 		let response;
+		let obj = this;
 		await axios.delete(`${path}/${this.entityPath}/client/${clientId}`, { data: entity }).then(res => {
 			response = res.data;
 		}).catch(function (error) {
 			response = false;
-			this.errorResponse(error);
+			obj.errorResponse(error);
 		});
 		return response;
 	}

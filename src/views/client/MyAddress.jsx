@@ -68,8 +68,8 @@ class MyAddress extends Component {
 
 	async deleteAddress(address){
 		this.service.delete(address).then(() => {
-			this.clientService.getById(this.props.client.id).then((resp) => {
-				this.props.setClient(resp);
+			this.clientService.getById(this.props.client).then((resp) => {
+				this.props.setClient(resp[0]);
 				this.setState({
 					addresses: [
 						...this.props.client.deliveryAddress
@@ -84,9 +84,9 @@ class MyAddress extends Component {
     
 		await this.service.put(this.props.client.id, this.state.address).then(
 			(resp) => {
-				if(resp === true){
-					this.clientService.getById(this.props.client.id).then((resp) => {
-						this.props.setClient(resp);
+				if(resp !== null){
+					this.clientService.getById(this.props.client).then((resp) => {
+						this.props.setClient(resp[0]);
 						this.setState({
 							addresses: [
 								...this.props.client.deliveryAddress
@@ -111,9 +111,9 @@ class MyAddress extends Component {
 		this.alterBlockUI();
 		await this.service.post(this.props.client.id, this.state.address).then(
 			(resp) => {
-				if(resp === true){
-					this.clientService.getById(this.props.client.id).then((resp) => {
-						this.props.setClient(resp);
+				if(resp !== null){
+					this.clientService.getById(this.props.client).then((resp) => {
+						this.props.setClient(resp[0]);
 						this.setState({
 							addresses: [
 								...this.props.client.deliveryAddress
