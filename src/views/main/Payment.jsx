@@ -434,6 +434,7 @@ class Payment extends Component {
 					</div>
 				</div>
 				<ModalCard
+					client={this.props.client}
 					openCartao={this.state.openCartao}
 					openCartaoModal={this.openCartaoModal}
 					closeCartaoModal={this.closeCartaoModal}
@@ -442,6 +443,7 @@ class Payment extends Component {
 				/>
        
 				<ModalAddress
+					client={this.props.client}
 					openAddress={this.state.openAddress}
 					openAddressModal={this.openAddressModal}
 					closeAddressModal={this.closeAddressModal}

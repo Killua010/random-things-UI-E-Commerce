@@ -108,6 +108,22 @@ export default class ProductService extends GeneralService {
 		return await data;
 	}
 
+	async getAllInactive() {
+		let obj = this;
+		let data = null;
+		await axios.get(`${path}/${this.entityPath}/inactives`,{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).then(res => {
+			data = res.data;
+		}).catch(function (error) {
+			obj.errorResponse(error);
+		});
+        
+		return await data;
+	}
+
 	async put(entity) {
 		let resp;
 		let obj = this;

@@ -124,6 +124,11 @@ class ShoppingCart extends Component {
 		for(let i = 0; i < this.state.cart.itens.length; i++){
 			if (i === index) {
 				item = this.state.cart.itens[i];
+				if(event.target.value > item.product.stockQuantity+1){
+					event.target.value = item.product.stockQuantity+1;
+				} else if(event.target.value < 0){
+					event.target.value = 0;
+				}
 				item.quantity = event.target.value;
 				idItem.push(this.state.cart.itens[i].id);
 				quantityItem.push(event.target.value);

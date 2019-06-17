@@ -18,20 +18,114 @@ import Close from "@material-ui/icons/Close";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 import modalStyle from "../../assets/jss/material-kit-react/modalStyle.jsx";
+import DeliveryAddressService from "../../services/DeliveryAddressService";
+import ClientService from "../../services/ClientService";
+
+import { bindActionCreators } from "redux";
+
+import * as clientActions from "../../actions/client";
+
+import { connect } from "react-redux";
 
 import ModalNewAddress from "./ModalNewAddress";
 
 import "./modal.css";
 
 class ModalAddress extends Component {
-  state = {
-    openNewAddress: false
+  constructor(props){
+    super(props);
+    this.clientService = new ClientService("clients");
+    this.service = new DeliveryAddressService("deliveryAddress");
+  this.state = {
+    openNewAddress: false,
+    address: {
+      city: {},
+      favorite: false
+    }
   };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleFieldChange = this.handleFieldChange.bind(this);
+    this.openNewAddressModal = this.openNewAddressModal.bind(this);
+    this.closeNewAddressModal = this.closeNewAddressModal.bind(this);
+    this.postAddress = this.postAddress.bind(this);
+};
+
+openNewAddressModal() {
+    this.setState({
+      update: false,
+      openNewAddress: true,
+      address: {
+        fullName: "",
+        street: "",
+        number: "",
+        neighborhood: "",
+        zipCode: "",
+        observation: "",
+        favorite: false,
+        cityId: "",
+        stateId: "",
+        residenceTypeId: ""
+      }
+    });  
+}
+
+closeNewAddressModal() {
+  this.setState({ openNewAddress: false });
+}
+
+  handleFieldChange(event) {
+		this.setState({
+			address: {
+				...this.state.address,
+				[event.target.name]: event.target.value
+			}
+		});
+	}  
+
+  async handleSubmit(e) {
+		e.preventDefault();
+    this.postAddress();
+	}
 
   newAddress = () => {
     this.props.closeAddressModal();
     this.openNewAddressModal();
   };
+
+  async postAddress(){
+		await this.service.post(this.props.client.id, this.state.address).then(
+			(resp) => {
+				if(resp !== null){
+					this.clientService.getById(this.props.client).then((resp) => {
+						this.props.setClient(resp[0]);
+						this.setState({
+							addresses: [
+								...this.props.client.deliveryAddress
+							]
+						});
+					});
+          
+				}
+			});
+
+		this.setState({
+      openNewAddress: false,
+      address: {
+        fullName: "",
+        street: "",
+        number: "",
+        neighborhood: "",
+        zipCode: "",
+        observation: "",
+        favorite: false,
+        cityId: "",
+        stateId: "",
+        residenceTypeId: ""
+      }
+    });
+    
+	}
 
   openNewAddressModal = () => {
     this.setState({ openNewAddress: true });
@@ -94,20 +188,31 @@ class ModalAddress extends Component {
               })}
              
           </DialogContent>
-          {/* <DialogActions
+          {<DialogActions
             className={classes.modalFooter + " " + classes.modalFooterCenter}
           >
-            <Button onClick={this.newAddress} color="warning">Outro Endereço</Button>
-          </DialogActions> */}
+            <Button onClick={this.newAddress} color="warning">Novo Endereço</Button>
+          </DialogActions> }
         </Dialog>
-        {/* <ModalNewAddress
-          openNewAddress={this.state.openNewAddress}
-          openNewAddressModal={this.openNewAddressModal}
-          closeNewAddressModal={this.closeNewAddressModal}
-        /> */}
+        <ModalNewAddress
+					address ={this.state.address}
+					handleSubmit={this.handleSubmit}
+					handleFieldChange={this.handleFieldChange}
+					openNewAddress={this.state.openNewAddress}
+					openNewAddressModal={this.openNewAddressModal}
+					closeNewAddressModal={this.closeNewAddressModal}
+					update={this.state.update}
+				/>
       </div>
     );
   }
 }
 
-export default withStyles(modalStyle)(ModalAddress);
+const mapStateToProps = state => ({
+	client: state.client
+});
+
+const mapDispatchToProps = dispatch =>
+	bindActionCreators(clientActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(modalStyle)(ModalAddress));

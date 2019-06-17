@@ -21,12 +21,100 @@ import modalStyle from "../../assets/jss/material-kit-react/modalStyle.jsx";
 
 import ModalNewCart from "./ModalNewCart";
 
+import { bindActionCreators } from "redux";
+
+import * as clientActions from "../../actions/client";
+
+import { connect } from "react-redux";
+
+import ClientService from "../../services/ClientService";
+import CreditCardService from "../../services/CreditCardService";
+
 import "./modal.css";
 
 class ModalCart extends Component {
-  state = {
-    openNewCart: false
-  };
+
+  constructor(props){
+    super(props);
+
+    this.clientService = new ClientService("clients");
+		this.service = new CreditCardService("creditCards");
+
+    this.state = {
+      openNewCart: false,
+      card: {
+        favorite: false
+      }
+    };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleFieldChange = this.handleFieldChange.bind(this);
+    this.openNewCartModal = this.openNewCartModal.bind(this);
+    this.closeNewCartModal = this.closeNewCartModal.bind(this);
+  }
+
+  closeNewCartModal() {
+		this.setState({ openNewCart: false });
+	}
+
+
+  openNewCartModal(card) {
+			this.setState({
+				update: false,
+				openNewCart: true,
+				card: {
+					number: "",
+					printedName: "",
+					securityCode: "",
+					neighborhood: "",
+					favorite: false,
+					creditCardFlagId: ""
+				}
+			});  
+	}
+
+  async handleSubmit(e) {
+		e.preventDefault();
+    this.postCard();
+  }
+  
+  handleFieldChange(event) {
+		this.setState({
+			card: {
+				...this.state.card,
+				[event.target.name]: event.target.value
+			}
+		});
+	}
+  
+  async postCard(){
+		await this.service.post(this.props.client.id, this.state.card).then(
+			(resp) => {
+				if(resp !== null){
+					this.clientService.getById(this.props.client).then((resp) => {
+						this.props.setClient(resp[0]);
+						this.setState({
+							cards: [
+								...this.props.client.cards
+							]
+						});
+					});
+          
+				}
+			});
+
+		this.setState({
+      openNewCart: false,
+      card: {
+        number: "",
+        printedName: "",
+        securityCode: "",
+        neighborhood: "",
+        favorite: false,
+        creditCardFlagId: ""
+      }
+		});
+	}
 
   newCart = () => {
     this.props.closeCartaoModal();
@@ -92,20 +180,31 @@ class ModalCart extends Component {
             })
           }
           </DialogContent>
-          {/* <DialogActions
+          <DialogActions
             className={classes.modalFooter + " " + classes.modalFooterCenter}
           >
-            <Button onClick={this.newCart} color="warning">Outro Cartão</Button>
-          </DialogActions> */}
+            <Button onClick={this.newCart} color="warning">Novo Cartão</Button>
+          </DialogActions> 
         </Dialog>
-        {/* <ModalNewCart
-          openNewCart={this.state.openNewCart}
-          openNewCartModal={this.openNewCartModal}
-          closeNewCartModal={this.closeNewCartModal}
-        /> */}
+        <ModalNewCart
+					card ={this.state.card}
+					handleSubmit={this.handleSubmit}
+					handleFieldChange={this.handleFieldChange}
+					openNewCart={this.state.openNewCart}
+					openNewCartModal={this.openNewCartModal}
+					closeNewCartModal={this.closeNewCartModal}
+				/>
       </div>
     );
   }
 }
 
-export default withStyles(modalStyle)(ModalCart);
+const mapStateToProps = state => ({
+	client: state.client
+});
+
+const mapDispatchToProps = dispatch =>
+	bindActionCreators(clientActions, dispatch);
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(modalStyle)(ModalCart));
