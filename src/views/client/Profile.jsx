@@ -84,14 +84,16 @@ class Profile extends React.Component {
 				} else {
 					this.clientService.getById(this.state.client).then(
 						(resp) => {
-							this.props.setClient(resp[0]);
-							this.setState({
-								openNewClient: false,
-								client: {
-									...this.props.client,
-									confirmPassword: this.props.client.password
-								}
-							});
+							if(resp != null){
+								this.props.setClient(resp[0]);
+								this.setState({
+									openNewClient: false,
+									client: {
+										...this.props.client,
+										confirmPassword: this.props.client.password
+									}
+								});
+							}
 						}
 					);
 				}

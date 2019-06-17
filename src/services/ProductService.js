@@ -12,24 +12,30 @@ export default class ProductService extends GeneralService {
 	async getById(entity) {
 		let data = null;
 		let obj = this;
-		await axios.get(`${path}/${this.entityPath}/${entity.id}`)
-			.then((res) => {
-				data = res.data;
-			}).catch(function (error) {
-				obj.errorResponse(error);
-			});
+		await axios.get(`${path}/${this.entityPath}/${entity.id}`,{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).then((res) => {
+			data = res.data;
+		}).catch(function (error) {
+			obj.errorResponse(error);
+		});
 		return await data;
 	}
 
 	async getPageabled(page){
 		let data = null;
 		let obj = this;
-		await axios.get(`${path}/${this.entityPath}/paging/${page}`)
-			.then(res => {
-				data = res.data;
-			}).catch(function (error) {
-				obj.errorResponse(error);
-			});
+		await axios.get(`${path}/${this.entityPath}/paging/${page}`,{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).then(res => {
+			data = res.data;
+		}).catch(function (error) {
+			obj.errorResponse(error);
+		});
         
 		return await data;
 	}
@@ -37,12 +43,15 @@ export default class ProductService extends GeneralService {
 	async findBy(param){
 		let data = null;
 		let obj = this;
-		await axios.get(`${path}/${this.entityPath}/findBy/${param}`)
-			.then(res => {
-				data = res.data;
-			}).catch(function (error) {
-				obj.errorResponse(error);
-			});
+		await axios.get(`${path}/${this.entityPath}/findBy/${param}`,{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).then(res => {
+			data = res.data;
+		}).catch(function (error) {
+			obj.errorResponse(error);
+		});
         
 		return await data;
 	}
@@ -50,12 +59,15 @@ export default class ProductService extends GeneralService {
 	async findByCategory(id){
 		let data = null;
 		let obj = this;
-		await axios.get(`${path}/${this.entityPath}/findByCategory/${id}`)
-			.then(res => {
-				data = res.data;
-			}).catch(function (error) {
-				obj.errorResponse(error);
-			});
+		await axios.get(`${path}/${this.entityPath}/findByCategory/${id}`,{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).then(res => {
+			data = res.data;
+		}).catch(function (error) {
+			obj.errorResponse(error);
+		});
         
 		return await data;
 	}
@@ -66,6 +78,10 @@ export default class ProductService extends GeneralService {
 		await axios.get(`${path}/${this.entityPath}/paging/${page}`, {
 			params: {
 				categoryId: category.id
+			}
+		},{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
 			}
 		}).then(res => {
 			data = res.data;
@@ -79,12 +95,15 @@ export default class ProductService extends GeneralService {
 	async getAll() {
 		let obj = this;
 		let data = null;
-		await axios.get(`${path}/${this.entityPath}`)
-			.then(res => {
-				data = res.data;
-			}).catch(function (error) {
-				obj.errorResponse(error);
-			});
+		await axios.get(`${path}/${this.entityPath}`,{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).then(res => {
+			data = res.data;
+		}).catch(function (error) {
+			obj.errorResponse(error);
+		});
         
 		return await data;
 	}
@@ -116,19 +135,19 @@ export default class ProductService extends GeneralService {
         
 		await axios.put(`${path}/${this.entityPath}/${entity.id}`, data, {
 			headers: {
-				"content-type": "multipart/form-data" 
+				"content-type": "multipart/form-data" ,
+				"Authorization" : localStorage.getItem("Authorization")
 			}
-		})
-			.then(() => {
-				resp = true;
-				swal({
-					title: "Atualizado com Sucesso",
-					icon: "success",
-				});
-			}).catch(function (error) {
-				resp = false;
-				obj.errorResponse(error);
+		}).then(() => {
+			resp = true;
+			swal({
+				title: "Atualizado com Sucesso",
+				icon: "success",
 			});
+		}).catch(function (error) {
+			resp = false;
+			obj.errorResponse(error);
+		});
 		return resp;
 	}
 
@@ -160,7 +179,8 @@ export default class ProductService extends GeneralService {
         
 		await axios.post(`${path}/${this.entityPath}`, data, {
 			headers: {
-				"content-type": "multipart/form-data" 
+				"content-type": "multipart/form-data",
+				"Authorization" : localStorage.getItem("Authorization") 
 			}
 		}).then(() => {
 			swal({
@@ -177,15 +197,18 @@ export default class ProductService extends GeneralService {
 
 	async delete(entity) {
 		let obj = this;
-		await axios.delete(`${path}/${this.entityPath}/${entity.id}`)
-			.then(() => {
-				swal({
-					title: "Deletado com Sucesso",
-					icon: "success",
-				});
-			}).catch(function (error) {
-				obj.errorResponse(error);
+		await axios.delete(`${path}/${this.entityPath}/${entity.id}`,{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).then(() => {
+			swal({
+				title: "Deletado com Sucesso",
+				icon: "success",
 			});
+		}).catch(function (error) {
+			obj.errorResponse(error);
+		});
 	}
 }
 

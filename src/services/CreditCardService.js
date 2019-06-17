@@ -14,7 +14,8 @@ export default class CreditCardService extends GeneralService {
 		let obj = this;
 		await axios.put(`${path}/${this.entityPath}/client/${idClient}/${entity.id}`, entity, {
 			headers: {
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
+				"Authorization" : localStorage.getItem("Authorization")
 			}
 		}).then(() => {
 			resp = true;
@@ -33,7 +34,8 @@ export default class CreditCardService extends GeneralService {
 		let obj = this;
 		await axios.post(`${path}/${this.entityPath}/client/${idClient}`, entity, {
 			headers: {
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
+				"Authorization" : localStorage.getItem("Authorization")
 			}
 		}).then(() => {
 			swal({

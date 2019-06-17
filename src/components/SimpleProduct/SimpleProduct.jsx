@@ -102,7 +102,7 @@ class SimpleProduct extends Component {
             <a href="javascript:void(0)" onClick={this.goTo}>
             {
               (this.props.product.imgSrc != null ? <img
-                src={this.props.product.imgSrc[0].replace("http://localhost:8080","http://192.168.9.237:8080")}
+                // src={this.props.product.imgSrc[0].replace("http://localhost:8080","http://192.168.9.237:8080")}
                 src={this.props.product.imgSrc[0]}
                 alt=""
               /> : <h3>Sem foto Disponivel</h3>)

@@ -11,12 +11,15 @@ export default class ShippingPriceService extends GeneralService{
 	async getByIdClient(id, entity) {
 		let data = null;
 		let obj = this;
-		await axios.post(`${path}/${this.entityPath}/calculete/client/${id}`, entity )
-			.then(res => {
-				data = res.data;
-			}).catch(function (error) {
-				obj.errorResponse(error);
-			});
+		await axios.post(`${path}/${this.entityPath}/calculete/client/${id}`, entity ,{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).then(res => {
+			data = res.data;
+		}).catch(function (error) {
+			obj.errorResponse(error);
+		});
         
 		return await data;
 	}

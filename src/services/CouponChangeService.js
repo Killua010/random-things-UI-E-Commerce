@@ -12,12 +12,15 @@ export default class CouponChangeService extends GeneralService {
 	async getByIdClientAndName(id, name) {
 		let data = null;
 		let obj = this;
-		await axios.get(`${path}/${this.entityPath}/byIdClientAndName/${id}/${name}`)
-			.then(res => {
-				data = res.data;
-			}).catch(function (error) {
-				obj.errorResponse(error);
-			});
+		await axios.get(`${path}/${this.entityPath}/byIdClientAndName/${id}/${name}`,{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).then(res => {
+			data = res.data;
+		}).catch(function (error) {
+			obj.errorResponse(error);
+		});
         
 		return await data;
 	}

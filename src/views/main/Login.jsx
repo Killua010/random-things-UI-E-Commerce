@@ -25,6 +25,8 @@ import * as clientActions from "../../actions/client";
 
 import * as cartActions from "../../actions/shoppingCart";
 
+import * as authActions from "../../actions/auth";
+
 import { connect } from "react-redux";
 
 import "../../assets/css/index.css";
@@ -66,8 +68,13 @@ class Login extends React.Component {
 		await this.service.login({"email": email, "password": password}).then(resp => {
 			if(resp !== null){
 				this.props.setClient(resp);
-				this.getShoppingCart(resp.id).then(() => 
-					this.props.history.push("/perfil"));
+				if(resp.roles.includes("ADMIN")){
+					this.props.history.push("/admin");
+				} else {
+					this.getShoppingCart(resp.id).then(() => 
+						this.props.history.push("/perfil"));
+				}
+				
 
 			}
 		});
@@ -192,10 +199,11 @@ class Login extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => 
-	bindActionCreators({...clientActions, ...cartActions}, dispatch);
+	bindActionCreators({...clientActions, ...cartActions, ...authActions}, dispatch);
 const mapStateToProps = state => ({
 	client: state.client,
-	cart: state.cart
+	cart: state.cart,
+	auth: state.auth
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(loginPageStyle)(Login));

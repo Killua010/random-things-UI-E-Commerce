@@ -1,7 +1,7 @@
 import axios from "axios";
 import swal from "sweetalert";
 
-export const path = "http://192.168.9.237:8080";
+export const path = "http://localhost:8080";
 // dev path
 //http://localhost:8080
 export default class GeneralService {
@@ -12,24 +12,30 @@ export default class GeneralService {
 	async getById(entity) {
 		let data = null;
 		let obj = this;
-		await axios.get(`${path}/${this.entityPath}/${entity.id}`)
-			.then((res) => {
-				data = res.data;
-			}).catch(function (error) {
-				obj.errorResponse(error);
-			});
+		await axios.get(`${path}/${this.entityPath}/${entity.id}`,{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).then((res) => {
+			data = res.data;
+		}).catch(function (error) {
+			obj.errorResponse(error);
+		});
 		return await data;
 	}
 
 	async getAll() {
 		let data = null;
 		let obj = this;
-		await axios.get(`${path}/${this.entityPath}`)
-			.then(res => {
-				data = res.data;
-			}).catch(function (error) {
-				obj.errorResponse(error);
-			});
+		await axios.get(`${path}/${this.entityPath}`,{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).then(res => {
+			data = res.data;
+		}).catch(function (error) {
+			obj.errorResponse(error);
+		});
         
 		return await data;
 	}
@@ -39,7 +45,8 @@ export default class GeneralService {
 		let obj = this;
 		await axios.put(`${path}/${this.entityPath}/${entity.id}`, entity, {
 			headers: {
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
+				"Authorization" : localStorage.getItem("Authorization")
 			}
 		})
 			.then((res) => {
@@ -76,15 +83,18 @@ export default class GeneralService {
 
 	async delete(entity) {
 		let obj = this;
-		await axios.delete(`${path}/${this.entityPath}/${entity.id}`)
-			.then(() => {
-				swal({
-					title: "Deletado com Sucesso",
-					icon: "success",
-				});
-			}).catch(function (error) {
-				obj.errorResponse(error);
+		await axios.delete(`${path}/${this.entityPath}/${entity.id}`,{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).then(() => {
+			swal({
+				title: "Deletado com Sucesso",
+				icon: "success",
 			});
+		}).catch(function (error) {
+			obj.errorResponse(error);
+		});
 	}
     
 	errorResponse(error){

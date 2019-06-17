@@ -9,9 +9,14 @@ export default class ShoppingCart extends SimpleService{
 	}
 
 	async getByIdClient(id) {
+		
 		let data = null;
 		let obj = this;
-		await axios.get(`${path}/${this.entityPath}/client/${id}`)
+		await axios.get(`${path}/${this.entityPath}/client/${id}`, {
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		})
 			.then(res => {
 				data = res.data;
 			}).catch(function (error) {
@@ -26,7 +31,8 @@ export default class ShoppingCart extends SimpleService{
 		let obj = this;
 		await axios.post(`${path}/${this.entityPath}/client/${clientId}`, entity, {
 			headers: {
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
+				"Authorization" : localStorage.getItem("Authorization")
 			}
 		}).then(res => {
 			response = res.data;
@@ -40,7 +46,11 @@ export default class ShoppingCart extends SimpleService{
 	async delete(entity, clientId) {
 		let response;
 		let obj = this;
-		await axios.delete(`${path}/${this.entityPath}/client/${clientId}`, { data: entity }).then(res => {
+		await axios.delete(`${path}/${this.entityPath}/client/${clientId}`, { data: entity },{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).then(res => {
 			response = res.data;
 		}).catch(function (error) {
 			response = false;

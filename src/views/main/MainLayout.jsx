@@ -157,18 +157,36 @@ class MainLayout extends Component {
 									</Button>
 								</ListItem>
 								<ListItem className={classes.listItem}>
-									<CustomDropdown
-										props={this.props}
-										buttonText={`Olá ${this.props.client.firstName}`}
-										buttonProps={{
-											className: classes.navLink,
-											color: "transparent"
-										}}
-										dropdownList={[
-											{ name: "Meu Perfil", path: "/perfil/inicio" },
-											// { name: "Sair", path: "/login" }
-										]}
-									/>
+									{
+										(this.props.client.roles.includes("ADMIN")) ? 
+											<CustomDropdown
+												props={this.props}
+												buttonText={`Olá ${this.props.client.firstName}`}
+												buttonProps={{
+													className: classes.navLink,
+													color: "transparent"
+												}}
+												dropdownList={[
+													{ name: "Meu Perfil", path: "/perfil/inicio" },
+													{ name: "Parte Administrativa", path: "/admin" }
+													// { name: "Sair", path: "/login" }
+												]}
+											/>
+											:
+											<CustomDropdown
+												props={this.props}
+												buttonText={`Olá ${this.props.client.firstName}`}
+												buttonProps={{
+													className: classes.navLink,
+													color: "transparent"
+												}}
+												dropdownList={[
+													{ name: "Meu Perfil", path: "/perfil/inicio" },
+													// { name: "Sair", path: "/login" }
+												]}
+											/>
+									}
+									
 								</ListItem>
 							</List>
 					}

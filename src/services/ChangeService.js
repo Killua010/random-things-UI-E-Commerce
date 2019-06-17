@@ -11,12 +11,15 @@ export default class ChangeService extends GeneralService {
 	async getAllByStatus(status) {
 		let data = null;
 		let obj = this;
-		await axios.get(`${path}/${this.entityPath}/${status}`)
-			.then(res => {
-				data = res.data;
-			}).catch(function (error) {
-				obj.errorResponse(error);
-			});
+		await axios.get(`${path}/${this.entityPath}/${status}`,{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).then(res => {
+			data = res.data;
+		}).catch(function (error) {
+			obj.errorResponse(error);
+		});
         
 		return await data;
 	}

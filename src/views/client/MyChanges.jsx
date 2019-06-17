@@ -26,12 +26,12 @@ class MyChanges extends React.Component {
 
 		this.getChanges = this.getChanges.bind(this);
 	}
-
+	
 
 	getChanges(){
 		if(this.props.client !== undefined){
       
-			this.changeService.getAllByClientId(this.props.client.id).then(res => {
+			this.changeService.getAllByClientId(this.props.client.id, this.props.client.Authorization).then(res => {
 				this.setState({
 					changes: res
 				});

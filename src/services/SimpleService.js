@@ -11,10 +11,13 @@ export default class SimpleService extends GeneralService {
 	async getAll() {
 		let data = null;
 		let obj = this;
-		await axios.get(`${path}/${this.entityPath}`)
-			.catch(function (error) {
-				obj.errorResponse(error);
-			});
+		await axios.get(`${path}/${this.entityPath}`,{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).catch(function (error) {
+			obj.errorResponse(error);
+		});
         
 		return await data;
 	}
@@ -24,7 +27,8 @@ export default class SimpleService extends GeneralService {
 		let obj = this;
 		await axios.put(`${path}/${this.entityPath}/${entity.id}`, entity, {
 			headers: {
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
+				"Authorization" : localStorage.getItem("Authorization")
 			}
 		}).then((res) => resp = res.data)
 			.catch(function (error) {
@@ -38,7 +42,8 @@ export default class SimpleService extends GeneralService {
 		let obj = this;
 		await axios.post(`${path}/${this.entityPath}`, entity, {
 			headers: {
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
+				"Authorization" : localStorage.getItem("Authorization")
 			}
 		}).then((res) => resp = res.data)
 			.catch(function (error) {
@@ -49,10 +54,13 @@ export default class SimpleService extends GeneralService {
 
 	async delete(entity) {
 		let obj = this;
-		await axios.delete(`${path}/${this.entityPath}/${entity.id}`)
-			.catch(function (error) {
-				obj.errorResponse(error);
-			});
+		await axios.delete(`${path}/${this.entityPath}/${entity.id}`,{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).catch(function (error) {
+			obj.errorResponse(error);
+		});
 	}
 }
 

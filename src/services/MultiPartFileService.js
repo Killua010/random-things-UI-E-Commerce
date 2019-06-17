@@ -23,7 +23,8 @@ export default class MultiPartFileService extends GeneralService {
         
 		await axios.put(`${path}/${this.entityPath}/${entity.id}`, data, {
 			headers: {
-				"content-type": "multipart/form-data" 
+				"content-type": "multipart/form-data" ,
+				"Authorization" : localStorage.getItem("Authorization")
 			}
 		}).then(() => {
 			resp = true;
@@ -40,7 +41,7 @@ export default class MultiPartFileService extends GeneralService {
 
 	async post(entity) {
 		let response;
-        let obj = this;
+		let obj = this;
 		const data = new FormData();
 
 		for(var prop in entity) {
@@ -52,7 +53,8 @@ export default class MultiPartFileService extends GeneralService {
 
 		await axios.post(`${path}/${this.entityPath}`, data, {
 			headers: {
-				"content-type": "multipart/form-data" 
+				"content-type": "multipart/form-data" ,
+				"Authorization" : localStorage.getItem("Authorization")
 			}
 		}).then(() => {
 			swal({
