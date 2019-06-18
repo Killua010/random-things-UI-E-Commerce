@@ -44,7 +44,7 @@ export default class OrderService extends SimpleService {
 	async nextStep(order) {
 		let response;
 		let obj = this;
-		await axios.put(`${path}/${this.entityPath}/${order.id}/nextStep`,{
+		await axios.put(`${path}/${this.entityPath}/${order.id}/nextStep`,{},{
 			headers: {
 				"Authorization" : localStorage.getItem("Authorization")
 			}

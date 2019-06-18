@@ -66,18 +66,18 @@ export default class GeneralService {
 		let obj = this;
 		await axios.post(`${path}/${this.entityPath}`, entity, {
 			headers: {
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
+				"Authorization" : localStorage.getItem("Authorization")
 			}
-		})
-			.then(res => {
-				swal({
-					title: "Cadastrado com Sucesso",
-					icon: "success",
-				});
-				response = res.data;
-			}).catch(function (error) {
-				obj.errorResponse(error);
+		}).then(res => {
+			swal({
+				title: "Cadastrado com Sucesso",
+				icon: "success",
 			});
+			response = res.data;
+		}).catch(function (error) {
+			obj.errorResponse(error);
+		});
 		return response;
 	}
 

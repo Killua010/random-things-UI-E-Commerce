@@ -27,22 +27,28 @@ export default class ChangeService extends GeneralService {
 	async aproved(change) {
 		let response;
 		let obj = this;
-		await axios.post(`${path}/${this.entityPath}/aproved/${change.id}`)
-			.catch(function (error) {
-				response = false;
-				obj.errorResponse(error);
-			});
+		await axios.post(`${path}/${this.entityPath}/aproved/${change.id}`,{},{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).catch(function (error) {
+			response = false;
+			obj.errorResponse(error);
+		});
 		return response;
 	}
 
 	async reproved(change) {
 		let response;
 		let obj = this;
-		await axios.post(`${path}/${this.entityPath}/reproved/${change.id}`)
-			.catch(function (error) {
-				response = false;
-				obj.errorResponse(error);
-			});
+		await axios.post(`${path}/${this.entityPath}/reproved/${change.id}`,{},{
+			headers: {
+				"Authorization" : localStorage.getItem("Authorization")
+			}
+		}).catch(function (error) {
+			response = false;
+			obj.errorResponse(error);
+		});
 		return response;
 	}
 }
