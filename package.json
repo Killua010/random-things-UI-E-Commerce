@@ -14,7 +14,7 @@
         "history": "4.7.2",
         "loaders.css": "^0.1.2",
         "mdbreact": "^4.13.0",
-        "node-sass": "4.9.3",
+        "node-sass": "4.13.1",
         "perfect-scrollbar": "1.4.0",
         "prop-types": "^15.6.2",
         "react": "16.5.2",
